@@ -1,6 +1,7 @@
 /docs/
 /lib/
 /bin/
+tmp/*
 /.shards/
 *.dwarf
 start_server
@@ -12,3 +13,4 @@ start_server
 /public/mix-manifest.json
 /node_modules
 yarn-error.log
+tmp/tasks_binary

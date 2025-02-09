@@ -5,6 +5,11 @@ class User < BaseModel
   table do
     column email : String
     column encrypted_password : String
+    column name : String
+    column avatar_url : String?
+
+    has_many invitations : Guest # foreign_key: :guest_id
+    has_many events : Event, through: [:invitations, :event]
   end
 
   def emailable : Carbon::Address

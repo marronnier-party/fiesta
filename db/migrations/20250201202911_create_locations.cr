@@ -7,6 +7,14 @@ class CreateLocations::V20250201202911 < Avram::Migrator::Migration::V1
       add name : String, unique: true
       add slug : String, unique: true, index: true
       add description : String
+      add address : String
+      add city : String
+      add country : String
+      add postal_code : String
+      add longitude : Float64?
+      add latitude : Float64?
+
+      add_belongs_to creator : User, on_delete: :restrict
     end
 
     alter table_for(Event) do

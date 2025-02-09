@@ -5,6 +5,11 @@ class CreateGuests::V20250201203835 < Avram::Migrator::Migration::V1
       primary_key id : Int64
       add_timestamps
       add status : Int32
+      add answered_at : Time?
+      add confirmed_at : Time?
+      add declined_at : Time?
+      add cancelled_at : Time?
+
       add_belongs_to user : User, on_delete: :nullify
       add_belongs_to event : Event, on_delete: :nullify
     end

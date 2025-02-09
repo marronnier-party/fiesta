@@ -7,6 +7,8 @@ class CreateUsers::V00000000000001 < Avram::Migrator::Migration::V1
       add_timestamps
       add email : String, unique: true, case_sensitive: false
       add encrypted_password : String
+      add name : String
+      add avatar_url : String?
     end
   end
 
