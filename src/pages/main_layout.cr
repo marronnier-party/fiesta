@@ -202,6 +202,5 @@ abstract class MainLayout
         end
       end
     end
-    
   end
 end

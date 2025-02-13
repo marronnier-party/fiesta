@@ -9,7 +9,7 @@ class Guest < BaseModel
 
   table do
     column status : Guest::Status = Guest::Status::NoAnswer
-    #column total_expenses : Float64 = 0.0
+    # column total_expenses : Float64 = 0.0
     column answered_at : Time?
     column confirmed_at : Time?
     column declined_at : Time?
