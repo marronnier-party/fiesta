@@ -1,6 +1,4 @@
 class Events::Wizard::New < BrowserAction
-  include Auth::RequireSignIn
-
   param current_step : Int32 = 1
 
   get "/events/wizard/new" do

@@ -1,4 +1,4 @@
-abstract class Locations::Wizard::Steps::BaseStep < BaseComponent
+abstract class Locations::Wizard::Steps::BaseStep < Shared::Wizard::Step
   needs location : Location
 
   abstract def step_title
@@ -23,10 +23,8 @@ abstract class Locations::Wizard::Steps::BaseStep < BaseComponent
     end
   end
 
-  private def render_back_button
-    link "Retour",
-      to: Locations::New.with(current_step: step_number - 1),
-      class: "btn btn-ghost"
+  private def back_path : String
+    Locations::New.with(current_step: step_number - 1)
   end
 
   private def render_next_button

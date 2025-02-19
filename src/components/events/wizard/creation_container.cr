@@ -1,4 +1,4 @@
-class Events::Wizard::Creation < BaseComponent
+class Events::Wizard::CreationContainer < BaseComponent
   needs current_step : Int32 = 1
   needs event : Event? = nil
   needs location : Location? = nil

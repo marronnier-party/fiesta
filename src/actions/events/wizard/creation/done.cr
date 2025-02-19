@@ -1,13 +1,6 @@
-class Events::Wizard::Done < BrowserAction
-  include Auth::RequireSignIn
+class Events::Wizard::Creation::Done < Events::WizardAction
 
-  get "/events/wizard/done/:event_id" do
-    event = EventQuery.find(event_id)
-
-    # Verify user owns the event
-    if event.creator_id != current_user.id
-      raise Lucky::ForbiddenError.new("Not authorized to access this event")
-    end
+  get "/events/wizard/creation/done/:event_id" do
 
     # Mark the event as completed if needed
     SaveEvent.update(event, completed: true) do |operation, updated_event|

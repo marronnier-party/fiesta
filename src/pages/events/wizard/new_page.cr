@@ -2,11 +2,10 @@ class Events::Wizard::NewPage < MainLayout
   needs current_step : Int32
   needs event : Event?
   needs location : Location?
-  needs current_user : User
 
   def content
     # You might want to add a page title or other elements here
-    mount Events::Wizard::Creation,
+    mount Events::Wizard::CreationContainer,
       current_step: current_step,
       event: event,
       location: location,

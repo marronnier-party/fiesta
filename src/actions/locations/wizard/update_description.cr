@@ -1,18 +1,12 @@
-class Locations::Wizard::UpdateDetails < BrowserAction
-  include Auth::RequireSignIn
+class Locations::Wizard::UpdateDescription < BrowserAction
+  include RequireLocationFromId
 
-  param location : Location::SaveParams
-
-  post "/locations/wizard/update_details/:location_id" do
-    location = LocationQuery.find(location_id)
-
-    authorize_user(location)
-
+  post "/locations/wizard/update_description/:location_id/:parent_event_id" do
     SaveLocation.update(location, params) do |operation, updated_location|
       if operation.saved?
-        if parent_event_id = updated_location.event_id
+        if parent_event_id #updated_location.event_ids.include?(parent_event_id.to_s)
           # If we came from event wizard, return there
-          redirect to: Events::Wizard::New.with(
+          redirect to: Events::Wizard::Creation::GoToStep.with(
             current_step: 3,
             event_id: parent_event_id
           )
@@ -22,11 +16,9 @@ class Locations::Wizard::UpdateDetails < BrowserAction
         end
       else
         if htmx?
-          component Locations::Wizard::Creation.new(
+          component Locations::Wizard::CreationContainer,
             current_step: 3,
-            location: location,
-            parent_event: location.event
-          )
+            location: location
         else
           redirect to: Locations::Wizard::New.with(
             current_step: 3,
@@ -34,12 +26,6 @@ class Locations::Wizard::UpdateDetails < BrowserAction
           )
         end
       end
-    end
-  end
-
-  private def authorize_user(location)
-    if location.creator_id != current_user.id
-      raise Lucky::ForbiddenError.new("Not authorized to update this location")
     end
   end
 end

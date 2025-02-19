@@ -1,11 +1,7 @@
 class Locations::Wizard::UpdateAddress < BrowserAction
-  include Auth::RequireSignIn
-
-  param location : Location::SaveParams
+  include RequireLocationFromId
 
   post "/locations/wizard/update_address/:location_id" do
-    location = LocationQuery.find(location_id)
-
     authorize_user(location)
 
     SaveLocation.update(location, params) do |operation, updated_location|

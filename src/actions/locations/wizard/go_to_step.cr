@@ -1,9 +1,9 @@
 class Locations::Wizard::GoToStep < BrowserAction
-  include Auth::RequireSignIn
+  include RequireLocationFromId
 
   param current_step : Int32
 
-  get "/locations/wizard/go-to-step/:location_id" do
+  get "/locations/wizard/go_to_step/:location_id" do
     location = LocationQuery.find(location_id)
 
     if location.creator_id != current_user.id

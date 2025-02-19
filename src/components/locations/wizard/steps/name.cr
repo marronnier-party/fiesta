@@ -1,4 +1,4 @@
-class Locations::Wizard::Steps::NameAndCreate < Locations::Wizard::Steps::BaseStep
+class Locations::Wizard::Steps::Name < Locations::Wizard::Steps::BaseStep
   def step_title
     "Comment s'appelle ce lieu ? 🏡"
   end

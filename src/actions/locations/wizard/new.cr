@@ -1,6 +1,4 @@
 class Locations::Wizard::New < BrowserAction
-  include Auth::RequireSignIn
-
   param current_step : Int32 = 1
   param parent_event_id : Int64? # Optional, for when creating from event wizard
 

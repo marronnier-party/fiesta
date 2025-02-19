@@ -1,9 +1,7 @@
 class Locations::Wizard::Done < BrowserAction
-  include Auth::RequireSignIn
+  include RequireLocationFromId
 
   get "/locations/wizard/done/:location_id" do
-    location = LocationQuery.find(location_id)
-
     if location.creator_id != current_user.id
       raise Lucky::ForbiddenError.new("Not authorized to access this location")
     end
