@@ -1,3 +1,5 @@
+require "../../wizard/summary"
+
 class Locations::Wizard::Summary < Shared::Wizard::Summary
   needs location : Location
   needs parent_event : Event?

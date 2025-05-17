@@ -7,11 +7,11 @@ class Events::Wizard::Creation::UpdateDateTime < Events::WizardAction
     SaveEvent.update(event, params) do |operation, updated_event|
       if operation.saved?
         if htmx?
-          component Events::Wizard::Creation.new(
+          component Events::Wizard::CreationContainer,
             current_step: 3,
             event: updated_event,
             current_user: current_user
-          )
+
         else
           redirect to: Events::Wizard::New.with(
             current_step: 3,
@@ -20,11 +20,11 @@ class Events::Wizard::Creation::UpdateDateTime < Events::WizardAction
         end
       else
         if htmx?
-          component Events::Wizard::Creation.new(
+          component Events::Wizard::CreationContainer,
             current_step: 2,
             event: event,
             current_user: current_user
-          )
+
         else
           redirect to: Events::Wizard::New.with(
             current_step: 2,
@@ -37,7 +37,7 @@ class Events::Wizard::Creation::UpdateDateTime < Events::WizardAction
 
   private def authorize_user(event)
     if event.creator_id != current_user.id
-      raise Lucky::ForbiddenError.new("Not authorized to update this event")
+      raise "Not authorized to update this event"
     end
   end
 end

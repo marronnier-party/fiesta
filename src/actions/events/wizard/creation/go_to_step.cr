@@ -7,12 +7,11 @@ class Events::Wizard::Creation::GoToStep < Events::WizardAction
     location = event.location # Assuming you have this relation set up
 
     if htmx?
-      component Events::Wizard::Creation.new(
+      component Events::Wizard::CreationContainer,
         current_step: current_step,
         event: event,
         location: location,
         current_user: current_user
-      )
     else
       redirect to: Events::Wizard::Creation::New.with(
         current_step: current_step,

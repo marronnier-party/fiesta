@@ -7,12 +7,12 @@ class Events::Wizard::New < BrowserAction
 
     if htmx?
       # If it's an HTMX request, return only the component
-      html Events::Wizard::Creation.new(
+      component Events::Wizard::CreationContainer,
         current_step: current_step,
         event: event,
         location: location,
         current_user: current_user
-      )
+
     else
       # For regular requests, render the full page
       html NewPage,

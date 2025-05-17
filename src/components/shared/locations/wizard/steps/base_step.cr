@@ -1,3 +1,5 @@
+require "../../../wizard/step"
+
 class Locations::Wizard::Steps::BaseStep < Shared::Wizard::Step
   needs location : Location
 

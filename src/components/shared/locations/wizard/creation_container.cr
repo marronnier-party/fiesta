@@ -1,3 +1,5 @@
+require "../../wizard/base"
+
 class Locations::Wizard::CreationContainer < Shared::Wizard::Base
   needs location : Location? = nil
   needs parent_event : Event? = nil

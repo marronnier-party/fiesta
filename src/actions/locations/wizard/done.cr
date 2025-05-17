@@ -1,14 +1,16 @@
 class Locations::Wizard::Done < BrowserAction
   include RequireLocationFromId
+  param parent_event_id : Int64? # Optional, for when creating from event wizard
+
 
   get "/locations/wizard/done/:location_id" do
     if location.creator_id != current_user.id
-      raise Lucky::ForbiddenError.new("Not authorized to access this location")
+      raise "Not authorized to access this location"
     end
 
     SaveLocation.update(location, completed: true) do |operation, updated_location|
       if operation.saved?
-        if parent_event_id = updated_location.event_id
+        if parent_event_id
           # If we came from event wizard, return there
           redirect to: Events::Wizard::New.with(
             current_step: 3,

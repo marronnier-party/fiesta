@@ -1,3 +1,5 @@
+require "../../../wizard/preview"
+
 class Locations::Wizard::Steps::Preview < Shared::Wizard::Preview
   needs location : Location
 
