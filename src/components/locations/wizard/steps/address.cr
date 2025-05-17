@@ -10,7 +10,7 @@ class Locations::Wizard::Steps::Address < Locations::Wizard::Steps::BaseStep
   end
 
   def render_content
-    form_for Locations::Create.with(current_step: step_number),
+    form_for Locations::Wizard::UpdateAddress.with(location_id: location.id), #.with(current_step: step_number),
       class: "space-y-4" do
       div class: "form-control" do
         input type: "text",

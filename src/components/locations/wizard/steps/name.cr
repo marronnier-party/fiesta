@@ -8,7 +8,7 @@ class Locations::Wizard::Steps::Name < Locations::Wizard::Steps::BaseStep
   end
 
   def render_content
-    form_for Locations::Wizard::Create.with(current_step: step_number),
+    form_for Locations::Wizard::NameAndCreate, #.with(parent_event_id: ***),
       class: "space-y-4" do
       div class: "form-control" do
         input type: "text",

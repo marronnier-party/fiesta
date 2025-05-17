@@ -1,5 +1,5 @@
 abstract class Shared::Wizard::Step < BaseComponent
-  needs current_step : Int32
+  # needs current_step : Int32 = 1
 
   def render
     render_persistence_script if needs_persistence?
@@ -45,7 +45,7 @@ abstract class Shared::Wizard::Step < BaseComponent
 
   # Abstract methods
   abstract def render_content
-  abstract def back_path : String
+  abstract def back_path
 
   # To be overridden
 

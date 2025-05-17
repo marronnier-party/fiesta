@@ -36,7 +36,7 @@ abstract class Shared::Wizard::Base < BaseComponent
   end
 
   # Abstract methods to be implemented by subclasses
-  abstract def steps : Array(Step) # Returns the steps configuration
+  abstract def steps # : Array(Step) # Returns the steps configuration
   abstract def render_summary
   abstract def render_current_step
   abstract def go_to_step_path(step_number : Int32) : String

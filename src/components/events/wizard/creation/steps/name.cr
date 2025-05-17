@@ -1,4 +1,4 @@
-class Events::Wizard::Steps::Name < Events::Wizard::Steps::BaseStep
+class Events::Wizard::Creation::Steps::Name < Events::Wizard::Steps::BaseStep
   def step_title : String
     "Comment on appelle ton événement ? 🎉"
   end

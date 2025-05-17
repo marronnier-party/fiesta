@@ -1,4 +1,4 @@
-class Events::Wizard::CreationContainer < BaseComponent
+class Events::Wizard::Creation::Container < BaseComponent
   needs current_step : Int32 = 1
   needs event : Event? = nil
   needs location : Location? = nil
@@ -15,7 +15,7 @@ class Events::Wizard::CreationContainer < BaseComponent
   end
 
   private def render_summary
-    mount Events::Wizard::Summary,
+    mount Events::Wizard::Creation::Summary,
       event: event.not_nil!,
       current_step: current_step,
       location: location
@@ -52,22 +52,22 @@ class Events::Wizard::CreationContainer < BaseComponent
     div id: "wizard-content", class: "transition-all duration-300" do
       case current_step
       when 1
-        mount Wizard::Steps::Name, event: event
+        mount Events::Wizard::Creation::Steps::Name, event: event
       when 2
-        mount Wizard::Steps::DateTime, event: event
+        mount Events::Wizard::Creation::Steps::DateTime, event: event
       when 3
-        mount Wizard::Steps::Location,
+        mount Events::Wizard::Creation::Steps::Location,
           event: event,
           location: location,
           current_user: current_user
       when 4
-        mount Wizard::Steps::Description, event: event
-      when 5
-        mount Wizard::Steps::Invitations,
-          event: event,
-          current_user: current_user
-      when 6 # New preview step
-        mount Wizard::Preview,
+        mount Events::Wizard::Creation::Steps::Description, event: event
+      # when 5
+      #   mount Events::Wizard::Creation::Steps::Invitations,
+      #     event: event,
+      #     current_user: current_user
+      when 5 # New preview step
+        mount Events::Wizard::Creation::Steps::Preview,
           event: event.not_nil!,
           location: location
       end

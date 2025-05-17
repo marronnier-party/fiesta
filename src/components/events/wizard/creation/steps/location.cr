@@ -93,7 +93,7 @@ class Events::Wizard::Steps::Location < Events::Wizard::Steps::BaseStep
   private def render_new_location_wizard
     div class: "card bg-base-100 shadow-xl" do
       div class: "card-body" do
-        mount Locations::Wizard::Creation,
+        mount Locations::Wizard::CreationContainer,
           current_step: 1,
           location: Location.new,
           parent_event: event

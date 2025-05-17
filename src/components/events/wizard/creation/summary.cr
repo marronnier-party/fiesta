@@ -1,4 +1,4 @@
-class Events::Wizard::Summary < Shared::Wizard::Summary
+class Events::Wizard::Creation::Summary < Shared::Wizard::Summary
   needs event : Event
   needs location : Location?
 

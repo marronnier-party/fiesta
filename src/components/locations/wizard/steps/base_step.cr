@@ -1,8 +1,13 @@
-abstract class Locations::Wizard::Steps::BaseStep < Shared::Wizard::Step
+class Locations::Wizard::Steps::BaseStep < Shared::Wizard::Step
   needs location : Location
 
-  abstract def step_title
-  abstract def step_number
+  def step_title
+    "needs a title"
+  end
+
+  def step_number
+    45454
+  end
 
   def render
     div class: card_classes, id: "location-step-#{step_number}" do
@@ -14,7 +19,9 @@ abstract class Locations::Wizard::Steps::BaseStep < Shared::Wizard::Step
     end
   end
 
-  abstract def render_content
+  def render_content
+    "content here"
+  end
 
   private def render_navigation
     div class: "card-actions justify-between mt-6" do
@@ -23,8 +30,11 @@ abstract class Locations::Wizard::Steps::BaseStep < Shared::Wizard::Step
     end
   end
 
-  private def back_path : String
-    Locations::New.with(current_step: step_number - 1)
+  private def back_path
+    Locations::Wizard::GoToStep.with(
+            location_id: location.not_nil!.id,
+            current_step: step_number - 1
+          )
   end
 
   private def render_next_button

@@ -15,25 +15,26 @@ class Locations::Wizard::CreationContainer < Shared::Wizard::Base
     li label,
        class: step_class(step_number),
        hx_get: Locations::Wizard::GoToStep.with(
-         location_id: location.id,
+         location_id: location.not_nil!.id,
          current_step: step_number
        ).path,
        hx_target: "#location-wizard-content",
        hx_trigger: "click"
   end
 
-  private def steps : Array(Shared::Wizard::Step)
+  private def steps #: Array(Shared::Wizard::Step)
   [
-    Wizard::Steps::Name,
-    Wizard::Steps::Address,
-    Wizard::Steps::Details,
-    Wizard::Preview
+    Locations::Wizard::Steps::Name,
+    Locations::Wizard::Steps::Address,
+    Locations::Wizard::Steps::Details,
+    # Locations::Wizard::Steps::Preview,
     ]
   end
 
   private def render_current_step
     div id: "location-wizard-content", class: "transition-all duration-300" do
-      mount steps[current_step - 1], location: location
+      # mount Locations::Wizard::Steps::Preview, location: location.not_nil!
+      mount steps[current_step - 1], location: location.not_nil!
     end
   end
 

@@ -8,7 +8,7 @@ class Locations::Wizard::Steps::Details < Locations::Wizard::Steps::BaseStep
   end
 
   def render_content
-    form_for Locations::Create.with(current_step: step_number),
+    form_for Locations::Create, #.with(current_step: step_number),
       class: "space-y-4" do
       div class: "grid grid-cols-2 gap-4" do
         div class: "form-control" do
