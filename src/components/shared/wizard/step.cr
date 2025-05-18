@@ -21,14 +21,14 @@ abstract class Shared::Wizard::Step < BaseComponent
 
   private def render_back_button
     link "Retour",
-         to: back_path,
-         class: "btn btn-ghost"
+      to: back_path,
+      class: "btn btn-ghost"
   end
 
   private def render_next_button
     button next_button_text,
-           class: "btn btn-primary",
-           type: "submit"
+      class: "btn btn-primary",
+      type: "submit"
   end
 
   private def next_button_text
@@ -50,7 +50,7 @@ abstract class Shared::Wizard::Step < BaseComponent
   # To be overridden
 
   def self.title : String
-      "Step title"
+    "Step title"
   end
 
   def self.number : Int32

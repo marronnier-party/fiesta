@@ -2,7 +2,6 @@ class Locations::Wizard::Done < BrowserAction
   include RequireLocationFromId
   param parent_event_id : Int64? # Optional, for when creating from event wizard
 
-
   get "/locations/wizard/done" do
     if location.creator_id != current_user.id
       raise "Not authorized to access this location"

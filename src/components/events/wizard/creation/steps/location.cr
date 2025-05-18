@@ -46,9 +46,9 @@ class Events::Wizard::Creation::Steps::Location < Events::Wizard::Creation::Step
       # L'étape suivante est la 4.
       next_step_number = 4
       button class: "btn btn-outline btn-primary gap-2",
-             hx_get: Events::Wizard::Creation::GoToStep.with(event_id: event.not_nil!.id, current_step: next_step_number).path,
-             hx_target: "#wizard-content", # Cible le conteneur principal du wizard
-             hx_swap: "innerHTML" do # Assure le remplacement du contenu
+        hx_get: Events::Wizard::Creation::GoToStep.with(event_id: event.not_nil!.id, current_step: next_step_number).path,
+        hx_target: "#wizard-content", # Cible le conteneur principal du wizard
+        hx_swap: "innerHTML" do       # Assure le remplacement du contenu
         mount UI::Icon, "clock", class: "w-5 h-5"
         span "Je définirai le lieu plus tard"
       end
@@ -96,7 +96,7 @@ class Events::Wizard::Creation::Steps::Location < Events::Wizard::Creation::Step
       "hx-target": "#wizard-content",
       "hx-swap":   "innerHTML",
       "name":      "location_id",
-      "value":     location.id.to_s
+      "value":     location.id.to_s,
     }
     button **button_attrs do
       div class: "card-body p-4" do

@@ -18,6 +18,6 @@ class Events::Wizard::New < BrowserAction
         current_step: current_step,
         event: event,
         location: location
-      end
+    end
   end
 end

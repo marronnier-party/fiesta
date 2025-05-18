@@ -17,7 +17,6 @@ class Locations::Wizard::GoToStep < BrowserAction
         current_step: current_step,
         location: location,
         parent_event: parent_event
-
     else
       redirect to: Locations::Wizard::New.with(
         current_step: current_step,

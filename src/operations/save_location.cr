@@ -3,11 +3,15 @@ class SaveLocation < Location::SaveOperation
 
   before_save do
     validate_required name
-    validate_required address
-    validate_required city
-    validate_required postal_code
-    validate_required country
-    validate_coordinates
+
+    Avram::Slugify.set slug,
+      using: name,
+      query: LocationQuery.new
+    # validate_required address
+    # validate_required city
+    # validate_required postal_code
+    # validate_required country
+    # validate_coordinates
   end
 
   private def validate_coordinates

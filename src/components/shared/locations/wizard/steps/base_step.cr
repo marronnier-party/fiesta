@@ -1,14 +1,14 @@
 require "../../../wizard/step"
 
 class Locations::Wizard::Steps::BaseStep < Shared::Wizard::Step
-  needs location : Location
+  needs location : Location?
 
   def step_title
     "needs a title"
   end
 
   def step_number
-    45454
+    3
   end
 
   def render
@@ -28,15 +28,14 @@ class Locations::Wizard::Steps::BaseStep < Shared::Wizard::Step
   private def render_navigation
     div class: "card-actions justify-between mt-6" do
       render_back_button unless step_number == 1
-      render_next_button
     end
   end
 
   private def back_path
     Locations::Wizard::GoToStep.with(
-            location_id: location.not_nil!.id,
-            current_step: step_number - 1
-          )
+      location_id: location.not_nil!.id,
+      current_step: step_number - 1
+    )
   end
 
   private def render_next_button

@@ -4,18 +4,20 @@
   "dependencies": {
     "@rails/ujs": "^7.1.501",
     "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/forms": "^0.5.9",
-    "@tailwindcss/typography": "^0.5.15",
-    "autoprefixer": "^10.4.20",
-    "cssnano": "^7.0.6",
-    "daisyui": "^4.12.22",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
+    "autoprefixer": "^10.4.21",
+    "cssnano": "^7.0.7",
+    "daisyui": "^4.12.24",
     "esbuild": "^0.24.2",
     "global": "^4.4.0",
-    "postcss": "^8.4.49",
-    "postcss-cli": "^11.0.0",
+    "htmx": "^0.0.2",
+    "leaflet": "^1.9.4",
+    "postcss": "^8.5.3",
+    "postcss-cli": "^11.0.1",
     "postcss-import": "^16.1.0",
     "postcss-nesting": "^13.0.1",
-    "postcss-preset-env": "^10.1.2",
+    "postcss-preset-env": "^10.1.6",
     "tailwindcss": "^3.4.17",
     "turbolinks": "^5.2.0"
   },
@@ -29,17 +31,16 @@
     "watch:css": "tailwindcss --postcss --watch --input=src/css/app.css --output=public/css/app.css",
     "prod:css": "tailwindcss --minify --input=src/css/app.css --output=public/css/app.css",
     "postprod:css": "tailwindcss --postcss --minify --input=src/css/app.css --output=public/css/app.css",
-    "prod": "bun prod:js && bun prod:css && bun choeur:css",
-    "yarn-prod": "yarn prod:js && yarn prod:css",
+    "prod": "bun prod:js && bun prod:css",
     "tailwind": "tailwindcss --minify --input=src/css/app.css --output=public/css/app.css",
     "choeur:css": "tailwindcss --postcss --input=src/css/choeur.css --output=public/css/choeur.css"
   },
   "devDependencies": {
-    "@types/node": "^20.17.10",
+    "@types/node": "^20.17.47",
     "browser-sync": "^2.29.3",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.3",
     "resolve-url-loader": "5.0.0",
     "tailwindcss-font-inter": "^3.1.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.8.3"
   }
 }

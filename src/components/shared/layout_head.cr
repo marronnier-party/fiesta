@@ -7,6 +7,7 @@ class Shared::LayoutHead < BaseComponent
       title "Marronnier.party - #{@page_title}"
       css_link asset("css/app.css")
       js_link asset("js/app.js"), defer: "true"
+      js_link "https://unpkg.com/htmx.org"
       csrf_meta_tags
       responsive_meta_tag
 

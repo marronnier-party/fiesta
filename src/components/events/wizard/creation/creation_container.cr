@@ -2,6 +2,7 @@ class Events::Wizard::Creation::Container < BaseComponent
   needs current_step : Int32 = 1
   needs event : Event? = nil
   needs location : Location? = nil
+
   # needs current_user : User
 
   def render
@@ -37,7 +38,7 @@ class Events::Wizard::Creation::Container < BaseComponent
   private def render_step_indicator(label, step_number)
     li label,
       class: step_class(step_number),
-      hx_get: Events::Wizard::Creation::GoToStep.with(current_step: step_number, event_id: event.not_nil!.id).path,
+      # hx_get: Events::Wizard::Creation::GoToStep.with(current_step: step_number, event_id: event.not_nil!.id).path,
       hx_target: "#wizard-content",
       hx_trigger: "click"
   end
@@ -61,10 +62,10 @@ class Events::Wizard::Creation::Container < BaseComponent
           location: location
       when 4
         mount Events::Wizard::Creation::Steps::Description, event: event
-      # when 5
-      #   mount Events::Wizard::Creation::Steps::Invitations,
-      #     event: event,
-      #     current_user: current_user
+        # when 5
+        #   mount Events::Wizard::Creation::Steps::Invitations,
+        #     event: event,
+        #     current_user: current_user
       when 5 # New preview step
         mount Events::Wizard::Creation::Steps::Preview,
           event: event.not_nil!,

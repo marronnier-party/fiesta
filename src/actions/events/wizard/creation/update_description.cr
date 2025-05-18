@@ -6,7 +6,6 @@ class Events::Wizard::Creation::UpdateDescription < Events::WizardAction
           component Events::Wizard::Creation::Container,
             current_step: 5,
             event: updated_event
-
         else
           redirect to: Events::Wizard::New.with(
             current_step: 5,
@@ -18,7 +17,6 @@ class Events::Wizard::Creation::UpdateDescription < Events::WizardAction
           component Events::Wizard::Creation::Container,
             current_step: 4,
             event: event
-
         else
           redirect to: Events::Wizard::New.with(
             current_step: 4,

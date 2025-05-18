@@ -33,16 +33,16 @@ class Locations::Wizard::Summary < Shared::Wizard::Summary
 
   private def render_edit_link(step : Int32)
     link "Modifier",
-         to: Locations::Wizard::GoToStep.with(
-           location_id: location.id,
-           current_step: step
-         ),
-         class: "text-xs text-primary hover:underline mt-2 block",
-         hx_get: Locations::Wizard::GoToStep.with(
-           location_id: location.id,
-           current_step: step
-         ).path,
-         hx_target: "#location-wizard-content"
+      to: Locations::Wizard::GoToStep.with(
+        location_id: location.id,
+        current_step: step
+      ),
+      class: "text-xs text-primary hover:underline mt-2 block",
+      hx_get: Locations::Wizard::GoToStep.with(
+        location_id: location.id,
+        current_step: step
+      ).path,
+      hx_target: "#location-wizard-content"
   end
 
   private def show_summary? : Bool

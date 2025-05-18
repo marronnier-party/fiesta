@@ -30,7 +30,7 @@ abstract class MainLayout
       mount Shared::LayoutHead, page_title: page_title
 
       body do
-        render_body_test
+        # render_body_test
         mount Shared::FlashMessages, context.flash
         render_signed_in_user
         content

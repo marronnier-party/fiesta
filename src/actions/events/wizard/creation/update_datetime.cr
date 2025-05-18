@@ -8,7 +8,6 @@ class Events::Wizard::Creation::UpdateDateTime < Events::WizardAction
           component Events::Wizard::Creation::Container,
             current_step: 3,
             event: updated_event
-
         else
           redirect to: Events::Wizard::New.with(
             current_step: 3,
@@ -20,7 +19,6 @@ class Events::Wizard::Creation::UpdateDateTime < Events::WizardAction
           component Events::Wizard::Creation::Container,
             current_step: 2,
             event: event
-
         else
           redirect to: Events::Wizard::New.with(
             current_step: 2,

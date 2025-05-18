@@ -2,6 +2,7 @@
 class Events::Wizard::Creation::Summary < Shared::Wizard::Summary
   needs event : Event
   needs location : Location?
+
   # needs current_step : Int32 # Ensure current_step is accessible (e.g., via 'needs' or a getter from the parent class)
 
   private def render_content

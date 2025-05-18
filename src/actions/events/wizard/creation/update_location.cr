@@ -11,7 +11,6 @@ class Events::Wizard::Creation::UpdateLocation < Events::WizardAction
             current_step: 4,
             event: updated_event.not_nil!,
             location: location
-
         else
           redirect to: Events::Wizard::New.with(
             current_step: 4,
@@ -23,7 +22,6 @@ class Events::Wizard::Creation::UpdateLocation < Events::WizardAction
           component Events::Wizard::Creation::Container,
             current_step: 3,
             event: event
-
         else
           redirect to: Events::Wizard::New.with(
             current_step: 3,

@@ -10,12 +10,12 @@ class Locations::Wizard::Steps::Address < Locations::Wizard::Steps::BaseStep
   end
 
   def render_content
-    form_for Locations::Wizard::UpdateAddress.with(location_id: location.id), #.with(current_step: step_number),
+    form_for Locations::Wizard::UpdateAddress.with(location_id: location.not_nil!.id), # .with(current_step: step_number),
       class: "space-y-4" do
       div class: "form-control" do
         input type: "text",
           name: "location:address",
-          value: location.address,
+          value: location.not_nil!.address,
           placeholder: "Ex: 123 rue des Lilas",
           class: "input input-bordered w-full",
           "data-address-autocomplete": "true",
@@ -26,6 +26,7 @@ class Locations::Wizard::Steps::Address < Locations::Wizard::Steps::BaseStep
         input type: "hidden", name: "location:longitude"
       end
 
+      render_next_button
       # Map preview
       div id: "location-map", class: "h-64 rounded-lg overflow-hidden mt-4"
     end

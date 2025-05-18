@@ -12,8 +12,8 @@ abstract class Shared::Wizard::Summary < BaseComponent
     div class: "p-4 bg-base-300 flex justify-between items-center" do
       h3 "Résumé", class: "font-bold"
       button "×",
-             class: "btn btn-ghost btn-sm btn-circle",
-             onclick: "this.closest('.fixed').classList.toggle('translate-x-96')"
+        class: "btn btn-ghost btn-sm btn-circle",
+        onclick: "this.closest('.fixed').classList.toggle('translate-x-96')"
     end
   end
 

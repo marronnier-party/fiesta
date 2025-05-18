@@ -2,12 +2,10 @@ class Locations::Wizard::UpdateAddress < BrowserAction
   include RequireLocationFromId
   param parent_event_id : Int64? # Optional, for when creating from event wizard
 
-
   post "/locations/wizard/update_address" do
     authorize_user(location)
 
     parent_event = parent_event_id.try { |id| EventQuery.find(id) }
-
 
     SaveLocation.update(location, params) do |operation, updated_location|
       if operation.saved?

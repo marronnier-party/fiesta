@@ -1,4 +1,5 @@
 require "./step.cr"
+
 abstract class Shared::Wizard::Form < Shared::Wizard::Step
   def render_content
     form_for form_action, class: "space-y-4" do

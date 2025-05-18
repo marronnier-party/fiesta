@@ -15,7 +15,7 @@ abstract class Shared::Wizard::Base < BaseComponent
     div class: "w-full mb-8" do
       ul class: "steps w-full" do
         steps.each_with_index do |step, index|
-          render_step_indicator(step.title, index+1)
+          render_step_indicator(step.title, index + 1)
         end
       end
     end
@@ -23,10 +23,10 @@ abstract class Shared::Wizard::Base < BaseComponent
 
   private def render_step_indicator(label, step_number)
     li label,
-       class: step_class(step_number),
-       hx_get: go_to_step_path(step_number),
-       hx_target: wizard_content_id,
-       hx_trigger: "click"
+      class: step_class(step_number),
+      hx_get: go_to_step_path(step_number),
+      hx_target: wizard_content_id,
+      hx_trigger: "click"
   end
 
   private def step_class(step_number)

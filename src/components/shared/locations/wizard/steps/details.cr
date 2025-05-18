@@ -8,14 +8,14 @@ class Locations::Wizard::Steps::Details < Locations::Wizard::Steps::BaseStep
   end
 
   def render_content
-    form_for Locations::Create, #.with(current_step: step_number),
+    form_for Locations::Create, # .with(current_step: step_number),
       class: "space-y-4" do
       div class: "grid grid-cols-2 gap-4" do
         div class: "form-control" do
           label "Ville", class: "label"
           input type: "text",
             name: "location:city",
-            value: location.city,
+            value: location.not_nil!.city,
             class: "input input-bordered w-full",
             required: true
         end
@@ -24,7 +24,7 @@ class Locations::Wizard::Steps::Details < Locations::Wizard::Steps::BaseStep
           label "Code postal", class: "label"
           input type: "text",
             name: "location:postal_code",
-            value: location.postal_code,
+            value: location.not_nil!.postal_code,
             class: "input input-bordered w-full",
             required: true,
             pattern: "\\d{5}",
@@ -36,7 +36,7 @@ class Locations::Wizard::Steps::Details < Locations::Wizard::Steps::BaseStep
         label "Pays", class: "label"
         input type: "text",
           name: "location:country",
-          value: location.country || "France",
+          value: location.not_nil!.country || "France",
           class: "input input-bordered w-full",
           required: true
       end
