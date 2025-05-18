@@ -8,7 +8,7 @@ class Locations::Wizard::New < BrowserAction
     parent_event = parent_event_id.try { |id| EventQuery.find(id) }
 
     if htmx?
-      component Locations::Wizard::CreationContainer,
+      component Locations::Wizard::Container,
         current_step: current_step,
         location: location,
         parent_event: parent_event

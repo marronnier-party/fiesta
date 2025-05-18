@@ -11,7 +11,7 @@ class Events::Wizard::Creation::UpdateLocation < Events::WizardAction
     SaveEvent.update(event, location_id: location_id) do |operation, updated_event|
       if operation.saved?
         if htmx?
-          component Events::Wizard::CreationContainer,
+          component Events::Wizard::Creation::Container,
             current_step: 4,
             event: updated_event,
             location: location,
@@ -25,7 +25,7 @@ class Events::Wizard::Creation::UpdateLocation < Events::WizardAction
         end
       else
         if htmx?
-          component Events::Wizard::CreationContainer,
+          component Events::Wizard::Creation::Container,
             current_step: 3,
             event: event,
             current_user: current_user

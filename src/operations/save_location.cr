@@ -1,5 +1,5 @@
 class SaveLocation < Location::SaveOperation
-  permit_columns name, address, city, postal_code, country, latitude, longitude, is_private, creator_id
+  permit_columns name, description, address, city, postal_code, country, latitude, longitude, is_private, creator_id
 
   before_save do
     validate_required name

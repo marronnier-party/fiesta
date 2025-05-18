@@ -16,7 +16,7 @@ class Locations::Wizard::UpdateDescription < BrowserAction
         end
       else
         if htmx?
-          component Locations::Wizard::CreationContainer,
+          component Locations::Wizard::Container,
             current_step: 3,
             location: location
         else

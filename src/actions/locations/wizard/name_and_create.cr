@@ -5,13 +5,13 @@ class Locations::Wizard::NameAndCreate < BrowserAction
     parent_event = parent_event_id.try { |id| EventQuery.find(id) }
     SaveLocation.create(params, creator_id: current_user.id) do |operation, location|
       if operation.saved?
-        component Locations::Wizard::CreationContainer,
+        component Locations::Wizard::Container,
           current_step: 2,
           location: location.not_nil!,
           current_user: current_user,
           parent_event: parent_event
       else
-        component Locations::Wizard::CreationContainer,
+        component Locations::Wizard::Container,
           current_step: 1,
           location: location,
           current_user: current_user,

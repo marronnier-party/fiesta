@@ -12,7 +12,7 @@ class Locations::Wizard::UpdateAddress < BrowserAction
     SaveLocation.update(location, params) do |operation, updated_location|
       if operation.saved?
         if htmx?
-          component Locations::Wizard::CreationContainer,
+          component Locations::Wizard::Container,
             current_step: 3,
             location: updated_location,
             parent_event: parent_event
@@ -24,7 +24,7 @@ class Locations::Wizard::UpdateAddress < BrowserAction
         end
       else
         if htmx?
-          component Locations::Wizard::CreationContainer,
+          component Locations::Wizard::Container,
             current_step: 2,
             location: location,
             parent_event: parent_event

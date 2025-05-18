@@ -1,4 +1,4 @@
-class Events::Wizard::Steps::Description < Events::Wizard::Steps::BaseStep
+class Events::Wizard::Creation::Steps::Description < Events::Wizard::Creation::Steps::BaseStep
   def step_title : String
     "Un petit mot pour décrire l'événement ? ✍️"
   end

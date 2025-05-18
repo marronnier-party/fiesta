@@ -11,7 +11,7 @@ class Locations::Wizard::Preview < BrowserAction
     parent_event = parent_event_id.try { |id| EventQuery.find(id) }
 
     if htmx?
-      component Locations::Wizard::CreationContainer,
+      component Locations::Wizard::Container,
         current_step: 4,
         location: location,
         parent_event: parent_event

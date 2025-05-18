@@ -7,7 +7,7 @@ class Events::Wizard::New < BrowserAction
 
     if htmx?
       # If it's an HTMX request, return only the component
-      component Events::Wizard::CreationContainer,
+      component Events::Wizard::Creation::Container,
         current_step: current_step,
         event: event,
         location: location,

@@ -1,4 +1,4 @@
-abstract class Events::Wizard::Steps::BaseStep < BaseComponent
+abstract class Events::Wizard::Creation::Steps::BaseStep < BaseComponent
   needs event : Event? = nil
 
   abstract def step_title
@@ -26,7 +26,7 @@ abstract class Events::Wizard::Steps::BaseStep < BaseComponent
 
   private def render_back_button
     link "Retour",
-      to: Events::New.with(current_step: step_number - 1),
+      to: Events::Wizard::Creation::GoToStep.with(current_step: step_number - 1, event_id: event.not_nil!.id),
       class: "btn btn-ghost"
   end
 
@@ -45,6 +45,6 @@ abstract class Events::Wizard::Steps::BaseStep < BaseComponent
   end
 
   def render_persistence_script
-    script src: asset("js/wizard-persistence.js")
+    # script src: asset("js/wizard-persistence.js")
   end
 end

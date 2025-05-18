@@ -5,7 +5,7 @@ class Events::Wizard::NewPage < MainLayout
 
   def content
     # You might want to add a page title or other elements here
-    mount Events::Wizard::CreationContainer,
+    mount Events::Wizard::Creation::Container,
       current_step: current_step,
       event: event,
       location: location,

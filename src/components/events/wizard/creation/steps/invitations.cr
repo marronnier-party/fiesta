@@ -1,4 +1,4 @@
-class Events::Wizard::Steps::Invitations < Events::Wizard::Steps::BaseStep
+class Events::Wizard::Creation::Steps::Invitations < Events::Wizard::Creation::Steps::BaseStep
   def step_title : String
     "Qui souhaites-tu inviter ? 👥"
   end

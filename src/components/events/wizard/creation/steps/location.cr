@@ -1,5 +1,5 @@
 # Complete Events::Wizard::Steps::Location component
-class Events::Wizard::Steps::Location < Events::Wizard::Steps::BaseStep
+class Events::Wizard::Creation::Steps::Location < Events::Wizard::Creation::Steps::BaseStep
   def step_title
     "On se retrouve où ? 📍"
   end
@@ -93,7 +93,7 @@ class Events::Wizard::Steps::Location < Events::Wizard::Steps::BaseStep
   private def render_new_location_wizard
     div class: "card bg-base-100 shadow-xl" do
       div class: "card-body" do
-        mount Locations::Wizard::CreationContainer,
+        mount Locations::Wizard::Container,
           current_step: 1,
           location: Location.new,
           parent_event: event
@@ -115,11 +115,11 @@ class Events::Wizard::Steps::Location < Events::Wizard::Steps::BaseStep
 
   private def location_button_class(option)
     base = "btn gap-2"
-    if params.get?("option") == option
-      base += " btn-primary"
-    else
-      base += " btn-outline"
-    end
-    base
+    # if params.get?("option") == option
+    #   base += " btn-primary"
+    # else
+    #   base += " btn-outline"
+    # end
+    # base
   end
 end

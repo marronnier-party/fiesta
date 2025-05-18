@@ -41,9 +41,9 @@ class Events::Wizard::Creation::Summary < Shared::Wizard::Summary
       end
 
       para class: "text-sm mt-1" do
-        text location.name
+        text location.not_nil!.name
         br
-        text location.city
+        text location.not_nil!.city
       end
 
       render_edit_link(3) if current_step > 3
@@ -69,12 +69,12 @@ class Events::Wizard::Creation::Summary < Shared::Wizard::Summary
 
   private def render_edit_link(step : Int32)
     link "Modifier",
-         to: Events::Wizard::GoToStep.with(
+         to: Events::Wizard::Creation::GoToStep.with(
            event_id: event.id,
            current_step: step
          ),
          class: "text-xs text-primary hover:underline mt-2 block",
-         hx_get: Events::Wizard::GoToStep.with(
+         hx_get: Events::Wizard::Creation::GoToStep.with(
            event_id: event.id,
            current_step: step
          ).path,
@@ -82,10 +82,10 @@ class Events::Wizard::Creation::Summary < Shared::Wizard::Summary
   end
 
   private def show_summary? : Bool
-    event.name ||
-      event.start_at ||
-      location ||
-      event.description.presence ||
+    event.name.present? ||
+      event.start_at.present? ||
+      location.present? ||
+      event.description.present? ||
       !event.guests.empty?
   end
 end

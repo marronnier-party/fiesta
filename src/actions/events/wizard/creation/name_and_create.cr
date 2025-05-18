@@ -3,7 +3,7 @@ class Events::Wizard::Creation::NameAndCreate < Events::WizardAction
       SaveEvent.create(params, creator: current_user) do |operation, event|
         if operation.saved?
           if htmx?
-            component Events::Wizard::CreationContainer,
+            component Events::Wizard::Creation::Container,
               current_step: 2,
               event: event,
               current_user: current_user
@@ -16,7 +16,7 @@ class Events::Wizard::Creation::NameAndCreate < Events::WizardAction
           end
         else
           if htmx?
-            component Events::Wizard::CreationContainer,
+            component Events::Wizard::Creation::Container,
               current_step: 1,
               current_user: current_user
 

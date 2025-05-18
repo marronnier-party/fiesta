@@ -13,7 +13,7 @@ class Locations::Wizard::GoToStep < BrowserAction
     end
 
     if htmx?
-      component Locations::Wizard::CreationContainer,
+      component Locations::Wizard::Container,
         current_step: current_step,
         location: location,
         parent_event: parent_event

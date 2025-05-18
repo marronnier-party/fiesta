@@ -7,7 +7,7 @@ class Events::Wizard::Creation::GoToStep < Events::WizardAction
     location = event.location # Assuming you have this relation set up
 
     if htmx?
-      component Events::Wizard::CreationContainer,
+      component Events::Wizard::Creation::Container,
         current_step: current_step,
         event: event,
         location: location,

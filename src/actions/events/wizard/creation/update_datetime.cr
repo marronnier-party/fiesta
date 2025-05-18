@@ -7,7 +7,7 @@ class Events::Wizard::Creation::UpdateDateTime < Events::WizardAction
     SaveEvent.update(event, params) do |operation, updated_event|
       if operation.saved?
         if htmx?
-          component Events::Wizard::CreationContainer,
+          component Events::Wizard::Creation::Container,
             current_step: 3,
             event: updated_event,
             current_user: current_user
@@ -20,7 +20,7 @@ class Events::Wizard::Creation::UpdateDateTime < Events::WizardAction
         end
       else
         if htmx?
-          component Events::Wizard::CreationContainer,
+          component Events::Wizard::Creation::Container,
             current_step: 2,
             event: event,
             current_user: current_user
