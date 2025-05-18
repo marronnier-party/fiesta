@@ -7,8 +7,7 @@ class Events::Wizard::Creation::UpdateDateTime < Events::WizardAction
         if htmx?
           component Events::Wizard::Creation::Container,
             current_step: 3,
-            event: updated_event,
-            current_user: current_user
+            event: updated_event
 
         else
           redirect to: Events::Wizard::New.with(
@@ -20,8 +19,7 @@ class Events::Wizard::Creation::UpdateDateTime < Events::WizardAction
         if htmx?
           component Events::Wizard::Creation::Container,
             current_step: 2,
-            event: event,
-            current_user: current_user
+            event: event
 
         else
           redirect to: Events::Wizard::New.with(

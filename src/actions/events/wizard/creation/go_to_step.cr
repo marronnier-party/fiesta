@@ -10,8 +10,7 @@ class Events::Wizard::Creation::GoToStep < Events::WizardAction
       component Events::Wizard::Creation::Container,
         current_step: current_step,
         event: event,
-        location: location,
-        current_user: current_user
+        location: location
     else
       redirect to: Events::Wizard::New.with(
         current_step: current_step,

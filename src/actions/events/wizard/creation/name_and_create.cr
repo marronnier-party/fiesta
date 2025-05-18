@@ -1,16 +1,16 @@
 class Events::Wizard::Creation::NameAndCreate < BrowserAction
   post "/events/wizard/creation/name_and_create" do
-      SaveEvent.create(params, creator: current_user) do |operation, event|
-        if operation.saved?
+      SaveEvent.create(params) do |operation, event|
+        if event
           if htmx?
             component Events::Wizard::Creation::Container,
               current_step: 2,
-              event: event,
+              event: event.not_nil!,
               current_user: current_user
           else
             redirect to: Events::Wizard::Creation::GoToStep.with(
               current_step: 2,
-              event_id: event.id
+              event_id: event.not_nil!.id
             )
           end
         else

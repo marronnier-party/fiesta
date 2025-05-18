@@ -1,9 +1,8 @@
 class Events::Wizard::Creation::Done < Events::WizardAction
-
   get "/events/wizard/creation/done" do
 
     # Mark the event as completed if needed
-    SaveEvent.update(event, completed: true) do |operation, updated_event|
+    SaveEvent.update(event) do |operation, updated_event|
       if operation.saved?
         redirect to: Events::Show.with(event_id: updated_event.id)
       else

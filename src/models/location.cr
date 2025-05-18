@@ -9,7 +9,7 @@ class Location < BaseModel
     column postal_code : String
     column latitude : Float64?
     column longitude : Float64?
-    column is_private : Bool = true
+    # column is_private : Bool = true
     belongs_to creator : User
     has_many events : Event
   end

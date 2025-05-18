@@ -6,7 +6,7 @@ class Locations::Create < BrowserAction
         redirect Show.with(location.id)
       else
         flash.failure = "It looks like the form is not valid"
-        html NewPage, operation: operation
+        redirect to: Locations::Wizard::New
       end
     end
   end

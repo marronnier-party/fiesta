@@ -14,7 +14,7 @@ class Locations::Wizard::New < BrowserAction
         parent_event: parent_event
 
     else
-      html NewPage,
+      html Locations::Wizard::NewPage,
         current_step: current_step,
         location: location,
         parent_event: parent_event

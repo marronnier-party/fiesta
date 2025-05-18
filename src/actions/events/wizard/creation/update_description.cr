@@ -1,12 +1,11 @@
-class Events::Wizard::UpdateDescription < Events::WizardAction
+class Events::Wizard::Creation::UpdateDescription < Events::WizardAction
   post "/events/wizard/update_description" do
     SaveEvent.update(event, params) do |operation, updated_event|
       if operation.saved?
         if htmx?
           component Events::Wizard::Creation::Container,
             current_step: 5,
-            event: updated_event,
-            current_user: current_user
+            event: updated_event
 
         else
           redirect to: Events::Wizard::New.with(
@@ -18,8 +17,7 @@ class Events::Wizard::UpdateDescription < Events::WizardAction
         if htmx?
           component Events::Wizard::Creation::Container,
             current_step: 4,
-            event: event,
-            current_user: current_user
+            event: event
 
         else
           redirect to: Events::Wizard::New.with(

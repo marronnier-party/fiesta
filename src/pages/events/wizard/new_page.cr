@@ -8,8 +8,7 @@ class Events::Wizard::NewPage < MainLayout
     mount Events::Wizard::Creation::Container,
       current_step: current_step,
       event: event,
-      location: location,
-      current_user: current_user
+      location: location
   end
 
   def page_title

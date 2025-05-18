@@ -8,7 +8,7 @@ class Events::Wizard::Creation::Steps::DateTime < Events::Wizard::Creation::Step
   end
 
   def render_content
-    form_for Events::Create.with(current_step: step_number),
+    form_for Events::Wizard::Creation::UpdateDateTime.with(event_id: event.not_nil!.id),
       class: "space-y-4" do
       div class: "grid grid-cols-1 md:grid-cols-2 gap-4" do
         div class: "form-control" do

@@ -6,8 +6,7 @@ class Events::Wizard::Creation::UpdateName < Events::WizardAction
         if htmx?
           component Events::Wizard::Creation::Container,
             current_step: 2,
-            event: updated_event,
-            current_user: current_user
+            event: updated_event
 
         else
           redirect to: Events::Wizard::New.with(
@@ -19,9 +18,7 @@ class Events::Wizard::Creation::UpdateName < Events::WizardAction
         if htmx?
           component Events::Wizard::Creation::Container,
             current_step: 1,
-            event: event,
-            current_user: current_user
-
+            event: event
         else
           redirect to: Events::Wizard::New.with(
             current_step: 1,

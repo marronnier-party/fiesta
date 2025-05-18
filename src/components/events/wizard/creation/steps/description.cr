@@ -8,7 +8,7 @@ class Events::Wizard::Creation::Steps::Description < Events::Wizard::Creation::S
   end
 
   def render_content
-    form_for Events::Create.with(current_step: step_number),
+    form_for Events::Wizard::Creation::UpdateDescription.with(event_id: event.not_nil!.id),
       class: "space-y-4" do
       div class: "form-control" do
         textarea name: "event:description",

@@ -10,8 +10,7 @@ class Events::Wizard::Creation::UpdateLocation < Events::WizardAction
           component Events::Wizard::Creation::Container,
             current_step: 4,
             event: updated_event.not_nil!,
-            location: location,
-            current_user: current_user
+            location: location
 
         else
           redirect to: Events::Wizard::New.with(
@@ -23,8 +22,7 @@ class Events::Wizard::Creation::UpdateLocation < Events::WizardAction
         if htmx?
           component Events::Wizard::Creation::Container,
             current_step: 3,
-            event: event,
-            current_user: current_user
+            event: event
 
         else
           redirect to: Events::Wizard::New.with(

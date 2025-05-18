@@ -2,7 +2,7 @@ class Events::Wizard::Creation::Container < BaseComponent
   needs current_step : Int32 = 1
   needs event : Event? = nil
   needs location : Location? = nil
-  needs current_user : User
+  # needs current_user : User
 
   def render
     div class: "min-h-screen bg-base-100" do
@@ -58,8 +58,7 @@ class Events::Wizard::Creation::Container < BaseComponent
       when 3
         mount Events::Wizard::Creation::Steps::Location,
           event: event,
-          location: location,
-          current_user: current_user
+          location: location
       when 4
         mount Events::Wizard::Creation::Steps::Description, event: event
       # when 5

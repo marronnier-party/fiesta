@@ -11,16 +11,13 @@ class Events::Wizard::New < BrowserAction
       component Events::Wizard::Creation::Container,
         current_step: current_step,
         event: event,
-        location: location,
-        current_user: current_user
-
+        location: location
     else
       # For regular requests, render the full page
-      html NewPage,
+      html Events::Wizard::NewPage,
         current_step: current_step,
         event: event,
-        location: location,
-        current_user: current_user
-    end
+        location: location
+      end
   end
 end
