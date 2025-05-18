@@ -40,7 +40,7 @@ abstract class Shared::Wizard::Step < BaseComponent
   end
 
   private def render_persistence_script
-    script src: asset("js/wizard-persistence.js")
+    # script src: asset("js/wizard-persistence.js")
   end
 
   # Abstract methods

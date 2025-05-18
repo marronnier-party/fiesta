@@ -1,5 +1,5 @@
 class Events::Wizard::Creation::UpdateName < Events::WizardAction
-  post "/events/wizard/update_name/:event_id" do
+  post "/events/wizard/update_name" do
 
     SaveEvent.update(event, params) do |operation, updated_event|
       if operation.saved?

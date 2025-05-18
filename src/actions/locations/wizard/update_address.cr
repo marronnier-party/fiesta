@@ -3,7 +3,7 @@ class Locations::Wizard::UpdateAddress < BrowserAction
   param parent_event_id : Int64? # Optional, for when creating from event wizard
 
 
-  post "/locations/wizard/update_address/:location_id" do
+  post "/locations/wizard/update_address" do
     authorize_user(location)
 
     parent_event = parent_event_id.try { |id| EventQuery.find(id) }

@@ -1,5 +1,6 @@
 module RequireEventFromId
   macro included
+    param event_id : Int64
     before require_event_from_id
   end
 

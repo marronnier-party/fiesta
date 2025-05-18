@@ -1,6 +1,6 @@
 class Locations::Wizard::New < BrowserAction
   param current_step : Int32 = 1
-   param location_id : Int64?
+  param location_id : Int64?
   param parent_event_id : Int64? # Optional, for when creating from event wizard
 
   get "/locations/wizard/new" do

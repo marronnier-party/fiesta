@@ -1,6 +1,6 @@
 class Events::Wizard::Creation::Steps::Preview < Shared::Wizard::Preview
   needs event : Event
-  needs location : Location?
+  needs location : ::Location?
 
   def step_title : String
     "Prévisualisation de l'événement 👀"
@@ -21,8 +21,8 @@ class Events::Wizard::Creation::Steps::Preview < Shared::Wizard::Preview
 
     render_section("Lieu", "map-pin") do
       if location
-        para location.name, class: "font-medium"
-        para "#{location.address}, #{location.city}"
+        para location.not_nil!.name, class: "font-medium"
+        para "#{location.not_nil!.address}, #{location.not_nil!.city}"
       else
         para "À définir", class: "italic text-base-content/60"
       end
@@ -44,11 +44,11 @@ class Events::Wizard::Creation::Steps::Preview < Shared::Wizard::Preview
   end
 
   def completion_path : String
-    Events::Wizard::Done.with(event_id: event.id).path
+    Events::Wizard::Creation::Done.with(event_id: event.id).path
   end
 
-  def back_path : String
-    Events::Wizard::GoToStep.with(event_id: event.id, current_step: 5).path
+  def back_path
+    Events::Wizard::Creation::GoToStep.with(event_id: event.id, current_step: 5)
   end
 
   def is_last_step? : Bool

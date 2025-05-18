@@ -1,5 +1,5 @@
 class Events::Wizard::UpdateDescription < Events::WizardAction
-  post "/events/wizard/update_description/:event_id" do
+  post "/events/wizard/update_description" do
     SaveEvent.update(event, params) do |operation, updated_event|
       if operation.saved?
         if htmx?
@@ -22,7 +22,7 @@ class Events::Wizard::UpdateDescription < Events::WizardAction
             current_user: current_user
 
         else
-          redirect to: Events::Wizard::Creation::New.with(
+          redirect to: Events::Wizard::New.with(
             current_step: 4,
             event_id: event.id
           )

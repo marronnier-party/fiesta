@@ -1,4 +1,4 @@
-class Events::Wizard::Creation::NameAndCreate < Events::WizardAction
+class Events::Wizard::Creation::NameAndCreate < BrowserAction
   post "/events/wizard/creation/name_and_create" do
       SaveEvent.create(params, creator: current_user) do |operation, event|
         if operation.saved?
@@ -7,9 +7,8 @@ class Events::Wizard::Creation::NameAndCreate < Events::WizardAction
               current_step: 2,
               event: event,
               current_user: current_user
-
           else
-            redirect to: Events::Wizard::New.with(
+            redirect to: Events::Wizard::Creation::GoToStep.with(
               current_step: 2,
               event_id: event.id
             )

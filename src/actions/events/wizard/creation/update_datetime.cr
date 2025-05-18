@@ -1,7 +1,5 @@
 class Events::Wizard::Creation::UpdateDateTime < Events::WizardAction
-
-  post "/events/wizard/update_datetime/:event_id" do
-    event = EventQuery.find(event_id)
+  post "/events/wizard/update_datetime" do
     authorize_user(event)
 
     SaveEvent.update(event, params) do |operation, updated_event|

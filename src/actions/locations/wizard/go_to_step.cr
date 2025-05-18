@@ -4,7 +4,7 @@ class Locations::Wizard::GoToStep < BrowserAction
   param current_step : Int32
   param parent_event_id : Int64?
 
-  get "/locations/wizard/go_to_step/:location_id" do
+  get "/locations/wizard/go_to_step" do
     location = LocationQuery.find(location_id)
     parent_event = parent_event_id.try { |id| EventQuery.find(id) }
 

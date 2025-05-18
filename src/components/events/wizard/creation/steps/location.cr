@@ -1,125 +1,138 @@
-# Complete Events::Wizard::Steps::Location component
+# src/components/events/wizard/creation/steps/location.cr
 class Events::Wizard::Creation::Steps::Location < Events::Wizard::Creation::Steps::BaseStep
+  # Assurez-vous que 'event' et 'current_user' sont accessibles ici.
+  # Ils pourraient venir de BaseStep, d'un 'getter' dans cette classe,
+  # ou être passés lors du 'mount'.
+  # Exemple (à adapter si déjà défini ailleurs) :
+  # getter event : Event
+  # getter current_user : User
+
   def step_title
     "On se retrouve où ? 📍"
   end
 
   def step_number
-    3
+    3 # Numéro de cette étape
   end
 
   def render_content
     div class: "space-y-6" do
-      render_location_options
-      render_selected_content
+      # Section 1: Conteneur des options initiales
+      div id: "location-options-container" do
+        render_location_options_buttons
+      end
+
+      # Section 2: Conteneur pour afficher les lieux existants (initialement masqué)
+      div id: "existing-locations-container", class: "hidden space-y-4" do
+        render_existing_locations_content
+        render_back_to_options_button
+      end
+
+      # Section 3: Conteneur pour le wizard de création de nouveau lieu (initialement masqué)
+      div id: "new-location-container", class: "hidden" do
+        render_new_location_wizard
+        render_back_to_options_button
+      end
     end
+    render_javascript_for_toggling
   end
 
-  private def render_location_options
+  private def render_location_options_buttons
     div class: "flex flex-col sm:flex-row gap-4 justify-center" do
-      render_option_button("Choisir un lieu existant", "map-pin", "existing")
-      render_option_button("Créer un nouveau lieu", "plus-circle", "new")
-      render_option_button("Je définirai le lieu plus tard", "clock", "skip")
+      button_option("Choisir un lieu existant", "map-pin", "showExisting")
+      button_option("Créer un nouveau lieu", "plus-circle", "showNew")
+
+      # Bouton pour passer cette étape (via HTMX vers Events::Wizard::Creation::GoToStep)
+      # L'étape suivante est la 4.
+      next_step_number = 4
+      button class: "btn btn-outline btn-primary gap-2",
+             hx_get: Events::Wizard::Creation::GoToStep.with(event_id: event.not_nil!.id, current_step: next_step_number).path,
+             hx_target: "#wizard-content", # Cible le conteneur principal du wizard
+             hx_swap: "innerHTML" do # Assure le remplacement du contenu
+        mount UI::Icon, "clock", class: "w-5 h-5"
+        span "Je définirai le lieu plus tard"
+      end
     end
   end
 
-  private def render_option_button(text, icon, option)
-    button text,
-      class: location_button_class(option),
-      hx_get: Events::LocationOption.with(
-        event_id: event.id,
-        option: option
-      ).path,
-      hx_target: "#location-content" do
-      mount UI::Icon, icon, class: "w-5 h-5"
+  private def button_option(text, icon_name, action_key)
+    button class: "btn btn-outline btn-primary gap-2", onclick: "handleLocationOption('#{action_key}')" do
+      mount UI::Icon, icon_name, class: "w-5 h-5"
       span text
     end
   end
 
-  private def render_selected_content
-    div id: "location-content", class: "mt-8" do
-      case params.get?("option")
-      when "existing"
-        render_existing_locations
-      when "new"
-        render_new_location_wizard
-      when "skip"
-        render_skip_confirmation
-      end
+  private def render_back_to_options_button
+    button class: "btn btn-sm btn-ghost mt-4", onclick: "showLocationOptions()" do
+      mount UI::Icon, "arrow-left", class: "w-4 h-4 mr-2"
+      text "Retour aux options"
     end
   end
 
-  private def render_existing_locations
+  private def render_existing_locations_content
     div class: "space-y-4" do
-      # Search input for locations
-      div class: "form-control" do
-        input type: "text",
-          placeholder: "Rechercher un lieu...",
-          class: "input input-bordered w-full",
-          hx_get: Locations::Search.path,
-          hx_trigger: "keyup changed delay:500ms",
-          hx_target: "#location-results"
-      end
-
-      # Location results
-      div id: "location-results", class: "space-y-2" do
-        LocationQuery.new.creator_id(current_user.id).each do |location|
-          render_location_card(location)
+      h4 "Vos lieux enregistrés", class: "text-lg font-semibold text-center mb-4"
+      div id: "location-results", class: "grid grid-cols-1 md:grid-cols-2 gap-4" do
+        locations = LocationQuery.new
+        if locations.empty?
+          div class: "col-span-full text-center p-4 border border-dashed rounded-lg" do
+            mount UI::Icon, "info", class: "w-10 h-10 mx-auto mb-2 text-gray-400"
+            para "Vous n'avez pas encore de lieux enregistrés.", class: "text-gray-600"
+            para "Vous pouvez en créer un en cliquant sur \"Créer un nouveau lieu\".", class: "text-sm text-gray-500"
+          end
+        else
+          locations.each do |location|
+            render_location_card(location)
+          end
         end
       end
     end
   end
 
-  private def render_location_card(location)
-    div class: "card bg-base-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer",
-      hx_post: Events::SetLocation.with(event_id: event.id, location_id: location.id).path,
-      hx_target: "#location-content" do
-      div class: "card-body" do
-        div class: "flex justify-between items-start" do
-          div do
-            h3 location.name, class: "font-bold"
-            para "#{location.address}, #{location.city}"
-          end
-          if location.try(&.id) == @location.try(&.id)
-            div class: "badge badge-primary" do
-              span "Sélectionné"
-            end
-          end
-        end
+  private def render_location_card(location : ::Location)
+    button_attrs = {
+      class:       "card bg-base-200 shadow-sm hover:shadow-lg transition-all duration-200 ease-in-out transform hover:-translate-y-1 cursor-pointer text-left",
+      "hx-post":   Events::Wizard::Creation::UpdateLocation.with(event_id: event.not_nil!.id, location_id: location.id).path,
+      "hx-target": "#wizard-content",
+      "hx-swap":   "innerHTML",
+      "name":      "location_id",
+      "value":     location.id.to_s
+    }
+    button **button_attrs do
+      div class: "card-body p-4" do
+        h3 location.name, class: "font-semibold text-lg card-title"
+        para "#{location.address}, #{location.city}", class: "text-sm opacity-75"
       end
     end
   end
 
   private def render_new_location_wizard
-    div class: "card bg-base-100 shadow-xl" do
-      div class: "card-body" do
-        mount Locations::Wizard::Container,
-          current_step: 1,
-          location: Location.new,
-          parent_event: event
-      end
-    end
+    mount Locations::Wizard::Container,
+      current_step: 1,
+      location: nil,
+      parent_event_id: event.not_nil!.id
   end
 
-  private def render_skip_confirmation
-    div class: "text-center space-y-4" do
-      para "Tu pourras définir le lieu plus tard depuis la page de l'événement.",
-        class: "text-base-content"
+  private def render_javascript_for_toggling
+    script type: "text/javascript" do
+      raw <<-JS
+        function showLocationOptions() {
+          document.getElementById('location-options-container').classList.remove('hidden');
+          document.getElementById('existing-locations-container').classList.add('hidden');
+          document.getElementById('new-location-container').classList.add('hidden');
+        }
 
-      button "Confirmer et continuer",
-        class: "btn btn-primary",
-        hx_post: Events::SkipLocation.with(event_id: event.id).path,
-        hx_target: "#wizard-content"
+        function handleLocationOption(option) {
+          document.getElementById('location-options-container').classList.add('hidden');
+          if (option === 'showExisting') {
+            document.getElementById('existing-locations-container').classList.remove('hidden');
+            document.getElementById('new-location-container').classList.add('hidden');
+          } else if (option === 'showNew') {
+            document.getElementById('new-location-container').classList.remove('hidden');
+            document.getElementById('existing-locations-container').classList.add('hidden');
+          }
+        }
+      JS
     end
-  end
-
-  private def location_button_class(option)
-    base = "btn gap-2"
-    # if params.get?("option") == option
-    #   base += " btn-primary"
-    # else
-    #   base += " btn-outline"
-    # end
-    # base
   end
 end

@@ -1,26 +1,22 @@
 class Events::Wizard::Creation::UpdateLocation < Events::WizardAction
   include RequireLocationFromId
-  param location_id : Int64
 
-  post "/events/wizard/update_location/:event_id" do
-    event = EventQuery.find(event_id)
-    location = LocationQuery.find(location_id)
-
+  post "/events/wizard/update_location" do
     authorize_user(event)
 
-    SaveEvent.update(event, location_id: location_id) do |operation, updated_event|
+    SaveEvent.update(event, location_id: location.id) do |operation, updated_event|
       if operation.saved?
         if htmx?
           component Events::Wizard::Creation::Container,
             current_step: 4,
-            event: updated_event,
+            event: updated_event.not_nil!,
             location: location,
             current_user: current_user
 
         else
-          redirect to: Events::Wizard::Creation::New.with(
+          redirect to: Events::Wizard::New.with(
             current_step: 4,
-            event_id: updated_event.id
+            event_id: updated_event.not_nil!.id
           )
         end
       else
@@ -31,7 +27,7 @@ class Events::Wizard::Creation::UpdateLocation < Events::WizardAction
             current_user: current_user
 
         else
-          redirect to: Events::Wizard::Creation::New.with(
+          redirect to: Events::Wizard::New.with(
             current_step: 3,
             event_id: event.id
           )

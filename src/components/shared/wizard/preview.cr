@@ -2,7 +2,7 @@ abstract class Shared::Wizard::Preview < Shared::Wizard::Step
   def render_content
     div class: "space-y-8" do
       render_preview_sections
-      render_completion_button
+      # render_completion_button
     end
   end
 
@@ -13,16 +13,16 @@ abstract class Shared::Wizard::Preview < Shared::Wizard::Step
     end
   end
 
-  private def render_completion_button
-    div class: "text-center" do
-      link "Ça me va !",
-           to: completion_path,
-           class: "btn btn-primary btn-lg gap-2" do
-        mount UI::Icon, "check", class: "w-5 h-5"
-        text "Ça me va !"
-      end
-    end
-  end
+  # private def render_completion_button
+  #   div class: "text-center" do
+  #     link "Ça me va !",
+  #          to: completion_path,
+  #          class: "btn btn-primary btn-lg gap-2" do
+  #       mount UI::Icon, "check", class: "w-5 h-5"
+  #       text "Ça me va !"
+  #     end
+  #   end
+  # end
 
   # Helper method for consistent section styling
   protected def render_section(title : String, icon : String, &)
@@ -41,5 +41,5 @@ abstract class Shared::Wizard::Preview < Shared::Wizard::Step
   # Abstract methods
   abstract def render_left_column
   abstract def render_right_column
-  abstract def completion_path : String
+  # abstract def completion_path : String
 end

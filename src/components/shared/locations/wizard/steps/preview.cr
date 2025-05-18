@@ -43,8 +43,8 @@ class Locations::Wizard::Steps::Preview < Shared::Wizard::Preview
     Locations::Wizard::Done.with(location_id: location.id).path
   end
 
-  def back_path : String
-    Locations::Wizard::GoToStep.with(location_id: location.id, current_step: 3).path
+  def back_path
+    Locations::Wizard::GoToStep.with(location_id: location.id, current_step: 3)
   end
 
   def is_last_step? : Bool

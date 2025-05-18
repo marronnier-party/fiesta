@@ -1,5 +1,6 @@
 class Events::Wizard::New < BrowserAction
   param current_step : Int32 = 1
+  param event_id : Int64?
 
   get "/events/wizard/new" do
     event = nil
