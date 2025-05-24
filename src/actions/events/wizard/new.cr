@@ -3,8 +3,8 @@ class Events::Wizard::New < BrowserAction
   param event_id : Int64?
 
   get "/events/wizard/new" do
-    event = nil
-    location = nil
+    event = event_id.try { |id| EventQuery.find(id) }
+    location = nil #event_id.try { |id| EventQuery.find(id) }
 
     if htmx?
       # If it's an HTMX request, return only the component

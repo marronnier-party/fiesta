@@ -13,6 +13,7 @@ class Events::Wizard::Creation::Steps::Name < Events::Wizard::Creation::Steps::B
   end
 
   def render_content
+    name_value = event ? event.not_nil!.name : ""
     form_for Events::Wizard::Creation::NameAndCreate,
       class: "space-y-4" do
       div class: "form-control" do
@@ -22,6 +23,7 @@ class Events::Wizard::Creation::Steps::Name < Events::Wizard::Creation::Steps::B
           placeholder: "Ex: Anniversaire de Roger",
           class: "input input-bordered w-full"
       end
+      render_next_button
     end
   end
 end

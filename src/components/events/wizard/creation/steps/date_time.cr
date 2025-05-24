@@ -15,7 +15,7 @@ class Events::Wizard::Creation::Steps::DateTime < Events::Wizard::Creation::Step
           label "Début", class: "label"
           input type: "datetime-local",
             name: "event:start_at",
-            value: event.not_nil!.start_at.to_s("%Y-%m-%dT%H:%M"),
+            value: "", # event.not_nil!.start_at.to_s("%Y-%m-%dT%H:%M"),
             class: "input input-bordered w-full"
         end
 
@@ -23,7 +23,7 @@ class Events::Wizard::Creation::Steps::DateTime < Events::Wizard::Creation::Step
           label "Fin", class: "label"
           input type: "datetime-local",
             name: "event:end_at",
-            value: event.not_nil!.end_at.to_s("%Y-%m-%dT%H:%M"),
+            value: "", # event.not_nil!.end_at.to_s("%Y-%m-%dT%H:%M"),
             class: "input input-bordered w-full"
         end
       end

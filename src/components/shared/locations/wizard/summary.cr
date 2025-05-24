@@ -8,12 +8,12 @@ class Locations::Wizard::Summary < Shared::Wizard::Summary
     div class: "p-4 space-y-4" do
       render_step_summary "Nom", location.name, 1, "home"
       render_address_summary
-      render_step_summary "Description", location.description, 3, "file-text"
+      render_step_summary "Description", location.description.to_s, 3, "file-text"
     end
   end
 
   private def render_address_summary
-    return unless location.address.presence
+    return unless location.address
 
     div class: summary_item_class(2) do
       div class: "flex items-center gap-2" do
@@ -22,9 +22,9 @@ class Locations::Wizard::Summary < Shared::Wizard::Summary
       end
 
       para class: "text-sm mt-1" do
-        text location.address
+        text location.address.to_s
         br
-        text "#{location.postal_code} #{location.city}"
+        text "#{location.postal_code.to_s} #{location.city.to_s}"
       end
 
       render_edit_link(2) if current_step > 2

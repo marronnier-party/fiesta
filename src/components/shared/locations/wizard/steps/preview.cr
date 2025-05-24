@@ -14,9 +14,9 @@ class Locations::Wizard::Steps::Preview < Shared::Wizard::Preview
   def render_left_column
     render_section("Nom et adresse", "map-pin") do
       para location.name, class: "font-medium"
-      para location.address
-      para "#{location.postal_code} #{location.city}"
-      para location.country
+      para location.address.to_s
+      para "#{location.postal_code.to_s} #{location.city.to_s}"
+      para location.country.to_s
     end
   end
 
@@ -31,8 +31,8 @@ class Locations::Wizard::Steps::Preview < Shared::Wizard::Preview
     end
 
     render_section("Description", "file-text") do
-      if location.description.presence
-        para location.description
+      if location.description
+        para location.description.to_s
       else
         para "Aucune description", class: "italic text-base-content/60"
       end

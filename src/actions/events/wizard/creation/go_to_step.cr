@@ -2,7 +2,7 @@ class Events::Wizard::Creation::GoToStep < Events::WizardAction
   param current_step : Int32 = 1
 
   get "/events/wizard/creation/go_to_step" do
-    location = event.location # Assuming you have this relation set up
+    location = event.location! # Assuming you have this relation set up
 
     if htmx?
       component Events::Wizard::Creation::Container,

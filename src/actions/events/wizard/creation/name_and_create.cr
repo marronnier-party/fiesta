@@ -1,6 +1,6 @@
 class Events::Wizard::Creation::NameAndCreate < BrowserAction
   post "/events/wizard/creation/name_and_create" do
-    SaveEvent.create(params) do |operation, event|
+    SaveEvent.create(params, creator_id: current_user.id) do |operation, event|
       if event
         if htmx?
           component Events::Wizard::Creation::Container,

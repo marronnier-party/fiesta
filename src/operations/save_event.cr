@@ -3,10 +3,14 @@ class SaveEvent < Event::SaveOperation
 
   before_save do
     validate_required name
-    validate_required start_at
-    validate_required end_at
+    # validate_required start_at
+    # validate_required end_at
     # validate_future_date
     # validate_end_after_start
+    #
+    Avram::Slugify.set slug,
+      using: name,
+      query: EventQuery.new
   end
 
   # private def validate_future_date

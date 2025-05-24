@@ -10,13 +10,13 @@ class Events::Wizard::Creation::Summary < Shared::Wizard::Summary
       render_step_summary "Nom", event.name, 1, "pencil"
       render_date_summary
       render_location_summary
-      render_step_summary "Description", event.description, 4, "file-text"
+      render_step_summary "Description", event.description.to_s, 4, "file-text"
       render_guests_summary
     end
   end
 
   private def render_date_summary
-    return unless event.start_at.present? && event.end_at.present?
+    return unless event.start_at && event.end_at
 
     start_time = event.start_at.not_nil!
     end_time = event.end_at.not_nil!
@@ -52,7 +52,7 @@ class Events::Wizard::Creation::Summary < Shared::Wizard::Summary
       para class: "text-sm mt-1" do
         text current_location.name
         br
-        text current_location.city
+        text current_location.city.to_s
       end
 
       render_edit_link(3) if current_step > 3
@@ -101,11 +101,7 @@ class Events::Wizard::Creation::Summary < Shared::Wizard::Summary
   end
 
   private def show_summary? : Bool
-    event.name.present? ||
-      event.start_at.present? ||
-      location.present? ||
-      event.description.present? ||
-      event.guests.any?
+    !event.name.blank?
   end
 
   # Example: You need to ensure 'current_step' and 'summary_item_class' are available.

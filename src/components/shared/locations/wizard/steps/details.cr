@@ -15,7 +15,7 @@ class Locations::Wizard::Steps::Details < Locations::Wizard::Steps::BaseStep
           label "Ville", class: "label"
           input type: "text",
             name: "location:city",
-            value: location.not_nil!.city,
+            value: location.not_nil!.city.to_s,
             class: "input input-bordered w-full",
             required: true
         end
@@ -24,7 +24,7 @@ class Locations::Wizard::Steps::Details < Locations::Wizard::Steps::BaseStep
           label "Code postal", class: "label"
           input type: "text",
             name: "location:postal_code",
-            value: location.not_nil!.postal_code,
+            value: location.not_nil!.postal_code.to_s,
             class: "input input-bordered w-full",
             required: true,
             pattern: "\\d{5}",
@@ -36,10 +36,11 @@ class Locations::Wizard::Steps::Details < Locations::Wizard::Steps::BaseStep
         label "Pays", class: "label"
         input type: "text",
           name: "location:country",
-          value: location.not_nil!.country || "France",
+          value: location.not_nil!.country.to_s || "France",
           class: "input input-bordered w-full",
           required: true
       end
     end
+    render_next_button
   end
 end

@@ -1,5 +1,5 @@
 abstract class Events::Wizard::Creation::Steps::BaseStep < BaseComponent
-  needs event : Event? = nil
+  needs event : Event?
 
   abstract def step_title
   abstract def step_number

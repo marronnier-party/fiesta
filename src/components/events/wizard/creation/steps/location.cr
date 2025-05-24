@@ -100,8 +100,8 @@ class Events::Wizard::Creation::Steps::Location < Events::Wizard::Creation::Step
     }
     button **button_attrs do
       div class: "card-body p-4" do
-        h3 location.name, class: "font-semibold text-lg card-title"
-        para "#{location.address}, #{location.city}", class: "text-sm opacity-75"
+        h3 location.not_nil!.name, class: "font-semibold text-lg card-title"
+        para "#{location.not_nil!.address.to_s}, #{location.not_nil!.city.to_s}", class: "text-sm opacity-75"
       end
     end
   end

@@ -12,7 +12,7 @@ class Events::Wizard::Creation::Steps::Description < Events::Wizard::Creation::S
       class: "space-y-4" do
       div class: "form-control" do
         textarea name: "event:description",
-          value: event.not_nil!.description,
+          value: event.not_nil!.description.to_s,
           placeholder: "Ex: On va fêter les 80 ans de Mamie ! Venez nombreux !",
           class: "textarea textarea-bordered h-32"
       end

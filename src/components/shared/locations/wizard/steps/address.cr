@@ -15,7 +15,7 @@ class Locations::Wizard::Steps::Address < Locations::Wizard::Steps::BaseStep
       div class: "form-control" do
         input type: "text",
           name: "location:address",
-          value: location.not_nil!.address,
+          value: location.not_nil!.address.to_s,
           placeholder: "Ex: 123 rue des Lilas",
           class: "input input-bordered w-full",
           "data-address-autocomplete": "true",
