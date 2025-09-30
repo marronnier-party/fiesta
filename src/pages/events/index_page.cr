@@ -1,5 +1,6 @@
 class Events::IndexPage < MainLayout
   needs events : Array(Event)
+  needs search_query : String?
 
   def page_title
     r("events.my_events").t
@@ -8,7 +9,21 @@ class Events::IndexPage < MainLayout
   def content
     div class: "space-y-6" do
       render_header
+      render_search
       render_events_list
+    end
+  end
+
+  private def render_search
+    form method: "get", action: Events::Index.path, class: "max-w-md" do
+      div class: "form-control" do
+        div class: "input-group" do
+          input type: "text", name: "search", value: search_query || "", placeholder: r("events.search_placeholder").t, class: "input input-bordered w-full"
+          button type: "submit", class: "btn btn-square" do
+            icon "search", "w-5 h-5"
+          end
+        end
+      end
     end
   end
 

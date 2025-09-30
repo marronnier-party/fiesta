@@ -3,6 +3,7 @@ class Events::ShowPage < MainLayout
   needs guests : Array(Guest)
   needs tasks : Array(Task)
   needs user_guest : Guest?
+  needs activities : Array(EventActivity)
 
   def page_title
     event.name
@@ -15,12 +16,14 @@ class Events::ShowPage < MainLayout
       div class: "grid grid-cols-1 lg:grid-cols-3 gap-6" do
         div class: "lg:col-span-2 space-y-6" do
           render_event_details
+          render_organizer_notes if is_organizer?
           render_tasks_section
         end
 
         div class: "space-y-6" do
           render_guest_stats
           render_guest_list
+          render_activity_feed
         end
       end
     end
@@ -39,10 +42,18 @@ class Events::ShowPage < MainLayout
         end
 
         if is_organizer?
-          div class: "card-actions justify-end mt-4 gap-2" do
+          div class: "card-actions justify-end mt-4 gap-2 flex-wrap" do
             link r("events.invite_guests").t, to: Events::InviteGuests.with(event.id), class: "btn btn-primary"
             link r("events.add_task").t, to: Events::AddTask.with(event.id), class: "btn btn-secondary"
             link r("actions.edit").t, to: Events::Edit.with(event.id), class: "btn btn-ghost"
+
+            # Export guests button
+            link r("events.export_guests").t, to: Events::ExportGuests.with(event.id), class: "btn btn-ghost btn-sm"
+
+            # Duplicate event button
+            form_for Events::Duplicate.with(event.id), class: "inline" do
+              button r("events.duplicate_event").t, type: "submit", class: "btn btn-ghost"
+            end
 
             # Only show cancel button if event is not already cancelled
             unless event.status == Event::Status::Cancelled
@@ -239,8 +250,31 @@ class Events::ShowPage < MainLayout
       div class: "flex gap-2" do
         render_task_actions(task)
 
-        # Show delete button for organizers
+        # Show reassign button for organizers
         if is_organizer?
+          div class: "dropdown dropdown-end" do
+            label class: "btn btn-sm btn-ghost", tabindex: "0" do
+              icon "user-plus", "w-4 h-4"
+            end
+            div class: "dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-10", tabindex: "0" do
+              form_for Tasks::Reassign.with(task.id), class: "p-2" do
+                label r("tasks.reassign_task").t, class: "label label-text font-semibold"
+                tag "select", name: "guest_id", class: "select select-bordered select-sm w-full mb-2", required: true do
+                  tag "option", value: "", disabled: true, selected: task.guest_id.nil? do
+                    text r("tasks.select_assignee").t
+                  end
+                  guests.select(&.status.confirmed?).each do |guest|
+                    tag "option", value: guest.id.to_s, selected: task.guest_id == guest.id do
+                      text guest.user!.name
+                    end
+                  end
+                end
+                button r("tasks.reassign").t, class: "btn btn-primary btn-sm btn-block"
+              end
+            end
+          end
+
+          # Show delete button for organizers
           form_for Tasks::Delete.with(task.id), class: "inline" do
             button type: "submit", class: "btn btn-sm btn-ghost btn-square", data_confirm: r("actions.confirm_delete").t do
               icon "trash", "w-4 h-4"
@@ -303,6 +337,81 @@ class Events::ShowPage < MainLayout
       span r("events.statuses.cancelled").t, class: "badge badge-error badge-lg"
     when Event::Status::Done
       span r("tasks.statuses.completed").t, class: "badge badge-ghost badge-lg"
+    end
+  end
+
+  private def render_organizer_notes
+    div class: "card bg-base-100 shadow-xl" do
+      div class: "card-body" do
+        div class: "flex items-center justify-between mb-4" do
+          h2 r("events.organizer_notes").t, class: "card-title"
+          link r("actions.edit").t, to: Events::Edit.with(event.id), class: "btn btn-ghost btn-sm"
+        end
+
+        if notes = event.organizer_notes
+          if notes.empty?
+            para r("events.organizer_notes_hint").t, class: "text-base-content/60 italic"
+          else
+            para notes, class: "text-base-content/80 whitespace-pre-wrap"
+          end
+        else
+          para r("events.organizer_notes_hint").t, class: "text-base-content/60 italic"
+        end
+      end
+    end
+  end
+
+  private def render_activity_feed
+    return if activities.empty?
+
+    div class: "card bg-base-100 shadow-xl" do
+      div class: "card-body" do
+        h2 r("events.activity_feed").t, class: "card-title mb-4"
+
+        div class: "space-y-3" do
+          activities.each do |activity|
+            render_activity_item(activity)
+          end
+        end
+      end
+    end
+  end
+
+  private def render_activity_item(activity : EventActivity)
+    div class: "flex items-start gap-3 p-3 bg-base-200 rounded-lg" do
+      div class: "avatar placeholder" do
+        div class: "bg-neutral text-neutral-content rounded-full w-8" do
+          span class: "text-xs" do
+            text activity.user!.name[0..0].upcase
+          end
+        end
+      end
+
+      div class: "flex-1" do
+        para class: "text-sm" do
+          span activity.user!.name, class: "font-semibold"
+          text " "
+          text activity.description
+        end
+        small format_relative_time(activity.created_at), class: "text-xs text-base-content/60"
+      end
+    end
+  end
+
+  private def format_relative_time(time : Time)
+    diff = Time.utc - time
+    minutes = diff.total_minutes.to_i
+
+    if minutes < 1
+      r("time.just_now").t
+    elsif minutes < 60
+      r("time.minutes_ago").t(count: minutes)
+    elsif minutes < 1440 # 24 hours
+      hours = (minutes / 60).to_i
+      r("time.hours_ago").t(count: hours)
+    else
+      days = (minutes / 1440).to_i
+      r("time.days_ago").t(count: days)
     end
   end
 

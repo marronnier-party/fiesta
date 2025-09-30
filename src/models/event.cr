@@ -11,6 +11,7 @@ class Event < BaseModel
     column name : String
     column slug : String
     column description : String?
+    column organizer_notes : String?
     column status : Event::Status = Event::Status::Draft
     column start_at : Time?
     column end_at : Time?

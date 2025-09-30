@@ -20,10 +20,18 @@ class Events::Show < BrowserAction
     # Find current user's guest record if they're invited
     user_guest = guests.find { |g| g.user_id == current_user.id }
 
+    # Load recent activities
+    activities = EventActivityQuery.new
+      .for_event(event.id)
+      .preload_user
+      .recent
+      .results
+
     html ShowPage,
       event: event,
       guests: guests,
       tasks: tasks,
-      user_guest: user_guest
+      user_guest: user_guest,
+      activities: activities
   end
 end

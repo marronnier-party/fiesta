@@ -57,10 +57,10 @@ class Shared::Navbar < BaseComponent
             end
           end
           li do
-            link "Profile", to: Me::Show
+            link r("profile.title").t, to: Profile::Show
           end
           li do
-            link "Sign Out", to: SignIns::Delete, flow_id: "sign-out-button"
+            link r("nav.sign_out").t, to: SignIns::Delete, flow_id: "sign-out-button"
           end
         end
       end

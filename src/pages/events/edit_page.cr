@@ -27,6 +27,17 @@ class Events::EditPage < MainLayout
               end
             end
 
+            # Organizer Notes (private)
+            div class: "form-control" do
+              label r("events.organizer_notes").t, class: "label font-semibold"
+              tag "textarea", name: "event:organizer_notes", class: "textarea textarea-bordered h-24", placeholder: r("events.organizer_notes_placeholder").t do
+                text operation.organizer_notes.value || ""
+              end
+              label class: "label" do
+                span r("events.organizer_notes_hint").t, class: "label-text-alt"
+              end
+            end
+
             # Date and time
             div class: "grid grid-cols-1 md:grid-cols-2 gap-4" do
               div class: "form-control" do

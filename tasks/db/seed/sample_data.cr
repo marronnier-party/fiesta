@@ -56,53 +56,53 @@ class Db::Seed::SampleData < LuckyTask::Task
   end
 
   private def create_grandma_house(creator : User)
-    return LocationQuery.new.name("Grandma's House").first if LocationQuery.new.name("Grandma's House").any?
+    return LocationQuery.new.name("Maison de Mamie").first if LocationQuery.new.name("Maison de Mamie").any?
 
     location = SaveLocation.create!(
-      name: "Grandma's House",
-      slug: "grandmas-house",
-      description: "The family home where we've gathered for decades",
+      name: "Maison de Mamie",
+      slug: "maison-mamie",
+      description: "La maison familiale où nous nous réunissons depuis des décennies",
       address: "123 Rue des Souvenirs",
       city: "Lyon",
       country: "France",
       postal_code: "69001",
       creator_id: creator.id
     )
-    puts "🏠 Created location: Grandma's House"
+    puts "🏠 Created location: Maison de Mamie"
     location
   end
 
   private def create_community_center(creator : User)
-    return LocationQuery.new.name("Community Center").first if LocationQuery.new.name("Community Center").any?
+    return LocationQuery.new.name("Centre Communautaire").first if LocationQuery.new.name("Centre Communautaire").any?
 
     location = SaveLocation.create!(
-      name: "Community Center",
-      slug: "community-center",
-      description: "Large hall perfect for big family gatherings",
+      name: "Centre Communautaire",
+      slug: "centre-communautaire",
+      description: "Grande salle parfaite pour les grands rassemblements familiaux",
       address: "456 Avenue de la République",
       city: "Lyon",
       country: "France",
       postal_code: "69003",
       creator_id: creator.id
     )
-    puts "🏢 Created location: Community Center"
+    puts "🏢 Created location: Centre Communautaire"
     location
   end
 
   private def create_summer_reunion(creator : User, location : Location)
-    return EventQuery.new.name("Summer 2025 Family Reunion").first if EventQuery.new.name("Summer 2025 Family Reunion").any?
+    return EventQuery.new.name("Réunion Familiale Été 2025").first if EventQuery.new.name("Réunion Familiale Été 2025").any?
 
     event = SaveEvent.create!(
-      name: "Summer 2025 Family Reunion",
-      slug: "summer-2025-reunion",
-      description: "Our annual summer cousinade! BBQ, games, and catching up with everyone. Bring your swimsuits for the pool!",
+      name: "Réunion Familiale Été 2025",
+      slug: "reunion-ete-2025",
+      description: "Notre cousinade annuelle d'été ! BBQ, jeux et retrouvailles avec toute la famille. N'oubliez pas vos maillots de bain pour la piscine !",
       status: Event::Status::Confirmed,
       start_at: Time.utc + 45.days + 14.hours,  # 45 days from now at 2 PM
       end_at: Time.utc + 45.days + 22.hours,    # Same day at 10 PM
       creator_id: creator.id,
       location_id: location.id
     )
-    puts "📅 Created event: Summer 2025 Family Reunion"
+    puts "📅 Created event: Réunion Familiale Été 2025"
     event
   end
 
@@ -193,7 +193,7 @@ class Db::Seed::SampleData < LuckyTask::Task
       SaveGuest.update!(bob_guest,
         status: Guest::Status::Confirmed,
         guest_count: 4,
-        notes: "Can't wait! We'll bring the kids."
+        notes: "Trop hâte ! On amènera les enfants."
       )
 
       # Add Bob's family members
@@ -210,7 +210,7 @@ class Db::Seed::SampleData < LuckyTask::Task
       SaveGuest.update!(susan_guest,
         status: Guest::Status::Confirmed,
         guest_count: 3,
-        notes: "Looking forward to it!"
+        notes: "On a hâte d'y être !"
       )
 
       # Add Susan's family
@@ -235,7 +235,7 @@ class Db::Seed::SampleData < LuckyTask::Task
     if julie_guest
       SaveGuest.update!(julie_guest,
         status: Guest::Status::Declined,
-        notes: "Sorry, we have a conflict that weekend :("
+        notes: "Désolée, on a un conflit ce week-end :("
       )
       puts "❌ Julie declined"
     end
@@ -250,12 +250,12 @@ class Db::Seed::SampleData < LuckyTask::Task
       SaveTask.create!(
         event_id: event.id,
         guest_id: bob_guest.id,
-        name: "Bring wine and soft drinks",
-        category: "Beverages",
-        notes: "3-4 bottles of wine, juice boxes for kids",
+        name: "Apporter du vin et des boissons",
+        category: "Boissons",
+        notes: "3-4 bouteilles de vin, jus de fruits pour les enfants",
         status: Task::Status::Pending
       )
-      puts "📋 Assigned task to Bob: Bring wine and soft drinks"
+      puts "📋 Assigned task to Bob: Apporter du vin et des boissons"
     end
 
     susan_guest = guests.find { |g| g.user!.name == "Susan Martin" }
@@ -263,12 +263,12 @@ class Db::Seed::SampleData < LuckyTask::Task
       SaveTask.create!(
         event_id: event.id,
         guest_id: susan_guest.id,
-        name: "Bring desserts",
-        category: "Food",
-        notes: "Gluten-free options appreciated!",
+        name: "Apporter les desserts",
+        category: "Nourriture",
+        notes: "Options sans gluten appréciées !",
         status: Task::Status::Pending
       )
-      puts "📋 Assigned task to Susan: Bring desserts"
+      puts "📋 Assigned task to Susan: Apporter les desserts"
     end
 
     mike_guest = guests.find { |g| g.user!.name == "Mike Johnson" }
@@ -276,11 +276,11 @@ class Db::Seed::SampleData < LuckyTask::Task
       SaveTask.create!(
         event_id: event.id,
         guest_id: mike_guest.id,
-        name: "Setup tables and chairs",
-        category: "Setup",
+        name: "Installer les tables et chaises",
+        category: "Installation",
         status: Task::Status::Pending
       )
-      puts "📋 Assigned task to Mike: Setup tables and chairs"
+      puts "📋 Assigned task to Mike: Installer les tables et chaises"
     end
 
     # Task for Marie (organizer creates a task for herself)
@@ -300,12 +300,12 @@ class Db::Seed::SampleData < LuckyTask::Task
     SaveTask.create!(
       event_id: event.id,
       guest_id: marie_guest.id,
-      name: "Prepare BBQ and main dishes",
-      category: "Food",
-      notes: "Burgers, sausages, grilled vegetables",
+      name: "Préparer le BBQ et les plats principaux",
+      category: "Nourriture",
+      notes: "Burgers, saucisses, légumes grillés",
       status: Task::Status::InProgress
     )
-    puts "📋 Assigned task to Marie: Prepare BBQ"
+    puts "📋 Assigned task to Marie: Préparer le BBQ"
   end
 
   private def complete_tasks(event : Event)
@@ -314,19 +314,19 @@ class Db::Seed::SampleData < LuckyTask::Task
   end
 
   private def create_past_event(creator : User, location : Location, family_members : Array(User))
-    return if EventQuery.new.name("Christmas Dinner 2024").any?
+    return if EventQuery.new.name("Dîner de Noël 2024").any?
 
     past_event = SaveEvent.create!(
-      name: "Christmas Dinner 2024",
-      slug: "christmas-2024",
-      description: "Annual Christmas celebration with the whole family",
+      name: "Dîner de Noël 2024",
+      slug: "noel-2024",
+      description: "Célébration annuelle de Noël avec toute la famille",
       status: Event::Status::Done,
       start_at: Time.utc - 280.days,  # ~9 months ago
       end_at: Time.utc - 280.days + 6.hours,
       creator_id: creator.id,
       location_id: location.id
     )
-    puts "📅 Created past event: Christmas Dinner 2024"
+    puts "📅 Created past event: Dîner de Noël 2024"
 
     # Invite some family members
     family_members[0..2].each do |member|
@@ -341,10 +341,10 @@ class Db::Seed::SampleData < LuckyTask::Task
       task = SaveTask.create!(
         event_id: past_event.id,
         guest_id: guest.id,
-        name: ["Bring wine", "Bring dessert", "Setup decorations"].sample,
-        category: ["Beverages", "Food", "Decorations"].sample,
+        name: ["Apporter du vin", "Apporter le dessert", "Installer les décorations"].sample,
+        category: ["Boissons", "Nourriture", "Décorations"].sample,
         status: Task::Status::Completed,
-        notes: "Cost: €#{rand(20..80)}"
+        notes: "Coût : €#{rand(20..80)}"
       )
 
       if start_time = past_event.start_at

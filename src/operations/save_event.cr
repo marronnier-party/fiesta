@@ -1,5 +1,5 @@
 class SaveEvent < Event::SaveOperation
-  permit_columns name, description, status, start_at, end_at, creator_id, location_id
+  permit_columns name, description, organizer_notes, status, start_at, end_at, creator_id, location_id
 
   before_save do
     validate_required name
