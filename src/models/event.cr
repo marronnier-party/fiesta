@@ -17,6 +17,7 @@ class Event < BaseModel
     column end_at : Time?
     column total_cost : Float64? = 0.0
     column budget : Float64?
+    column event_type : String? = "other"
 
     belongs_to creator : User
     belongs_to location : Location?

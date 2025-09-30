@@ -326,6 +326,15 @@ fr:
     use_template: "Utiliser le modèle"
     hint: "Après avoir créé un modèle, vous pouvez ajouter des tâches et des invités par défaut lors de son utilisation pour créer des événements"
 
+  # Task Suggestions
+  task_suggestions:
+    title: "Suggestions de tâches"
+    subtitle: "Tâches suggérées pour un événement %{event_type}"
+    hint: "Sélectionnez les tâches que vous souhaitez ajouter à votre événement. Vous pourrez les assigner aux invités plus tard."
+    apply: "Ajouter les tâches sélectionnées"
+    created: "%{count} tâche(s) ajoutée(s) à votre événement"
+    none_selected: "Aucune tâche n'a été sélectionnée"
+
   # Polls
   polls:
     title: "Sondages"

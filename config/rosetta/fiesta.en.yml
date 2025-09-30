@@ -326,6 +326,15 @@ en:
     use_template: "Use Template"
     hint: "After creating a template, you can add default tasks and guests when using it to create events"
 
+  # Task Suggestions
+  task_suggestions:
+    title: "Task Suggestions"
+    subtitle: "Suggested tasks for %{event_type} event"
+    hint: "Select the tasks you'd like to add to your event. You can assign them to guests later."
+    apply: "Add Selected Tasks"
+    created: "%{count} task(s) added to your event"
+    none_selected: "No tasks were selected"
+
   # Polls
   polls:
     title: "Polls"

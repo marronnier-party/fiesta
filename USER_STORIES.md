@@ -736,7 +736,7 @@ This document maps out 20+ user stories for the Fiesta family event organizer ap
 - Tasks created with suggestions
 - Assign later
 
-**Status:** 🔨 To Be Implemented
+**Status:** ✅ Implemented (Events::ShowTaskSuggestions, ApplyTaskSuggestions with TaskSuggestions service, event_type field added to Event model) - with comprehensive specs (12 total: 5 service specs + 7 action specs)
 
 ---
 

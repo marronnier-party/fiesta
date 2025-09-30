@@ -35,6 +35,12 @@ class Db::Seed::SampleData < LuckyTask::Task
     # Some tasks are completed with costs
     complete_tasks(summer_reunion)
 
+    # Create event templates
+    create_event_templates(marie, grandma_house)
+
+    # Create polls for the summer reunion
+    create_polls(summer_reunion, family_members)
+
     # Create past event
     create_past_event(marie, community_center, family_members)
 
@@ -128,7 +134,9 @@ class Db::Seed::SampleData < LuckyTask::Task
       start_at: Time.utc + 45.days + 14.hours,  # 45 days from now at 2 PM
       end_at: Time.utc + 45.days + 22.hours,    # Same day at 10 PM
       creator_id: creator.id,
-      location_id: location.id
+      location_id: location.id,
+      event_type: "reunion",
+      budget: 500.0
     )
     puts "📅 Created event: Réunion Familiale Été 2025"
     event
@@ -341,6 +349,88 @@ class Db::Seed::SampleData < LuckyTask::Task
     # This will be more useful when we create the past event
   end
 
+  private def create_event_templates(creator : User, location : Location)
+    return if EventTemplateQuery.new.for_user(creator).any?
+
+    # BBQ Template
+    bbq_template = SaveEventTemplate.create!(
+      name: "BBQ Familial d'Été",
+      description: "Modèle pour nos BBQ d'été annuels",
+      location_id: location.id,
+      creator_id: creator.id,
+      task_templates: [
+        {"name" => "Acheter viande et légumes", "category" => "food"},
+        {"name" => "Préparer marinades", "category" => "food"},
+        {"name" => "Nettoyer le grill", "category" => "setup"},
+        {"name" => "Acheter boissons et glace", "category" => "beverages"},
+      ].to_json,
+      default_guest_ids: "[]"
+    )
+    puts "📝 Created template: BBQ Familial d'Été"
+
+    # Birthday Template
+    birthday_template = SaveEventTemplate.create!(
+      name: "Anniversaire",
+      description: "Modèle pour les anniversaires familiaux",
+      location_id: location.id,
+      creator_id: creator.id,
+      task_templates: [
+        {"name" => "Commander le gâteau", "category" => "food"},
+        {"name" => "Acheter décorations", "category" => "decorations"},
+        {"name" => "Envoyer les invitations", "category" => "other"},
+        {"name" => "Planifier jeux et activités", "category" => "entertainment"},
+      ].to_json,
+      default_guest_ids: "[]"
+    )
+    puts "📝 Created template: Anniversaire"
+  end
+
+  private def create_polls(event : Event, family_members : Array(User))
+    return if PollQuery.new.for_event(event).any?
+
+    # Create a poll about what time works best
+    time_poll = SavePoll.create!(
+      event_id: event.id,
+      question: "Quelle heure vous convient le mieux pour commencer ?",
+      is_locked: false
+    )
+
+    option1 = SavePollOption.create!(poll_id: time_poll.id, option_text: "14h00 (2 PM)")
+    option2 = SavePollOption.create!(poll_id: time_poll.id, option_text: "15h00 (3 PM)")
+    option3 = SavePollOption.create!(poll_id: time_poll.id, option_text: "16h00 (4 PM)")
+
+    # Some family members vote
+    bob = family_members.find { |m| m.name == "Bob Smith" }
+    if bob
+      SavePollVote.create!(poll_id: time_poll.id, poll_option_id: option1.id, user_id: bob.id)
+    end
+
+    susan = family_members.find { |m| m.name == "Susan Martin" }
+    if susan
+      SavePollVote.create!(poll_id: time_poll.id, poll_option_id: option2.id, user_id: susan.id)
+    end
+
+    mike = family_members.find { |m| m.name == "Mike Johnson" }
+    if mike
+      SavePollVote.create!(poll_id: time_poll.id, poll_option_id: option1.id, user_id: mike.id)
+    end
+
+    puts "📊 Created poll: Quelle heure vous convient le mieux ?"
+
+    # Create a poll about food preferences
+    food_poll = SavePoll.create!(
+      event_id: event.id,
+      question: "Préférence pour le plat principal ?",
+      is_locked: false
+    )
+
+    SavePollOption.create!(poll_id: food_poll.id, option_text: "Burgers et hot-dogs")
+    SavePollOption.create!(poll_id: food_poll.id, option_text: "Côtes levées et poulet")
+    SavePollOption.create!(poll_id: food_poll.id, option_text: "Mix des deux")
+
+    puts "📊 Created poll: Préférence pour le plat principal ?"
+  end
+
   private def create_past_event(creator : User, location : Location, family_members : Array(User))
     return if EventQuery.new.name("Dîner de Noël 2024").any?
 
@@ -352,7 +442,9 @@ class Db::Seed::SampleData < LuckyTask::Task
       start_at: Time.utc - 280.days,  # ~9 months ago
       end_at: Time.utc - 280.days + 6.hours,
       creator_id: creator.id,
-      location_id: location.id
+      location_id: location.id,
+      event_type: "holiday",
+      budget: 300.0
     )
     puts "📅 Created past event: Dîner de Noël 2024"
 
