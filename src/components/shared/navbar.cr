@@ -14,7 +14,7 @@ class Shared::Navbar < BaseComponent
       # Mobile menu dropdown
       div class: "dropdown" do
         label class: "btn btn-ghost lg:hidden", tabindex: "0" do
-          mount UI::Icon, name: "menu", classes: "h-5 w-5"
+          icon "menu", "h-5 w-5"
         end
         ul class: "menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52", tabindex: "0" do
           render_mobile_menu_items
@@ -70,7 +70,7 @@ class Shared::Navbar < BaseComponent
   private def render_desktop_menu_items
     li do
       link to: Me::Show, class: nav_link_class(Me::Show) do
-        mount UI::Icon, name: "home", classes: "w-4 h-4 mr-1"
+        icon "home", "w-4 h-4 mr-1"
         text r("nav.dashboard").t
       end
     end
@@ -79,7 +79,7 @@ class Shared::Navbar < BaseComponent
     li do
       # Will create this action later
       a href: "#", class: "opacity-50 cursor-not-allowed" do
-        mount UI::Icon, name: "clipboard-list", classes: "w-4 h-4 mr-1"
+        icon "clipboard-list", "w-4 h-4 mr-1"
         text r("tasks.title").t
       end
     end
@@ -88,14 +88,21 @@ class Shared::Navbar < BaseComponent
     if user_is_organizer?
       li do
         link to: Events::Index, class: "" do
-          mount UI::Icon, name: "calendar", classes: "w-4 h-4 mr-1"
+          icon "calendar", "w-4 h-4 mr-1"
           text r("nav.my_events").t
         end
       end
 
       li do
+        link to: Locations::Index, class: "" do
+          icon "map-pin", "w-4 h-4 mr-1"
+          text r("locations.my_locations").t
+        end
+      end
+
+      li do
         link to: Events::New, class: "btn btn-primary btn-sm" do
-          mount UI::Icon, name: "plus", classes: "w-4 h-4 mr-1"
+          icon "plus", "w-4 h-4 mr-1"
           text r("nav.create_event").t
         end
       end

@@ -43,6 +43,13 @@ class Events::ShowPage < MainLayout
             link r("events.invite_guests").t, to: Events::InviteGuests.with(event.id), class: "btn btn-primary"
             link r("events.add_task").t, to: Events::AddTask.with(event.id), class: "btn btn-secondary"
             link r("actions.edit").t, to: Events::Edit.with(event.id), class: "btn btn-ghost"
+
+            # Only show cancel button if event is not already cancelled
+            unless event.status == Event::Status::Cancelled
+              form_for Events::Cancel.with(event.id), class: "inline" do
+                button r("events.cancel_event").t, type: "submit", class: "btn btn-error btn-outline", data_confirm: r("events.cancel_confirm").t
+              end
+            end
           end
         end
       end
@@ -64,7 +71,7 @@ class Events::ShowPage < MainLayout
 
           if start_at = event.start_at
             div class: "flex items-center gap-3" do
-              mount UI::Icon, name: "calendar", classes: "w-6 h-6 text-primary"
+              icon "calendar", "w-6 h-6 text-primary"
               div do
                 label r("events.start_at").t, class: "font-semibold block"
                 span format_datetime(start_at), class: "text-base-content/80"
@@ -74,7 +81,7 @@ class Events::ShowPage < MainLayout
 
           if end_at = event.end_at
             div class: "flex items-center gap-3" do
-              mount UI::Icon, name: "calendar", classes: "w-6 h-6 text-primary"
+              icon "calendar", "w-6 h-6 text-primary"
               div do
                 label r("events.end_at").t, class: "font-semibold block"
                 span format_datetime(end_at), class: "text-base-content/80"
@@ -84,7 +91,7 @@ class Events::ShowPage < MainLayout
 
           if location = event.location
             div class: "flex items-start gap-3" do
-              mount UI::Icon, name: "map-pin", classes: "w-6 h-6 text-primary"
+              icon "map-pin", "w-6 h-6 text-primary"
               div do
                 label r("events.location").t, class: "font-semibold block"
                 span location.name, class: "text-base-content/80"
@@ -202,7 +209,7 @@ class Events::ShowPage < MainLayout
 
         if tasks.empty?
           div class: "text-center py-8 text-base-content/60" do
-            mount UI::Icon, name: "clipboard-list", classes: "w-12 h-12 mx-auto mb-2 opacity-40"
+            icon "clipboard-list", "w-12 h-12 mx-auto mb-2 opacity-40"
             para r("dashboard.no_tasks").t
           end
         else
@@ -229,18 +236,29 @@ class Events::ShowPage < MainLayout
         end
       end
 
-      render_task_actions(task)
+      div class: "flex gap-2" do
+        render_task_actions(task)
+
+        # Show delete button for organizers
+        if is_organizer?
+          form_for Tasks::Delete.with(task.id), class: "inline" do
+            button type: "submit", class: "btn btn-sm btn-ghost btn-square", data_confirm: r("actions.confirm_delete").t do
+              icon "trash", "w-4 h-4"
+            end
+          end
+        end
+      end
     end
   end
 
   private def render_task_status_icon(task : Task)
     case task.status
     when Task::Status::Pending
-      mount UI::Icon, name: "circle", classes: "w-5 h-5 text-base-content/40"
+      icon "circle", "w-5 h-5 text-base-content/40"
     when Task::Status::InProgress
-      mount UI::Icon, name: "clock", classes: "w-5 h-5 text-warning"
+      icon "clock", "w-5 h-5 text-warning"
     when Task::Status::Completed
-      mount UI::Icon, name: "check-circle", classes: "w-5 h-5 text-success"
+      icon "check-circle", "w-5 h-5 text-success"
     end
   end
 
@@ -250,7 +268,9 @@ class Events::ShowPage < MainLayout
       if tg.user_id == current_user.id
       case task.status
       when Task::Status::Pending
-        link r("tasks.start_task").t, to: Tasks::Complete.with(task.id), class: "btn btn-sm btn-primary"
+        form_for Tasks::Start.with(task.id), class: "inline" do
+          button r("tasks.start_task").t, class: "btn btn-sm btn-primary"
+        end
       when Task::Status::InProgress
         link r("tasks.mark_complete").t, to: Tasks::Complete.with(task.id), class: "btn btn-sm btn-success"
       when Task::Status::Completed

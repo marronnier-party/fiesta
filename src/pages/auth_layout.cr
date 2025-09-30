@@ -4,6 +4,11 @@ abstract class AuthLayout
   abstract def content
   abstract def page_title
 
+  # Helper macro to render icons easily
+  macro icon(icon_name, icon_classes = "w-4 h-4")
+    mount UI::Icon, name: {{icon_name}}, classes: {{icon_classes}}
+  end
+
   # The default page title. It is passed to `Shared::LayoutHead`.
   #
   # Add a `page_title` method to pages to override it. You can also remove

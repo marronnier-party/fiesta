@@ -25,7 +25,7 @@ class Events::InviteGuestsPage < MainLayout
 
   private def render_no_users_message
     div class: "text-center py-8" do
-      mount UI::Icon, name: "users", classes: "w-16 h-16 mx-auto mb-4 text-base-content/40"
+      icon "users", "w-16 h-16 mx-auto mb-4 text-base-content/40"
       para r("guests.all_invited").t, class: "text-base-content/70"
       link r("actions.back").t, to: Events::Show.with(event.id), class: "btn btn-ghost mt-4"
     end

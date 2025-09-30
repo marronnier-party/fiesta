@@ -33,30 +33,30 @@ class Home::IndexPage < AuthLayout
   private def render_features
     div class: "grid md:grid-cols-3 gap-8 mb-16" do
       render_feature_card(
-        icon: "calendar",
+        icon_name: "calendar",
         title: "Easy RSVP",
         description: "Let everyone know you're coming with just a few clicks. Add your family members and dietary restrictions."
       )
 
       render_feature_card(
-        icon: "clipboard-list",
+        icon_name: "clipboard-list",
         title: "Coordinate Tasks",
         description: "Know who's bringing what. Mark tasks complete and report what you spent. No surprises!"
       )
 
       render_feature_card(
-        icon: "users",
+        icon_name: "users",
         title: "See Who's Coming",
         description: "Get excited! See the full guest list, who confirmed, and the total headcount."
       )
     end
   end
 
-  private def render_feature_card(icon : String, title : String, description : String)
+  private def render_feature_card(icon_name : String, title : String, description : String)
     div class: "card bg-base-100 shadow-xl" do
       div class: "card-body items-center text-center" do
         div class: "w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4" do
-          mount UI::Icon, name: icon, classes: "w-8 h-8 text-primary"
+          icon icon_name, "w-8 h-8 text-primary"
         end
 
         h3 title, class: "card-title text-2xl mb-2"

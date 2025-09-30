@@ -30,7 +30,7 @@ class Me::ShowPage < MainLayout
   private def render_pending_invitations_section
     div class: "mb-8" do
       div class: "flex items-center gap-2 mb-4" do
-        mount UI::Icon, name: "alert-triangle", classes: "w-6 h-6 text-warning"
+        icon "alert-triangle", "w-6 h-6 text-warning"
         h2 "Pending Invitations", class: "text-2xl font-semibold"
       end
 
@@ -38,7 +38,7 @@ class Me::ShowPage < MainLayout
         mount Dashboard::EmptyState,
           title: "No pending invitations",
           description: "You're all caught up! You'll see new event invitations here.",
-          icon: "check-circle"
+          icon_name: "check-circle"
       else
         div class: "grid grid-cols-1 gap-4" do
           pending_invitations.each do |guest|
@@ -52,7 +52,7 @@ class Me::ShowPage < MainLayout
   private def render_confirmed_events_section
     div class: "mb-8" do
       div class: "flex items-center gap-2 mb-4" do
-        mount UI::Icon, name: "calendar", classes: "w-6 h-6 text-primary"
+        icon "calendar", "w-6 h-6 text-primary"
         h2 "Your Upcoming Events", class: "text-2xl font-semibold"
       end
 
@@ -60,7 +60,7 @@ class Me::ShowPage < MainLayout
         mount Dashboard::EmptyState,
           title: "No upcoming events",
           description: "You haven't confirmed any events yet. Check your pending invitations above!",
-          icon: "calendar"
+          icon_name: "calendar"
       else
         div class: "grid grid-cols-1 lg:grid-cols-2 gap-4" do
           confirmed_events.each do |guest|
@@ -75,7 +75,7 @@ class Me::ShowPage < MainLayout
     div class: "mb-8" do
       div class: "flex items-center justify-between mb-4" do
         div class: "flex items-center gap-2" do
-          mount UI::Icon, name: "clipboard-list", classes: "w-6 h-6 text-info"
+          icon "clipboard-list", "w-6 h-6 text-info"
           h2 "Your Tasks", class: "text-2xl font-semibold"
         end
       end
@@ -84,7 +84,7 @@ class Me::ShowPage < MainLayout
         mount Dashboard::EmptyState,
           title: "No tasks assigned",
           description: "You don't have any tasks yet. Event organizers will assign tasks as needed.",
-          icon: "clipboard-list"
+          icon_name: "clipboard-list"
       else
         div class: "grid grid-cols-1 gap-3" do
           user_tasks.each do |task|

@@ -14,14 +14,14 @@ class Dashboard::TaskListItem < BaseComponent
             div class: "flex flex-col gap-1 text-sm text-base-content/70" do
               if event = task.event
                 div class: "flex items-center gap-2" do
-                  mount UI::Icon, name: "calendar", classes: "w-4 h-4"
+                  icon "calendar", "w-4 h-4"
                   text event.name
                 end
               end
 
               if category = task.category
                 div class: "flex items-center gap-2" do
-                  mount UI::Icon, name: "tag", classes: "w-4 h-4"
+                  icon "tag", "w-4 h-4"
                   text category
                 end
               end

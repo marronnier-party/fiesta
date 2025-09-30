@@ -16,7 +16,7 @@ class Events::IndexPage < MainLayout
     div class: "flex items-center justify-between" do
       h1 r("events.my_events").t, class: "text-3xl font-bold"
       link to: Events::New, class: "btn btn-primary" do
-        mount UI::Icon, name: "plus", classes: "w-5 h-5 mr-2"
+        icon "plus", "w-5 h-5 mr-2"
         text r("nav.create_event").t
       end
     end
@@ -38,7 +38,7 @@ class Events::IndexPage < MainLayout
     div class: "card bg-base-100 shadow-xl" do
       div class: "card-body items-center text-center py-12" do
         div class: "bg-base-300 rounded-full p-6 mb-4" do
-          mount UI::Icon, name: "calendar", classes: "w-16 h-16 text-base-content/40"
+          icon "calendar", "w-16 h-16 text-base-content/40"
         end
         h2 r("events.no_events").t, class: "card-title text-2xl mb-2"
         para r("events.no_events_hint").t, class: "text-base-content/70 mb-6"
@@ -57,14 +57,14 @@ class Events::IndexPage < MainLayout
             div class: "space-y-2 mt-4" do
               if start_at = event.start_at
                 div class: "flex items-center gap-2 text-base-content/80" do
-                  mount UI::Icon, name: "calendar", classes: "w-5 h-5"
+                  icon "calendar", "w-5 h-5"
                   text format_date(start_at)
                 end
               end
 
               if location = event.location
                 div class: "flex items-center gap-2 text-base-content/80" do
-                  mount UI::Icon, name: "map-pin", classes: "w-5 h-5"
+                  icon "map-pin", "w-5 h-5"
                   text location.name
                 end
               end

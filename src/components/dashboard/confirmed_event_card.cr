@@ -13,7 +13,7 @@ class Dashboard::ConfirmedEventCard < BaseComponent
           end
 
           span class: "badge badge-success badge-lg gap-2" do
-            mount UI::Icon, name: "check-circle", classes: "w-4 h-4"
+            icon "check-circle", "w-4 h-4"
             text r("guests.statuses.confirmed").t
           end
         end
@@ -33,14 +33,14 @@ class Dashboard::ConfirmedEventCard < BaseComponent
     div class: "space-y-2 mb-4" do
       if start_at = guest.event!.start_at
         div class: "flex items-center gap-2 text-base-content/80" do
-          mount UI::Icon, name: "calendar", classes: "w-5 h-5"
+          icon "calendar", "w-5 h-5"
           text format_date(start_at)
         end
       end
 
       if location = guest.event!.location
         div class: "flex items-center gap-2 text-base-content/80" do
-          mount UI::Icon, name: "map-pin", classes: "w-5 h-5"
+          icon "map-pin", "w-5 h-5"
           text location.name
         end
       end
@@ -51,7 +51,7 @@ class Dashboard::ConfirmedEventCard < BaseComponent
     total = guest.total_attendees
 
     div class: "flex items-start gap-2 mb-4" do
-      mount UI::Icon, name: "users", classes: "w-5 h-5 text-base-content/80 mt-0.5"
+      icon "users", "w-5 h-5 text-base-content/80 mt-0.5"
       div class: "flex-1" do
         para class: "text-base-content/80" do
           strong class: "text-base-content", text: "Your group: #{total} #{total == 1 ? "person" : "people"}"
@@ -73,7 +73,7 @@ class Dashboard::ConfirmedEventCard < BaseComponent
     return if task_count == 0
 
     div class: "alert alert-info" do
-      mount UI::Icon, name: "clipboard-list", classes: "w-5 h-5"
+      icon "clipboard-list", "w-5 h-5"
       span do
         text "You have #{task_count} #{task_count == 1 ? "task" : "tasks"} for this event"
       end

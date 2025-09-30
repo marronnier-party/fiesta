@@ -21,14 +21,14 @@ class Guests::RsvpPage < MainLayout
         div class: "space-y-2 text-base-content/80" do
           if start_at = guest.event!.start_at
             div class: "flex items-center gap-2" do
-              mount UI::Icon, name: "calendar", classes: "w-5 h-5"
+              icon "calendar", "w-5 h-5"
               text format_date(start_at)
             end
           end
 
           if location = guest.event!.location
             div class: "flex items-center gap-2" do
-              mount UI::Icon, name: "map-pin", classes: "w-5 h-5"
+              icon "map-pin", "w-5 h-5"
               text location.name
             end
           end

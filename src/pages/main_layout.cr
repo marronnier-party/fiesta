@@ -9,6 +9,11 @@ abstract class MainLayout
   abstract def content
   abstract def page_title
 
+  # Helper macro to render icons easily
+  macro icon(icon_name, icon_classes = "w-4 h-4")
+    mount UI::Icon, name: {{icon_name}}, classes: {{icon_classes}}
+  end
+
   # MainLayout defines a default 'page_title'.
   #
   # Add a 'page_title' method to your indivual pages to customize each page's

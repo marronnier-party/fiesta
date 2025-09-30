@@ -13,7 +13,7 @@ class Dashboard::InvitationCard < BaseComponent
           end
 
           span class: "badge badge-warning badge-lg gap-2" do
-            mount UI::Icon, name: "alert-triangle", classes: "w-4 h-4"
+            icon "alert-triangle", "w-4 h-4"
             text r("guests.rsvp_now").t
           end
         end
@@ -32,14 +32,14 @@ class Dashboard::InvitationCard < BaseComponent
     div class: "space-y-2" do
       if start_at = guest.event!.start_at
         div class: "flex items-center gap-2 text-base-content/80" do
-          mount UI::Icon, name: "calendar", classes: "w-5 h-5"
+          icon "calendar", "w-5 h-5"
           text format_date(start_at)
         end
       end
 
       if location = guest.event!.location
         div class: "flex items-center gap-2 text-base-content/80" do
-          mount UI::Icon, name: "map-pin", classes: "w-5 h-5"
+          icon "map-pin", "w-5 h-5"
           text location.name
         end
       end
