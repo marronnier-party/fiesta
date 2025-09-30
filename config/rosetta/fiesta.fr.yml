@@ -86,6 +86,34 @@ fr:
       draft: "Brouillon"
       confirmed: "Confirmé"
       cancelled: "Annulé"
+    reminders:
+      send_reminders: "Envoyer des rappels"
+      sent_success: "Rappels envoyés à %{count} invité(s)"
+      sent_to_count: "Rappel envoyé à %{count} invité(s)"
+      no_pending_guests: "Aucun invité en attente à relancer"
+    errors:
+      not_organizer: "Seul l'organisateur peut effectuer cette action"
+    budget:
+      title: "Budget"
+      label: "Budget de l'événement"
+      hint: "Budget total pour cet événement (optionnel)"
+      total_budget: "Budget Total"
+      actual_cost: "Coût Réel"
+      remaining: "Restant"
+      used: "Budget Utilisé"
+    activity:
+      date_changed: "a modifié la date de l'événement du %{old_date} au %{new_date}"
+
+  # Comments
+  comments:
+    title: "Commentaires"
+    add_comment: "Ajouter un commentaire..."
+    post: "Publier"
+    comment_count: "commentaire"
+    no_comments: "Aucun commentaire"
+    created_successfully: "Commentaire publié avec succès"
+    errors:
+      unauthorized: "Vous n'êtes pas autorisé à commenter ceci"
 
   # Locations
   locations:
@@ -104,6 +132,10 @@ fr:
     created_successfully: "Lieu créé avec succès !"
     updated_successfully: "Lieu mis à jour avec succès !"
     deleted_successfully: "Lieu supprimé avec succès"
+    search_placeholder: "Rechercher des lieux..."
+    no_results: "Aucun lieu trouvé"
+    no_results_hint: "Aucun lieu ne correspond à '%{query}'"
+    view_all: "Voir tous les lieux"
     placeholder:
       name: "Maison de grand-mère"
       address: "123 Rue Principale"
@@ -144,6 +176,14 @@ fr:
       pending: "En attente"
       confirmed: "Confirmé"
       declined: "Refusé"
+      attended: "Présent"
+    mark_attended: "Marquer présent"
+    unmark_attended: "Enlever"
+    marked_attended: "%{name} marqué comme présent"
+    unmarked_attended: "%{name} retiré des présents"
+    attended_activity: "%{name} a assisté à l'événement"
+    errors:
+      must_be_confirmed: "L'invité doit être confirmé pour être marqué comme présent"
 
   # Tasks
   tasks:
@@ -177,6 +217,12 @@ fr:
     select_assignee: "Sélectionner une personne..."
     category: "Catégorie"
     select_category: "Sélectionner une catégorie..."
+    my_tasks: "Mes Tâches"
+    filters:
+      all: "Toutes"
+      pending: "En attente"
+      in_progress: "En cours"
+      completed: "Terminées"
     placeholder:
       name: "Apporter les desserts"
       description: "Détails de la tâche..."

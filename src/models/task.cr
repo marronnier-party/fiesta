@@ -17,4 +17,8 @@ class Task < BaseModel
     belongs_to event : Event
     belongs_to guest : Guest?
   end
+
+  def comments
+    CommentQuery.new.for_task(self).preload_user.recent.results
+  end
 end

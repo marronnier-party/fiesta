@@ -86,6 +86,34 @@ en:
       draft: "Draft"
       confirmed: "Confirmed"
       cancelled: "Cancelled"
+    reminders:
+      send_reminders: "Send Reminders"
+      sent_success: "Reminders sent to %{count} guest(s)"
+      sent_to_count: "Reminder sent to %{count} guest(s)"
+      no_pending_guests: "No pending guests to remind"
+    errors:
+      not_organizer: "Only the organizer can perform this action"
+    budget:
+      title: "Budget"
+      label: "Event Budget"
+      hint: "Total budget for this event (optional)"
+      total_budget: "Total Budget"
+      actual_cost: "Actual Cost"
+      remaining: "Remaining"
+      used: "Budget Used"
+    activity:
+      date_changed: "changed event date from %{old_date} to %{new_date}"
+
+  # Comments
+  comments:
+    title: "Comments"
+    add_comment: "Add a comment..."
+    post: "Post"
+    comment_count: "comment"
+    no_comments: "No comments yet"
+    created_successfully: "Comment posted successfully"
+    errors:
+      unauthorized: "You are not authorized to comment on this"
 
   # Locations
   locations:
@@ -104,6 +132,10 @@ en:
     created_successfully: "Location created successfully!"
     updated_successfully: "Location updated successfully!"
     deleted_successfully: "Location deleted successfully"
+    search_placeholder: "Search locations..."
+    no_results: "No locations found"
+    no_results_hint: "No locations match '%{query}'"
+    view_all: "View All Locations"
     placeholder:
       name: "Grandma's House"
       address: "123 Main Street"
@@ -144,6 +176,14 @@ en:
       pending: "Pending"
       confirmed: "Confirmed"
       declined: "Declined"
+      attended: "Attended"
+    mark_attended: "Mark Attended"
+    unmark_attended: "Unmark"
+    marked_attended: "%{name} marked as attended"
+    unmarked_attended: "%{name} unmarked as attended"
+    attended_activity: "%{name} attended the event"
+    errors:
+      must_be_confirmed: "Guest must be confirmed to mark as attended"
 
   # Tasks
   tasks:
@@ -177,6 +217,12 @@ en:
     select_assignee: "Select someone..."
     category: "Category"
     select_category: "Select a category..."
+    my_tasks: "My Tasks"
+    filters:
+      all: "All"
+      pending: "Pending"
+      in_progress: "In Progress"
+      completed: "Completed"
     placeholder:
       name: "Bring desserts"
       description: "Task details..."

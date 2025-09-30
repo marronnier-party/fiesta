@@ -2,6 +2,7 @@ class Events::ShowPage < MainLayout
   needs event : Event
   needs guests : Array(Guest)
   needs tasks : Array(Task)
+  needs task_comments : Hash(Int64, Array(Comment))
   needs user_guest : Guest?
   needs activities : Array(EventActivity)
 
@@ -16,6 +17,7 @@ class Events::ShowPage < MainLayout
       div class: "grid grid-cols-1 lg:grid-cols-3 gap-6" do
         div class: "lg:col-span-2 space-y-6" do
           render_event_details
+          render_budget_section if is_organizer? && event.budget
           render_organizer_notes if is_organizer?
           render_tasks_section
         end
@@ -85,7 +87,9 @@ class Events::ShowPage < MainLayout
               icon "calendar", "w-6 h-6 text-primary"
               div do
                 label r("events.start_at").t, class: "font-semibold block"
-                span format_datetime(start_at), class: "text-base-content/80"
+                span class: "text-base-content/80" do
+                  text format_datetime(start_at)
+                end
               end
             end
           end
@@ -95,7 +99,9 @@ class Events::ShowPage < MainLayout
               icon "calendar", "w-6 h-6 text-primary"
               div do
                 label r("events.end_at").t, class: "font-semibold block"
-                span format_datetime(end_at), class: "text-base-content/80"
+                span class: "text-base-content/80" do
+                  text format_datetime(end_at)
+                end
               end
             end
           end
@@ -105,7 +111,9 @@ class Events::ShowPage < MainLayout
               icon "map-pin", "w-6 h-6 text-primary"
               div do
                 label r("events.location").t, class: "font-semibold block"
-                span location.name, class: "text-base-content/80"
+                span class: "text-base-content/80" do
+                  text location.name
+                end
                 if address = location.address
                   para [address, location.city, location.postal_code].compact.join(", "), class: "text-sm text-base-content/60"
                 end
@@ -160,7 +168,19 @@ class Events::ShowPage < MainLayout
   private def render_guest_list
     div class: "card bg-base-100 shadow-xl" do
       div class: "card-body" do
-        h2 r("events.guest_list").t, class: "card-title text-2xl mb-4"
+        div class: "flex items-center justify-between mb-4" do
+          h2 r("events.guest_list").t, class: "card-title text-2xl"
+
+          # Send reminders button for organizers
+          if is_organizer?
+            pending_count = guests.count { |g| g.status == Guest::Status::NoAnswer }
+            if pending_count > 0
+              form_for Events::SendReminders.with(event.id), class: "inline" do
+                button r("events.reminders.send_reminders").t, class: "btn btn-sm btn-outline btn-primary"
+              end
+            end
+          end
+        end
 
         div class: "space-y-2" do
           guests.each do |guest|
@@ -190,7 +210,22 @@ class Events::ShowPage < MainLayout
         end
       end
 
-      render_guest_status_badge(guest)
+      div class: "flex items-center gap-2" do
+        render_guest_status_badge(guest)
+
+        # Show attendance marking for organizers on past events
+        if is_organizer? && event.start_at && event.start_at.not_nil! < Time.utc
+          if guest.status == Guest::Status::Confirmed
+            form_for Guests::MarkAttended.with(guest.id), class: "inline" do
+              button r("guests.mark_attended").t, type: "submit", class: "btn btn-xs btn-success"
+            end
+          elsif guest.status == Guest::Status::Attended
+            form_for Guests::UnmarkAttended.with(guest.id), class: "inline" do
+              button r("guests.unmark_attended").t, type: "submit", class: "btn btn-xs btn-ghost"
+            end
+          end
+        end
+      end
     end
   end
 
@@ -198,6 +233,8 @@ class Events::ShowPage < MainLayout
     case guest.status
     when Guest::Status::Confirmed
       span r("guests.statuses.confirmed").t, class: "badge badge-success"
+    when Guest::Status::Attended
+      span r("guests.statuses.attended").t, class: "badge badge-primary"
     when Guest::Status::NoAnswer
       span r("guests.statuses.pending").t, class: "badge badge-warning"
     when Guest::Status::Declined
@@ -235,20 +272,33 @@ class Events::ShowPage < MainLayout
   end
 
   private def render_task_item(task : Task)
-    div class: "flex items-center justify-between p-4 bg-base-200 rounded-lg" do
-      div class: "flex-1" do
-        div class: "flex items-center gap-2 mb-1" do
-          render_task_status_icon(task)
-          span task.name, class: "font-semibold"
+    div class: "collapse collapse-arrow bg-base-200" do
+      input type: "checkbox", class: "peer"
+
+      div class: "collapse-title flex items-center justify-between pr-12" do
+        div class: "flex-1" do
+          div class: "flex items-center gap-2 mb-1" do
+            render_task_status_icon(task)
+            span class: "font-semibold" do
+              text task.name
+            end
+          end
+
+          if guest = task.guest
+            small r("tasks.assigned_to").t + ": #{guest.user!.name}", class: "text-sm text-base-content/60"
+          end
+
+          # Show comment count
+          comments = task_comments[task.id]? || [] of Comment
+          if comments.size > 0
+            span class: "text-xs text-base-content/50" do
+              text " • #{comments.size} #{r("comments.comment_count").t}"
+            end
+          end
         end
 
-        if guest = task.guest
-          small r("tasks.assigned_to").t + ": #{guest.user!.name}", class: "text-sm text-base-content/60"
-        end
-      end
-
-      div class: "flex gap-2" do
-        render_task_actions(task)
+        div class: "flex gap-2" do
+          render_task_actions(task)
 
         # Show reassign button for organizers
         if is_organizer?
@@ -281,6 +331,73 @@ class Events::ShowPage < MainLayout
             end
           end
         end
+        end
+      end
+
+      # Collapse content - comments section
+      div class: "collapse-content" do
+        render_task_comments(task)
+      end
+    end
+  end
+
+  private def render_task_comments(task : Task)
+    comments = task_comments[task.id]? || [] of Comment
+
+    div class: "space-y-4 pt-4" do
+      # Comments list
+      if comments.any?
+        div class: "space-y-2" do
+          comments.each do |comment|
+            render_comment(comment)
+          end
+        end
+      end
+
+      # Add comment form
+      can_comment = is_organizer? || (task.guest_id && task.guest_id == user_guest.try(&.id))
+      if can_comment
+        form_for Comments::Create, class: "mt-4" do
+          input type: "hidden", name: "comment:commentable_type", value: "Task"
+          input type: "hidden", name: "comment:commentable_id", value: task.id.to_s
+
+          div class: "form-control" do
+            tag "textarea",
+              name: "comment:content",
+              class: "textarea textarea-bordered",
+              placeholder: r("comments.add_comment").t,
+              rows: "2",
+              required: true
+          end
+
+          div class: "flex justify-end mt-2" do
+            button r("comments.post").t, class: "btn btn-sm btn-primary"
+          end
+        end
+      end
+    end
+  end
+
+  private def render_comment(comment : Comment)
+    div class: "flex gap-3 p-3 bg-base-100 rounded-lg" do
+      div class: "avatar placeholder" do
+        div class: "bg-neutral text-neutral-content rounded-full w-8" do
+          span class: "text-xs" do
+            text comment.user!.name[0..0].upcase
+          end
+        end
+      end
+
+      div class: "flex-1" do
+        div class: "flex items-baseline gap-2" do
+          span class: "font-semibold text-sm" do
+            text comment.user!.name
+          end
+          small class: "text-xs text-base-content/60" do
+            text format_relative_time(comment.created_at)
+          end
+        end
+        para comment.content, class: "text-sm mt-1"
       end
     end
   end
@@ -337,6 +454,66 @@ class Events::ShowPage < MainLayout
       span r("events.statuses.cancelled").t, class: "badge badge-error badge-lg"
     when Event::Status::Done
       span r("tasks.statuses.completed").t, class: "badge badge-ghost badge-lg"
+    end
+  end
+
+  private def render_budget_section
+    div class: "card bg-base-100 shadow-xl" do
+      div class: "card-body" do
+        div class: "flex items-center justify-between mb-4" do
+          h2 r("events.budget.title").t, class: "card-title"
+          link r("actions.edit").t, to: Events::Edit.with(event.id), class: "btn btn-ghost btn-sm"
+        end
+
+        if budget = event.budget
+          actual = event.actual_cost
+          remaining = event.remaining_budget
+          percentage = event.budget_percentage_used
+
+          div class: "space-y-4" do
+            # Budget overview
+            div class: "stats shadow w-full" do
+              div class: "stat" do
+                div class: "stat-title" do
+                  text r("events.budget.total_budget").t
+                end
+                div "$#{"%.2f" % budget}", class: "stat-value text-primary"
+              end
+
+              div class: "stat" do
+                div class: "stat-title" do
+                  text r("events.budget.actual_cost").t
+                end
+                div "$#{"%.2f" % actual}", class: "stat-value #{actual > budget ? "text-error" : "text-info"}"
+              end
+
+              div class: "stat" do
+                div class: "stat-title" do
+                  text r("events.budget.remaining").t
+                end
+                if rem = remaining
+                  div "$#{"%.2f" % rem}", class: "stat-value #{rem < 0 ? "text-error" : "text-success"}"
+                end
+              end
+            end
+
+            # Progress bar
+            if pct = percentage
+              div class: "space-y-2" do
+                div class: "flex justify-between text-sm" do
+                  span do
+                    text r("events.budget.used").t
+                  end
+                  span do
+                    text "#{"%.1f" % pct}%"
+                  end
+                end
+                tag "progress", class: "progress #{pct > 100 ? "progress-error" : pct > 80 ? "progress-warning" : "progress-success"} w-full", value: pct.to_s, max: "100"
+              end
+            end
+          end
+        end
+      end
     end
   end
 

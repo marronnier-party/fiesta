@@ -77,10 +77,9 @@ class Shared::Navbar < BaseComponent
 
     # Show "My Tasks" for all users (they might be assigned tasks)
     li do
-      # Will create this action later
-      a href: "#", class: "opacity-50 cursor-not-allowed" do
+      link to: Tasks::Index, class: "" do
         icon "clipboard-list", "w-4 h-4 mr-1"
-        text r("tasks.title").t
+        text r("tasks.my_tasks").t
       end
     end
 
@@ -115,7 +114,7 @@ class Shared::Navbar < BaseComponent
     end
 
     li do
-      a r("tasks.title").t, href: "#", class: "opacity-50"
+      link r("tasks.my_tasks").t, to: Tasks::Index
     end
 
     if user_is_organizer?

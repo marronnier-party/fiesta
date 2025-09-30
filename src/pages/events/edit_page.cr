@@ -72,6 +72,15 @@ class Events::EditPage < MainLayout
               end
             end
 
+            # Budget
+            div class: "form-control" do
+              label r("events.budget.label").t, class: "label font-semibold"
+              input type: "number", name: "event:budget", value: operation.budget.value.to_s, placeholder: "0.00", step: "0.01", min: "0", class: "input input-bordered w-full"
+              label class: "label" do
+                span r("events.budget.hint").t, class: "label-text-alt"
+              end
+            end
+
             # Actions
             div class: "card-actions justify-end mt-8" do
               link r("actions.cancel").t, to: Events::Show.with(event.id), class: "btn btn-ghost"

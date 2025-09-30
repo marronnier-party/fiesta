@@ -1,5 +1,6 @@
 class Locations::IndexPage < MainLayout
   needs locations : Array(Location)
+  needs search_query : String
 
   def page_title
     r("locations.my_locations").t
@@ -12,14 +13,51 @@ class Locations::IndexPage < MainLayout
         link r("locations.create").t, to: Locations::New, class: "btn btn-primary"
       end
 
+      # Search box
+      unless locations.empty? && search_query.blank?
+        render_search_box
+      end
+
       if locations.empty?
-        render_empty_state
+        if search_query.blank?
+          render_empty_state
+        else
+          render_no_results
+        end
       else
         div class: "grid gap-4 md:grid-cols-2 lg:grid-cols-3" do
           locations.each do |location|
             render_location_card(location)
           end
         end
+      end
+    end
+  end
+
+  private def render_search_box
+    form_for Locations::Index, method: "get", class: "mb-6" do
+      div class: "form-control" do
+        div class: "input-group" do
+          input type: "text",
+            name: "search",
+            value: search_query,
+            placeholder: r("locations.search_placeholder").t,
+            class: "input input-bordered w-full"
+          button type: "submit", class: "btn btn-square" do
+            icon "search", "w-5 h-5"
+          end
+        end
+      end
+    end
+  end
+
+  private def render_no_results
+    div class: "card bg-base-100 shadow-xl" do
+      div class: "card-body text-center py-12" do
+        icon "search", "w-16 h-16 mx-auto mb-4 text-base-content/40"
+        h2 r("locations.no_results").t, class: "text-2xl font-bold mb-2"
+        para r("locations.no_results_hint").t(query: search_query), class: "text-base-content/70 mb-6"
+        link r("locations.view_all").t, to: Locations::Index, class: "btn btn-ghost"
       end
     end
   end
