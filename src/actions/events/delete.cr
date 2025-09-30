@@ -4,8 +4,8 @@ class Events::Delete < BrowserAction
 
   delete "/events/:event_id" do
     DeleteEvent.delete(event) do |_operation, _deleted|
-      flash.success = "Deleted the event"
-      redirect Home::Index
+      flash.success = r("events.deleted_successfully").t
+      redirect Events::Index
     end
   end
 end

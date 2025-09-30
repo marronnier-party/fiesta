@@ -46,6 +46,8 @@ fr:
     status: "Statut"
     created_successfully: "Événement créé avec succès !"
     updated_successfully: "Événement mis à jour avec succès !"
+    deleted_successfully: "Événement supprimé avec succès"
+    delete_confirm: "Êtes-vous sûr de vouloir supprimer cet événement ?"
     save_as_draft: "Enregistrer comme brouillon"
     publish_event: "Publier l'événement"
     select_location: "Sélectionner un lieu..."

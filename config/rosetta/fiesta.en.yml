@@ -46,6 +46,8 @@ en:
     status: "Status"
     created_successfully: "Event created successfully!"
     updated_successfully: "Event updated successfully!"
+    deleted_successfully: "Event deleted successfully"
+    delete_confirm: "Are you sure you want to delete this event?"
     save_as_draft: "Save as Draft"
     publish_event: "Publish Event"
     select_location: "Select a location..."
