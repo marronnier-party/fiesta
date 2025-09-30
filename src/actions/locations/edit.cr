@@ -1,6 +1,8 @@
 class Locations::Edit < BrowserAction
+  include RequireLocationFromId
+  include RequireLocationOwnership
+
   get "/locations/:location_id/edit" do
-    location = LocationQuery.find(location_id)
     html EditPage,
       operation: SaveLocation.new(location),
       location: location

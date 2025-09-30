@@ -4,7 +4,7 @@ class Locations::EditPage < MainLayout
   quick_def page_title, "Edit Location with id: #{location.id}"
 
   def content
-    link "Back to all Locations", to: Locations::Index
+    #link "Back to all Locations", to: Locations::Index
     h1 "Edit Location with id: #{location.id}"
     render_location_form(operation)
   end

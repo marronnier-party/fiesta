@@ -3,23 +3,20 @@ class SaveLocation < Location::SaveOperation
 
   before_save do
     validate_required name
+    validate_coordinates
 
     Avram::Slugify.set slug,
       using: name,
-      query: LocationQuery.new
-    # validate_required address
-    # validate_required city
-    # validate_required postal_code
-    # validate_required country
-    # validate_coordinates
+      query: LocationQuery.new.creator_id(creator_id.value || 0)
   end
 
   private def validate_coordinates
     return unless latitude.value || longitude.value
+
     if latitude.value.nil? && longitude.value
-      latitude.add_error "requis si la longitude est définie"
+      latitude.add_error "is required if longitude is provided"
     elsif longitude.value.nil? && latitude.value
-      longitude.add_error "requis si la latitude est définie"
+      longitude.add_error "is required if latitude is provided"
     end
   end
 end

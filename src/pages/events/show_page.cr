@@ -3,7 +3,7 @@ class Events::ShowPage < MainLayout
   quick_def page_title, "Event with id: #{event.id}"
 
   def content
-    link "Back to all Events", to: Events::Index
+    #link "Back to all Events", to: Events::Index
     h1 "Event with id: #{event.id}"
     render_actions
     render_event_fields

@@ -1,0 +1,33 @@
+class Events::Guests::Rsvp < BrowserAction
+  include RequireEventFromId
+
+  post "/events/:event_id/rsvp" do
+    guest = GuestQuery.new.for_event(event).for_user(current_user).first?
+
+    if guest.nil?
+      flash.failure = "You are not invited to this event"
+      redirect Events::Index
+      return
+    end
+
+    response = params.get("response") # "confirm" or "decline"
+    new_status = response == "confirm" ? Guest::Status::Confirmed : Guest::Status::Declined
+
+    SaveGuest.update(guest, status: new_status) do |operation, updated_guest|
+      if updated_guest
+        # Send confirmation email
+        RsvpConfirmationEmail.new(updated_guest, event).deliver_now
+
+        if new_status == Guest::Status::Confirmed
+          flash.success = "You confirmed your attendance to #{event.name}"
+        else
+          flash.info = "You declined the invitation to #{event.name}"
+        end
+        redirect Events::Show.with(event.id)
+      else
+        flash.failure = "Failed to update RSVP"
+        redirect Events::Show.with(event.id)
+      end
+    end
+  end
+end

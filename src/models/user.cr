@@ -5,7 +5,7 @@ class User < BaseModel
   table do
     column email : String
     column encrypted_password : String
-    column name : String = "choucroute"
+    column name : String
     column avatar_url : String?
 
     has_many invitations : Guest # foreign_key: :guest_id

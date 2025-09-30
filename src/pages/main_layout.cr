@@ -29,19 +29,28 @@ abstract class MainLayout
     html lang: "en" do
       mount Shared::LayoutHead, page_title: page_title
 
-      body do
-        # render_body_test
+      body class: "min-h-screen bg-base-200" do
+        mount Shared::Navbar, current_user: current_user
         mount Shared::FlashMessages, context.flash
-        render_signed_in_user
-        content
+
+        main class: "container mx-auto px-4 py-8 max-w-7xl" do
+          content
+        end
+
+        render_footer
       end
     end
   end
 
-  private def render_signed_in_user
-    text current_user.email
-    text " - "
-    link "Sign out", to: SignIns::Delete, flow_id: "sign-out-button"
+  private def render_footer
+    footer class: "footer footer-center p-4 bg-base-300 text-base-content mt-auto" do
+      div do
+        para class: "text-sm" do
+          text "🎉 Fiesta - "
+          text "Coordinate family events together"
+        end
+      end
+    end
   end
 
   private def render_body_test

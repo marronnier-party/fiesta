@@ -4,7 +4,7 @@ class Events::EditPage < MainLayout
   quick_def page_title, "Edit Event with id: #{event.id}"
 
   def content
-    link "Back to all Events", to: Events::Index
+    #link "Back to all Events", to: Events::Index
     h1 "Edit Event with id: #{event.id}"
     render_event_form(operation)
   end

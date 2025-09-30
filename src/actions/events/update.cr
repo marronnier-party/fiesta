@@ -1,6 +1,8 @@
 class Events::Update < BrowserAction
+  include RequireEventFromId
+  include RequireEventOwnership
+
   put "/events/:event_id" do
-    event = EventQuery.find(event_id)
     SaveEvent.update(event, params) do |operation, updated_event|
       if operation.saved?
         flash.success = "The record has been updated"

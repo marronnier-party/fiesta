@@ -3,7 +3,7 @@ class Locations::ShowPage < MainLayout
   quick_def page_title, "Location with id: #{location.id}"
 
   def content
-    link "Back to all Locations", to: Locations::Index
+    #link "Back to all Locations", to: Locations::Index
     h1 "Location with id: #{location.id}"
     render_actions
     render_location_fields

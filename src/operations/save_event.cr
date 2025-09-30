@@ -1,28 +1,31 @@
 class SaveEvent < Event::SaveOperation
-  permit_columns name, description, status, start_at, end_at, creator_id
+  permit_columns name, description, status, start_at, end_at, creator_id, location_id
 
   before_save do
     validate_required name
-    # validate_required start_at
-    # validate_required end_at
-    # validate_future_date
-    # validate_end_after_start
-    #
+    validate_future_date
+    validate_end_after_start
+
     Avram::Slugify.set slug,
       using: name,
-      query: EventQuery.new
+      query: EventQuery.new.creator_id(creator_id.value || 0)
   end
 
-  # private def validate_future_date
-  #   if start_at.value && start_at.value < Time.utc
-  #     start_at.add_error "doit être dans le futur"
-  #   end
-  # end
+  private def validate_future_date
+    # Only validate future date if event is being confirmed (not draft)
+    return unless status.value == Event::Status::Confirmed
+    return unless start_at.value
 
-  # private def validate_end_after_start
-  #   return unless start_at.value && end_at.value
-  #   if end_at.value <= start_at.value
-  #     end_at.add_error "doit être après la date de début"
-  #   end
-  # end
+    if start_at.value.not_nil! < Time.utc
+      start_at.add_error "must be in the future for confirmed events"
+    end
+  end
+
+  private def validate_end_after_start
+    return unless start_at.value && end_at.value
+
+    if end_at.value.not_nil! <= start_at.value.not_nil!
+      end_at.add_error "must be after start date"
+    end
+  end
 end

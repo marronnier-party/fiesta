@@ -1,6 +1,5 @@
 module RequireLocationFromId
   macro included
-    param location_id : Int64
     before require_location_from_id
   end
 
