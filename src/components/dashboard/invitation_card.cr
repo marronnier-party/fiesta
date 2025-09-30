@@ -8,21 +8,21 @@ class Dashboard::InvitationCard < BaseComponent
           div class: "flex-1" do
             h3 guest.event!.name, class: "card-title text-2xl"
             para class: "text-sm text-base-content/70 mt-1" do
-              text "Organized by #{guest.event!.creator!.name}"
+              text r("events.organized_by").t(name: guest.event!.creator!.name)
             end
           end
 
           span class: "badge badge-warning badge-lg gap-2" do
             mount UI::Icon, name: "alert-triangle", classes: "w-4 h-4"
-            text "Please RSVP"
+            text r("guests.rsvp_now").t
           end
         end
 
         render_event_details
 
         div class: "card-actions justify-end mt-4" do
-          link "View Details", to: Events::Show.with(guest.event_id), class: "btn btn-ghost"
-          link "RSVP Now", to: Guests::Rsvp.with(guest.id), class: "btn btn-primary"
+          link r("events.view_details").t, to: Events::Show.with(guest.event_id), class: "btn btn-ghost"
+          link r("guests.rsvp_now").t, to: Guests::Rsvp.with(guest.id), class: "btn btn-primary"
         end
       end
     end

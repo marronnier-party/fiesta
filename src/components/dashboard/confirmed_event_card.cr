@@ -8,13 +8,13 @@ class Dashboard::ConfirmedEventCard < BaseComponent
           div class: "flex-1" do
             h3 guest.event!.name, class: "card-title text-2xl"
             para class: "text-sm text-base-content/70 mt-1" do
-              text "Organized by #{guest.event!.creator!.name}"
+              text r("events.organized_by").t(name: guest.event!.creator!.name)
             end
           end
 
           span class: "badge badge-success badge-lg gap-2" do
             mount UI::Icon, name: "check-circle", classes: "w-4 h-4"
-            text "Confirmed"
+            text r("guests.statuses.confirmed").t
           end
         end
 
@@ -23,7 +23,7 @@ class Dashboard::ConfirmedEventCard < BaseComponent
         render_tasks
 
         div class: "card-actions justify-end mt-4" do
-          link "View Event", to: Events::Show.with(guest.event_id), class: "btn btn-primary"
+          link r("events.view_details").t, to: Events::Show.with(guest.event_id), class: "btn btn-primary"
         end
       end
     end

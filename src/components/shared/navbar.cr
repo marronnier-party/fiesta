@@ -71,7 +71,7 @@ class Shared::Navbar < BaseComponent
     li do
       link to: Me::Show, class: nav_link_class(Me::Show) do
         mount UI::Icon, name: "home", classes: "w-4 h-4 mr-1"
-        text "Dashboard"
+        text r("nav.dashboard").t
       end
     end
 
@@ -80,7 +80,7 @@ class Shared::Navbar < BaseComponent
       # Will create this action later
       a href: "#", class: "opacity-50 cursor-not-allowed" do
         mount UI::Icon, name: "clipboard-list", classes: "w-4 h-4 mr-1"
-        text "My Tasks"
+        text r("tasks.title").t
       end
     end
 
@@ -89,14 +89,14 @@ class Shared::Navbar < BaseComponent
       li do
         link to: Events::Index, class: "" do
           mount UI::Icon, name: "calendar", classes: "w-4 h-4 mr-1"
-          text "My Events"
+          text r("nav.my_events").t
         end
       end
 
       li do
         link to: Events::New, class: "btn btn-primary btn-sm" do
           mount UI::Icon, name: "plus", classes: "w-4 h-4 mr-1"
-          text "Create Event"
+          text r("nav.create_event").t
         end
       end
     end
@@ -104,25 +104,25 @@ class Shared::Navbar < BaseComponent
 
   private def render_mobile_menu_items
     li do
-      link "Dashboard", to: Me::Show
+      link r("nav.dashboard").t, to: Me::Show
     end
 
     li do
-      a "My Tasks", href: "#", class: "opacity-50"
+      a r("tasks.title").t, href: "#", class: "opacity-50"
     end
 
     if user_is_organizer?
       li do
-        link "My Events", to: Events::Index
+        link r("nav.my_events").t, to: Events::Index
       end
 
       li do
-        link "Create Event", to: Events::New
+        link r("nav.create_event").t, to: Events::New
       end
     end
 
     li class: "border-t mt-2 pt-2" do
-      link "Sign Out", to: SignIns::Delete
+      link r("nav.sign_out").t, to: SignIns::Delete
     end
   end
 

@@ -1,0 +1,195 @@
+fr:
+  # Navigation
+  nav:
+    home: "Accueil"
+    dashboard: "Tableau de bord"
+    my_events: "Mes événements"
+    create_event: "Créer un événement"
+    sign_out: "Déconnexion"
+    sign_in: "Connexion"
+
+  # Common actions
+  actions:
+    save: "Enregistrer"
+    cancel: "Annuler"
+    edit: "Modifier"
+    delete: "Supprimer"
+    create: "Créer"
+    update: "Mettre à jour"
+    confirm: "Confirmer"
+    back: "Retour"
+    submit: "Soumettre"
+
+  # Dashboard
+  dashboard:
+    title: "Tableau de bord"
+    welcome: "Bienvenue, %{name}"
+    pending_invitations: "Invitations en attente"
+    confirmed_events: "Événements confirmés"
+    your_tasks: "Vos tâches"
+    no_pending_invitations: "Aucune invitation en attente"
+    no_confirmed_events: "Aucun événement confirmé"
+    no_tasks: "Aucune tâche assignée"
+
+  # Events
+  events:
+    title: "Événements"
+    new: "Nouvel événement"
+    edit: "Modifier l'événement"
+    create: "Créer un événement"
+    show: "Détails de l'événement"
+    name: "Nom de l'événement"
+    description: "Description"
+    start_at: "Date et heure de début"
+    end_at: "Date et heure de fin"
+    location: "Lieu"
+    status: "Statut"
+    created_successfully: "Événement créé avec succès !"
+    updated_successfully: "Événement mis à jour avec succès !"
+    save_as_draft: "Enregistrer comme brouillon"
+    publish_event: "Publier l'événement"
+    select_location: "Sélectionner un lieu..."
+    or_create_location: "Ou créer un nouveau lieu"
+    my_events: "Mes événements"
+    no_events: "Aucun événement pour le moment"
+    no_events_hint: "Créez votre premier événement pour commencer !"
+    view_details: "Voir les détails"
+    invite_guests: "Inviter des personnes"
+    add_task: "Ajouter une tâche"
+    guest_list: "Liste des invités"
+    task_list: "Liste des tâches"
+    total_guests: "Total d'invités"
+    confirmed_count: "%{count} confirmés"
+    pending_count: "%{count} en attente"
+    declined_count: "%{count} refusés"
+    organized_by: "Organisé par %{name}"
+    placeholder:
+      name: "Réunion de famille été 2025"
+      description: "Dites à tout le monde ce qui les attend..."
+    statuses:
+      draft: "Brouillon"
+      confirmed: "Confirmé"
+      cancelled: "Annulé"
+
+  # Locations
+  locations:
+    title: "Lieux"
+    new: "Nouveau lieu"
+    create: "Créer un lieu"
+    name: "Nom du lieu"
+    address: "Adresse"
+    city: "Ville"
+    postal_code: "Code postal"
+    country: "Pays"
+    description: "Description"
+    created_successfully: "Lieu créé avec succès !"
+    placeholder:
+      name: "Maison de grand-mère"
+      address: "123 Rue Principale"
+      city: "Lyon"
+      postal_code: "69001"
+      country: "France"
+      description: "Détails utiles sur ce lieu..."
+
+  # Guests
+  guests:
+    title: "Invités"
+    rsvp: "Répondre"
+    rsvp_title: "Votre réponse"
+    invitation: "Invitation"
+    status: "Statut"
+    guest_count: "Nombre de personnes"
+    notes: "Notes"
+    will_attend: "Allez-vous participer ?"
+    yes_coming: "Oui, je viens !"
+    yes_coming_subtitle: "J'ai hâte pour cet événement"
+    no_sorry: "Désolé, je ne peux pas venir"
+    no_sorry_subtitle: "J'ai un conflit"
+    how_many: "Combien de personnes (vous inclus) ?"
+    how_many_hint: "Incluez-vous et les membres de votre famille"
+    notes_optional: "Notes (optionnel)"
+    notes_placeholder: "Restrictions alimentaires, demandes spéciales ou commentaires..."
+    save_rsvp: "Enregistrer la réponse"
+    rsvp_saved: "Réponse enregistrée avec succès !"
+    rsvp_failed: "Impossible d'enregistrer la réponse"
+    not_found: "Invitation non trouvée"
+    rsvp_now: "Répondre maintenant"
+    for_event: "Pour : %{event}"
+    select_guests: "Sélectionner les invités"
+    send_invitations: "Envoyer les invitations"
+    invited_successfully: "Invitations envoyées avec succès !"
+    all_invited: "Tous les utilisateurs ont déjà été invités"
+    statuses:
+      pending: "En attente"
+      confirmed: "Confirmé"
+      declined: "Refusé"
+
+  # Tasks
+  tasks:
+    title: "Tâches"
+    complete: "Terminer la tâche"
+    mark_complete: "Marquer comme terminée"
+    start_task: "Commencer la tâche"
+    name: "Nom de la tâche"
+    description: "Description"
+    cost: "Coût"
+    notes: "Notes"
+    completed_at: "Terminée le"
+    assigned_to: "Assignée à"
+    assign_to: "Assigner à"
+    amount_spent: "Montant dépensé (optionnel)"
+    amount_spent_hint: "Indiquez combien vous avez dépensé pour cette tâche"
+    notes_placeholder: "Commentaires ou détails..."
+    completed_successfully: "Tâche marquée comme terminée !"
+    completion_failed: "Impossible de terminer la tâche"
+    created_successfully: "Tâche créée avec succès !"
+    not_found: "Tâche non trouvée"
+    select_assignee: "Sélectionner une personne..."
+    category: "Catégorie"
+    select_category: "Sélectionner une catégorie..."
+    placeholder:
+      name: "Apporter les desserts"
+      description: "Détails de la tâche..."
+    categories:
+      food: "Nourriture"
+      beverages: "Boissons"
+      setup: "Installation"
+      cleanup: "Nettoyage"
+      entertainment: "Divertissement"
+      decorations: "Décorations"
+      other: "Autre"
+    statuses:
+      pending: "En attente"
+      in_progress: "En cours"
+      completed: "Terminée"
+
+  # Auth
+  auth:
+    sign_in: "Connexion"
+    sign_out: "Déconnexion"
+    sign_up: "Inscription"
+    email: "Email"
+    password: "Mot de passe"
+    remember_me: "Se souvenir de moi"
+    forgot_password: "Mot de passe oublié ?"
+
+  # Flash messages
+  flash:
+    success: "Succès"
+    error: "Erreur"
+    info: "Information"
+    warning: "Attention"
+
+  # Date and time
+  datetime:
+    at: "à"
+    on: "le"
+    from: "de"
+    to: "à"
+
+  # Errors
+  errors:
+    required: "Ce champ est requis"
+    invalid: "Valeur invalide"
+    not_found: "Non trouvé"
+    unauthorized: "Non autorisé"

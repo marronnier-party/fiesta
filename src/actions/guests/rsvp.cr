@@ -9,10 +9,10 @@ class Guests::Rsvp < BrowserAction
     # Update guest status
     SaveGuest.update(guest, params) do |operation, updated_guest|
       if operation.saved?
-        flash.success = "RSVP saved successfully!"
+        flash.success = r("guests.rsvp_saved").t
         redirect to: Me::Show
       else
-        flash.failure = "Could not save RSVP"
+        flash.failure = r("guests.rsvp_failed").t
         html RsvpPage, guest: guest, save_operation: operation
       end
     end

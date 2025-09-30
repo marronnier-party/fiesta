@@ -2,7 +2,7 @@ class Events::IndexPage < MainLayout
   needs events : Array(Event)
 
   def page_title
-    "My Events"
+    r("events.my_events").t
   end
 
   def content
@@ -14,10 +14,10 @@ class Events::IndexPage < MainLayout
 
   private def render_header
     div class: "flex items-center justify-between" do
-      h1 "My Events", class: "text-3xl font-bold"
+      h1 r("events.my_events").t, class: "text-3xl font-bold"
       link to: Events::New, class: "btn btn-primary" do
         mount UI::Icon, name: "plus", classes: "w-5 h-5 mr-2"
-        text "Create Event"
+        text r("nav.create_event").t
       end
     end
   end
@@ -40,9 +40,9 @@ class Events::IndexPage < MainLayout
         div class: "bg-base-300 rounded-full p-6 mb-4" do
           mount UI::Icon, name: "calendar", classes: "w-16 h-16 text-base-content/40"
         end
-        h2 "No events yet", class: "card-title text-2xl mb-2"
-        para "Create your first family event to get started!", class: "text-base-content/70 mb-6"
-        link "Create Event", to: Events::New, class: "btn btn-primary btn-lg"
+        h2 r("events.no_events").t, class: "card-title text-2xl mb-2"
+        para r("events.no_events_hint").t, class: "text-base-content/70 mb-6"
+        link r("nav.create_event").t, to: Events::New, class: "btn btn-primary btn-lg"
       end
     end
   end
@@ -75,8 +75,8 @@ class Events::IndexPage < MainLayout
         end
 
         div class: "card-actions justify-end mt-4" do
-          link "View Details", to: Events::Show.with(event.id), class: "btn btn-ghost"
-          link "Edit", to: Events::Edit.with(event.id), class: "btn btn-primary"
+          link r("events.view_details").t, to: Events::Show.with(event.id), class: "btn btn-ghost"
+          link r("actions.edit").t, to: Events::Edit.with(event.id), class: "btn btn-primary"
         end
       end
     end
@@ -85,13 +85,13 @@ class Events::IndexPage < MainLayout
   private def render_status_badge(event : Event)
     case event.status
     when Event::Status::Draft
-      span "Draft", class: "badge badge-warning"
+      span r("events.statuses.draft").t, class: "badge badge-warning"
     when Event::Status::Confirmed
-      span "Published", class: "badge badge-success"
+      span r("events.statuses.confirmed").t, class: "badge badge-success"
     when Event::Status::Cancelled
-      span "Cancelled", class: "badge badge-error"
+      span r("events.statuses.cancelled").t, class: "badge badge-error"
     when Event::Status::Done
-      span "Completed", class: "badge badge-ghost"
+      span r("tasks.statuses.completed").t, class: "badge badge-ghost"
     end
   end
 

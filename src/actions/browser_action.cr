@@ -1,6 +1,7 @@
 abstract class BrowserAction < Lucky::Action
   include Lucky::ProtectFromForgery
   include HTMX
+  include Rosetta::Translatable
 
   # By default all actions are required to use underscores.
   # Add `include Lucky::SkipRouteStyleCheck` to your actions if you wish to ignore this check for specific routes.

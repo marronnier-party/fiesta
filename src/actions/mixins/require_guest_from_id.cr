@@ -1,5 +1,6 @@
 module RequireGuestFromId
   macro included
+    include Rosetta::Translatable
     before enforce_guest_found
   end
 
@@ -12,7 +13,7 @@ module RequireGuestFromId
     @_guest = GuestQuery.find(guest_id)
     continue
   rescue Avram::RecordNotFoundError
-    flash.failure = "Guest invitation not found"
+    flash.failure = r("guests.not_found").t
     redirect to: Me::Show
   end
 end

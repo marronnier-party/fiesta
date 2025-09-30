@@ -1,0 +1,195 @@
+en:
+  # Navigation
+  nav:
+    home: "Home"
+    dashboard: "Dashboard"
+    my_events: "My Events"
+    create_event: "Create Event"
+    sign_out: "Sign Out"
+    sign_in: "Sign In"
+
+  # Common actions
+  actions:
+    save: "Save"
+    cancel: "Cancel"
+    edit: "Edit"
+    delete: "Delete"
+    create: "Create"
+    update: "Update"
+    confirm: "Confirm"
+    back: "Back"
+    submit: "Submit"
+
+  # Dashboard
+  dashboard:
+    title: "Dashboard"
+    welcome: "Welcome, %{name}"
+    pending_invitations: "Pending Invitations"
+    confirmed_events: "Confirmed Events"
+    your_tasks: "Your Tasks"
+    no_pending_invitations: "No pending invitations"
+    no_confirmed_events: "No confirmed events"
+    no_tasks: "No assigned tasks"
+
+  # Events
+  events:
+    title: "Events"
+    new: "New Event"
+    edit: "Edit Event"
+    create: "Create Event"
+    show: "Event Details"
+    name: "Event Name"
+    description: "Description"
+    start_at: "Start Date & Time"
+    end_at: "End Date & Time"
+    location: "Location"
+    status: "Status"
+    created_successfully: "Event created successfully!"
+    updated_successfully: "Event updated successfully!"
+    save_as_draft: "Save as Draft"
+    publish_event: "Publish Event"
+    select_location: "Select a location..."
+    or_create_location: "Or create a new location"
+    my_events: "My Events"
+    no_events: "No events yet"
+    no_events_hint: "Create your first event to get started!"
+    view_details: "View Details"
+    invite_guests: "Invite Guests"
+    add_task: "Add Task"
+    guest_list: "Guest List"
+    task_list: "Task List"
+    total_guests: "Total Guests"
+    confirmed_count: "%{count} confirmed"
+    pending_count: "%{count} pending"
+    declined_count: "%{count} declined"
+    organized_by: "Organized by %{name}"
+    placeholder:
+      name: "Summer 2025 Family Reunion"
+      description: "Tell everyone what to expect..."
+    statuses:
+      draft: "Draft"
+      confirmed: "Confirmed"
+      cancelled: "Cancelled"
+
+  # Locations
+  locations:
+    title: "Locations"
+    new: "New Location"
+    create: "Create Location"
+    name: "Location Name"
+    address: "Street Address"
+    city: "City"
+    postal_code: "Postal Code"
+    country: "Country"
+    description: "Description"
+    created_successfully: "Location created successfully!"
+    placeholder:
+      name: "Grandma's House"
+      address: "123 Main Street"
+      city: "Lyon"
+      postal_code: "69001"
+      country: "France"
+      description: "Any helpful details about this location..."
+
+  # Guests
+  guests:
+    title: "Guests"
+    rsvp: "RSVP"
+    rsvp_title: "Your RSVP"
+    invitation: "Invitation"
+    status: "Status"
+    guest_count: "Guest Count"
+    notes: "Notes"
+    will_attend: "Will you attend?"
+    yes_coming: "Yes, I'm coming!"
+    yes_coming_subtitle: "I can't wait for this event"
+    no_sorry: "Sorry, I can't make it"
+    no_sorry_subtitle: "I have a conflict"
+    how_many: "How many people (including you)?"
+    how_many_hint: "Include yourself and any family members"
+    notes_optional: "Notes (optional)"
+    notes_placeholder: "Any dietary restrictions, special requests, or comments..."
+    save_rsvp: "Save RSVP"
+    rsvp_saved: "RSVP saved successfully!"
+    rsvp_failed: "Could not save RSVP"
+    not_found: "Guest invitation not found"
+    rsvp_now: "RSVP Now"
+    for_event: "For: %{event}"
+    select_guests: "Select Guests"
+    send_invitations: "Send Invitations"
+    invited_successfully: "Invitations sent successfully!"
+    all_invited: "All users have already been invited"
+    statuses:
+      pending: "Pending"
+      confirmed: "Confirmed"
+      declined: "Declined"
+
+  # Tasks
+  tasks:
+    title: "Tasks"
+    complete: "Complete Task"
+    mark_complete: "Mark as Complete"
+    start_task: "Start Task"
+    name: "Task Name"
+    description: "Description"
+    cost: "Cost"
+    notes: "Notes"
+    completed_at: "Completed At"
+    assigned_to: "Assigned To"
+    assign_to: "Assign To"
+    amount_spent: "Amount spent (optional)"
+    amount_spent_hint: "Enter how much you spent on this task"
+    notes_placeholder: "Any comments or details..."
+    completed_successfully: "Task marked as complete!"
+    completion_failed: "Could not complete task"
+    created_successfully: "Task created successfully!"
+    not_found: "Task not found"
+    select_assignee: "Select someone..."
+    category: "Category"
+    select_category: "Select a category..."
+    placeholder:
+      name: "Bring desserts"
+      description: "Task details..."
+    categories:
+      food: "Food"
+      beverages: "Beverages"
+      setup: "Setup"
+      cleanup: "Cleanup"
+      entertainment: "Entertainment"
+      decorations: "Decorations"
+      other: "Other"
+    statuses:
+      pending: "Pending"
+      in_progress: "In Progress"
+      completed: "Completed"
+
+  # Auth
+  auth:
+    sign_in: "Sign In"
+    sign_out: "Sign Out"
+    sign_up: "Sign Up"
+    email: "Email"
+    password: "Password"
+    remember_me: "Remember Me"
+    forgot_password: "Forgot Password?"
+
+  # Flash messages
+  flash:
+    success: "Success"
+    error: "Error"
+    info: "Info"
+    warning: "Warning"
+
+  # Date and time
+  datetime:
+    at: "at"
+    on: "on"
+    from: "from"
+    to: "to"
+
+  # Errors
+  errors:
+    required: "This field is required"
+    invalid: "Invalid value"
+    not_found: "Not found"
+    unauthorized: "Unauthorized"
