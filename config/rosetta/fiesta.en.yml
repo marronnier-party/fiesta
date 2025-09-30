@@ -289,6 +289,24 @@ en:
     hours_ago: "%{count}h ago"
     days_ago: "%{count}d ago"
 
+  # Task Categories
+  task_categories:
+    title: "Task Categories"
+    new: "New Category"
+    edit: "Edit Category"
+    name: "Category Name"
+    color: "Color"
+    manage: "Manage Categories"
+    created: "Category created successfully"
+    updated: "Category updated successfully"
+    deleted: "Category deleted successfully"
+    create_failed: "Failed to create category"
+    update_failed: "Failed to update category"
+    cannot_delete_default: "Cannot delete default category"
+    no_categories: "No custom categories yet"
+    default_categories: "Default Categories"
+    custom_categories: "Custom Categories"
+
   # Errors
   errors:
     required: "This field is required"

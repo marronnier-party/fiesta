@@ -289,6 +289,24 @@ fr:
     hours_ago: "Il y a %{count}h"
     days_ago: "Il y a %{count}j"
 
+  # Task Categories
+  task_categories:
+    title: "Catégories de tâches"
+    new: "Nouvelle catégorie"
+    edit: "Modifier la catégorie"
+    name: "Nom de la catégorie"
+    color: "Couleur"
+    manage: "Gérer les catégories"
+    created: "Catégorie créée avec succès"
+    updated: "Catégorie mise à jour avec succès"
+    deleted: "Catégorie supprimée avec succès"
+    create_failed: "Échec de la création de la catégorie"
+    update_failed: "Échec de la mise à jour de la catégorie"
+    cannot_delete_default: "Impossible de supprimer une catégorie par défaut"
+    no_categories: "Aucune catégorie personnalisée pour le moment"
+    default_categories: "Catégories par défaut"
+    custom_categories: "Catégories personnalisées"
+
   # Errors
   errors:
     required: "Ce champ est requis"

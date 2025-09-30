@@ -10,6 +10,9 @@ class Db::Seed::SampleData < LuckyTask::Task
     # Create family organizer
     marie = create_organizer
 
+    # Create task categories for the organizer
+    create_task_categories(marie)
+
     # Create locations
     grandma_house = create_grandma_house(marie)
     community_center = create_community_center(marie)
@@ -53,6 +56,31 @@ class Db::Seed::SampleData < LuckyTask::Task
     )
     puts "👩 Created organizer: Marie Dupont"
     user
+  end
+
+  private def create_task_categories(user : User)
+    return if TaskCategoryQuery.new.for_user(user).any?
+
+    default_categories = [
+      {name: "Nourriture", color: "#22C55E"},
+      {name: "Boissons", color: "#3B82F6"},
+      {name: "Installation", color: "#F59E0B"},
+      {name: "Nettoyage", color: "#EF4444"},
+      {name: "Divertissement", color: "#A855F7"},
+      {name: "Décorations", color: "#EC4899"},
+      {name: "Autre", color: "#6B7280"},
+    ]
+
+    default_categories.each do |cat|
+      SaveTaskCategory.create!(
+        name: cat[:name],
+        color: cat[:color],
+        is_default: true,
+        user_id: user.id
+      )
+    end
+
+    puts "🏷️  Created #{default_categories.size} default task categories"
   end
 
   private def create_grandma_house(creator : User)

@@ -640,6 +640,270 @@ This document maps out 20+ user stories for the Fiesta family event organizer ap
 
 ---
 
+### 39. Task Categories Management
+**As an** organizer
+**I want to** create and manage custom task categories
+**So that** I can organize tasks by type specific to my events
+
+**Flow:**
+- Navigate to Settings or Manage Categories
+- See default categories (Food, Beverages, Setup, etc.)
+- Add custom category with name and optional color
+- Edit or delete custom categories
+- Select from categories when creating tasks
+
+**Status:** ✅ Implemented (TaskCategories CRUD actions, with comprehensive specs and seed data)
+
+---
+
+### 40. Bulk Guest Import
+**As an** organizer
+**I want to** import multiple guests from a CSV file
+**So that** I can quickly add my entire family contact list
+
+**Flow:**
+- Click "Import Guests" from Family Members page
+- Upload CSV with name, email columns
+- Preview import with validation
+- Confirm import
+- See success/error summary
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 41. Event Templates
+**As an** organizer
+**I want to** create event templates
+**So that** I can quickly set up recurring events like annual reunions
+
+**Flow:**
+- Create template from existing event or from scratch
+- Save template with predefined: location, task list, guest list
+- Create new event from template
+- Template pre-fills all fields
+- Make adjustments as needed
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 42. Plus-One Management
+**As a** guest
+**I want to** specify who I'm bringing as plus-ones
+**So that** organizer knows exactly who's coming
+
+**Flow:**
+- RSVP "yes"
+- Enter guest count
+- Click "Add Guest Details"
+- Enter names and ages of additional guests
+- Save plus-one details
+- Organizer sees full list with names
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 43. Event Polls
+**As an** organizer
+**I want to** create polls for event decisions
+**So that** guests can vote on options
+
+**Flow:**
+- View event page
+- Click "Create Poll"
+- Enter question (e.g., "What time works best?")
+- Add options
+- All guests can vote
+- See results in real-time
+- Lock poll when decided
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 44. Task Suggestions
+**As an** organizer
+**I want to** see suggested tasks based on event type
+**So that** I don't forget important items
+
+**Flow:**
+- Create new event
+- Select event type (Birthday, BBQ, Holiday, etc.)
+- See suggested task list
+- Check tasks to add
+- Tasks created with suggestions
+- Assign later
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 45. Weather Integration
+**As an** organizer or guest
+**I want to** see weather forecast for event date
+**So that** I can plan for outdoor events
+
+**Flow:**
+- View event with location and date
+- See weather widget
+- Shows forecast for event date/time
+- Updates as date approaches
+- Alert if bad weather expected
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 46. Secret Santa
+**As an** organizer
+**I want to** organize a Secret Santa gift exchange
+**So that** guests can participate in gift giving
+
+**Flow:**
+- View event page
+- Enable "Secret Santa"
+- Set gift budget and rules
+- Add participants from guest list
+- Randomize assignments
+- Each participant sees only their assigned person
+- Send notifications with assignments
+- Track who has purchased/given gifts
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 47. Calendar Export
+**As a** guest
+**I want to** export event to my calendar
+**So that** I don't forget the event
+
+**Flow:**
+- View confirmed event
+- Click "Add to Calendar"
+- Choose format (iCal, Google, Outlook)
+- Download/open calendar file
+- Event added with all details
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 48. Timeline View
+**As an** organizer
+**I want to** see a timeline of all my events
+**So that** I can visualize my event schedule
+
+**Flow:**
+- Navigate to "My Events"
+- Switch to "Timeline View"
+- See calendar/gantt view
+- Events displayed on dates
+- Click to view details
+- Filter by month/year
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 49. Guest Check-In
+**As an** organizer
+**I want to** check in guests as they arrive
+**So that** I can track real-time attendance
+
+**Flow:**
+- On event day
+- Open event page
+- See "Check-In Mode" button
+- View guest list with checkboxes
+- Tap to check in arriving guests
+- See count of checked-in vs expected
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 50. Expense Split Calculator
+**As an** organizer
+**I want to** calculate how to split event costs
+**So that** everyone pays their fair share
+
+**Flow:**
+- After event
+- View event budget section
+- Click "Split Costs"
+- See total expenses from all tasks
+- Choose split method (equal, by headcount, custom)
+- See who owes what
+- Send payment requests
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 51. Event Messaging
+**As any** attendee
+**I want to** message all event attendees
+**So that** we can coordinate last-minute details
+
+**Flow:**
+- View event
+- Click "Messages" tab
+- See group chat for event
+- Post message
+- All confirmed guests notified
+- Thread of messages visible
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 52. Automatic Reminders
+**As a** guest
+**I want to** receive automatic reminders about upcoming events
+**So that** I don't forget
+
+**Flow:**
+- System automatically sends reminders
+- 1 week before: "Event coming up"
+- 1 day before: "Event tomorrow" with details
+- On event day: "Event today at [time]"
+- Email and/or app notification
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+### 53. Task Notifications
+**As a** guest
+**I want to** receive notifications when tasks are assigned
+**So that** I know my responsibilities
+
+**Flow:**
+- Organizer assigns task
+- I receive notification immediately
+- Email and/or in-app alert
+- Click to view task details
+- Snooze reminder or mark in-progress
+
+**Status:** 🔨 To Be Implemented
+
+---
+
+## 🚫 Features Not Planned for Implementation
+
+The following features were considered but will not be implemented at this time:
+
+- **Family Groups**: Organizing members into groups for bulk invitations
+- **Photo Gallery**: Uploading and sharing event photos
+- **Recipe Sharing**: Attaching recipes to food tasks
+- **Dietary Restrictions**: Tracking guest dietary preferences
+- **Carpool Coordination**: Matching drivers and riders
+
+---
+
 ## 🎨 UI/UX Notes
 
 - **Mobile-first**: All flows must work on phones
