@@ -38,12 +38,24 @@ class Events::Show < BrowserAction
       .recent
       .results
 
+    # Get weather forecast if event has location and date
+    weather_forecast = if location = event.location
+                         if start_at = event.start_at
+                           WeatherService.get_forecast(
+                             location.latitude,
+                             location.longitude,
+                             start_at
+                           )
+                         end
+                       end
+
     html ShowPage,
       event: event,
       guests: guests,
       tasks: tasks,
       task_comments: task_comments,
       user_guest: user_guest,
-      activities: activities
+      activities: activities,
+      weather_forecast: weather_forecast
   end
 end

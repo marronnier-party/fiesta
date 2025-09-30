@@ -5,6 +5,7 @@ class Events::ShowPage < MainLayout
   needs task_comments : Hash(Int64, Array(Comment))
   needs user_guest : Guest?
   needs activities : Array(EventActivity)
+  needs weather_forecast : WeatherService::WeatherForecast?
 
   def page_title
     event.name
@@ -17,7 +18,9 @@ class Events::ShowPage < MainLayout
       div class: "grid grid-cols-1 lg:grid-cols-3 gap-6" do
         div class: "lg:col-span-2 space-y-6" do
           render_event_details
+          render_weather_widget if weather_forecast
           render_budget_section if is_organizer? && event.budget
+          render_expense_split_link if is_organizer? && event.actual_cost > 0
           render_organizer_notes if is_organizer?
           render_tasks_section
         end
@@ -48,6 +51,19 @@ class Events::ShowPage < MainLayout
             link r("events.invite_guests").t, to: Events::InviteGuests.with(event.id), class: "btn btn-primary"
             link r("events.add_task").t, to: Events::AddTask.with(event.id), class: "btn btn-secondary"
             link r("actions.edit").t, to: Events::Edit.with(event.id), class: "btn btn-ghost"
+
+            # Secret Santa button
+            link "🎅 " + r("secret_santa.title").t, to: SecretSanta::Show.with(event.id), class: "btn btn-ghost"
+
+            # Messages button
+            link "💬 " + r("messaging.title").t, to: Events::ShowMessages.with(event.id), class: "btn btn-ghost"
+
+            # Check-in mode button (only on event day)
+            if start_at = event.start_at
+              if (start_at - Time.utc).abs <= 24.hours
+                link "✓ " + r("checkin.mode").t, to: Events::CheckInMode.with(event.id), class: "btn btn-success"
+              end
+            end
 
             # Export guests button
             link r("events.export_guests").t, to: Events::ExportGuests.with(event.id), class: "btn btn-ghost btn-sm"
@@ -128,6 +144,11 @@ class Events::ShowPage < MainLayout
             if ug.status == Guest::Status::NoAnswer
               div class: "mt-6" do
                 link r("guests.rsvp_now").t, to: Guests::Rsvp.with(ug.id), class: "btn btn-primary btn-block"
+              end
+            elsif ug.status == Guest::Status::Confirmed && event.start_at
+              # Show calendar export for confirmed guests
+              div class: "mt-6" do
+                link "📅 " + r("calendar.export").t, to: Events::ExportCalendar.with(event.id), class: "btn btn-outline btn-block"
               end
             end
           end
@@ -517,6 +538,20 @@ class Events::ShowPage < MainLayout
     end
   end
 
+  private def render_expense_split_link
+    div class: "card bg-base-100 shadow-xl" do
+      div class: "card-body" do
+        div class: "flex items-center justify-between" do
+          div do
+            h2 r("expense_split.title").t, class: "card-title"
+            para "Calculez la répartition des dépenses entre les invités", class: "text-sm text-base-content/60"
+          end
+          link r("expense_split.title").t, to: Events::ExpenseSplit.with(event.id), class: "btn btn-primary"
+        end
+      end
+    end
+  end
+
   private def render_organizer_notes
     div class: "card bg-base-100 shadow-xl" do
       div class: "card-body" do
@@ -548,6 +583,55 @@ class Events::ShowPage < MainLayout
         div class: "space-y-3" do
           activities.each do |activity|
             render_activity_item(activity)
+          end
+        end
+      end
+    end
+  end
+
+  private def render_weather_widget
+    return unless forecast = weather_forecast
+
+    div class: "card bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 shadow-xl" do
+      div class: "card-body" do
+        div class: "flex items-center justify-between mb-2" do
+          h2 r("weather.title").t, class: "card-title text-xl"
+          span forecast.temperature.to_i.to_s + "°C", class: "text-3xl font-bold"
+        end
+
+        div class: "space-y-2" do
+          div class: "flex items-center gap-2" do
+            case forecast.condition
+            when "Sunny"
+              span "☀️", class: "text-2xl"
+            when "Cloudy"
+              span "☁️", class: "text-2xl"
+            when "Partly Cloudy"
+              span "⛅", class: "text-2xl"
+            when "Rainy"
+              span "🌧️", class: "text-2xl"
+            end
+            span forecast.condition, class: "text-lg font-medium"
+          end
+
+          para r("weather.description").t, class: "text-sm text-base-content/80"
+
+          div class: "flex gap-4 text-sm mt-3" do
+            div do
+              span "💧 ", class: "opacity-70"
+              text r("weather.humidity").t + ": #{forecast.humidity}%"
+            end
+            div do
+              span "💨 ", class: "opacity-70"
+              text r("weather.wind_speed").t + ": #{forecast.wind_speed.to_i} km/h"
+            end
+          end
+
+          # Weather alert if any
+          if alert = WeatherService.get_weather_alert(forecast)
+            div class: "alert alert-warning mt-3 py-2" do
+              span alert, class: "text-sm"
+            end
           end
         end
       end

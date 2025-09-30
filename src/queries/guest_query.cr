@@ -22,4 +22,8 @@ class GuestQuery < Guest::BaseQuery
   def declined
     by_status(Guest::Status::Declined)
   end
+
+  def confirmed_or_attended
+    status.in([Guest::Status::Confirmed, Guest::Status::Attended])
+  end
 end

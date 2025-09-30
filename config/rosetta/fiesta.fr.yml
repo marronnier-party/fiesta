@@ -401,6 +401,97 @@ fr:
     default_categories: "Catégories par défaut"
     custom_categories: "Catégories personnalisées"
 
+  # Weather
+  weather:
+    title: "Prévisions météo"
+    temperature: "Température"
+    humidity: "Humidité"
+    wind_speed: "Vent"
+    condition:
+      sunny: "Ensoleillé"
+      cloudy: "Nuageux"
+      partly_cloudy: "Partiellement nuageux"
+      rainy: "Pluvieux"
+    alerts:
+      rain: "⚠️ Pluie prévue - envisagez un plan B en intérieur"
+      hot: "☀️ Température élevée prévue - assurez ombre et eau"
+      cold: "❄️ Temps froid prévu - habillez-vous chaudement"
+    description: "Météo parfaite pour votre événement !"
+
+  # Secret Santa
+  secret_santa:
+    title: "Père Noël secret"
+    enable: "Activer le Père Noël secret"
+    disable: "Désactiver le Père Noël secret"
+    enabled: "Père Noël secret activé"
+    disabled: "Père Noël secret désactivé"
+    gift_budget: "Budget cadeau"
+    rules: "Règles"
+    randomize: "Tirer au sort"
+    assignments: "Attributions"
+    your_assignment: "Vous offrez un cadeau à"
+    mark_purchased: "Marquer comme acheté"
+    mark_given: "Marquer comme offert"
+    status:
+      pending: "En attente"
+      purchased: "Acheté"
+      given: "Offert"
+    assignments_created: "Attributions créées avec succès"
+    reveal_date: "Date de révélation"
+
+  # Calendar Export
+  calendar:
+    export: "Exporter au calendrier"
+    export_success: "Événement exporté avec succès"
+    ical_format: "Format iCal"
+
+  # Timeline
+  timeline:
+    title: "Vue chronologique"
+    view: "Vue chronologique"
+    list_view: "Vue liste"
+    month: "Mois"
+    year: "Année"
+
+  # Guest Check-In
+  checkin:
+    title: "Enregistrement des invités"
+    mode: "Mode enregistrement"
+    checked_in: "Enregistrés"
+    expected: "Attendus"
+    check_in: "Enregistrer"
+    undo: "Annuler"
+    checked_in_successfully: "Invité enregistré avec succès"
+
+  # Expense Split
+  expense_split:
+    title: "Répartition des dépenses"
+    total_expenses: "Dépenses totales"
+    split_method: "Méthode de répartition"
+    equal: "Égale"
+    by_headcount: "Par nombre de personnes"
+    custom: "Personnalisée"
+    per_person: "Par personne"
+    amount_owed: "Montant dû"
+    send_requests: "Envoyer les demandes de paiement"
+
+  # Event Messaging
+  messaging:
+    title: "Messages"
+    send_message: "Envoyer un message"
+    message_placeholder: "Écrivez votre message..."
+    no_messages: "Aucun message pour le moment"
+    message_sent: "Message envoyé avec succès"
+
+  # Reminders & Notifications
+  reminders:
+    automatic: "Rappels automatiques"
+    one_week_before: "Une semaine avant"
+    one_day_before: "Un jour avant"
+    event_day: "Le jour de l'événement"
+    task_assigned: "Tâche assignée"
+    rsvp_reminder: "Rappel de réponse"
+
   # Errors
   errors:
     required: "Ce champ est requis"

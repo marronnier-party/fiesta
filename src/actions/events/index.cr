@@ -16,6 +16,12 @@ class Events::Index < BrowserAction
 
     events = query.results
 
-    html IndexPage, events: events, search_query: params.get?("search")
+    # Check view mode
+    view_mode = params.get?("view") || "list"
+
+    html IndexPage,
+      events: events,
+      search_query: params.get?("search"),
+      view_mode: view_mode
   end
 end

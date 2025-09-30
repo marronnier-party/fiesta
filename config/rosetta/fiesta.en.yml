@@ -401,6 +401,97 @@ en:
     default_categories: "Default Categories"
     custom_categories: "Custom Categories"
 
+  # Weather
+  weather:
+    title: "Weather Forecast"
+    temperature: "Temperature"
+    humidity: "Humidity"
+    wind_speed: "Wind"
+    condition:
+      sunny: "Sunny"
+      cloudy: "Cloudy"
+      partly_cloudy: "Partly Cloudy"
+      rainy: "Rainy"
+    alerts:
+      rain: "⚠️ Rain expected - consider indoor backup plan"
+      hot: "☀️ High temperature expected - ensure shade and water"
+      cold: "❄️ Cold weather expected - dress warmly"
+    description: "Perfect weather for your event!"
+
+  # Secret Santa
+  secret_santa:
+    title: "Secret Santa"
+    enable: "Enable Secret Santa"
+    disable: "Disable Secret Santa"
+    enabled: "Secret Santa enabled"
+    disabled: "Secret Santa disabled"
+    gift_budget: "Gift Budget"
+    rules: "Rules"
+    randomize: "Randomize Assignments"
+    assignments: "Assignments"
+    your_assignment: "You're giving a gift to"
+    mark_purchased: "Mark as Purchased"
+    mark_given: "Mark as Given"
+    status:
+      pending: "Pending"
+      purchased: "Purchased"
+      given: "Given"
+    assignments_created: "Assignments created successfully"
+    reveal_date: "Reveal Date"
+
+  # Calendar Export
+  calendar:
+    export: "Export to Calendar"
+    export_success: "Event exported successfully"
+    ical_format: "iCal Format"
+
+  # Timeline
+  timeline:
+    title: "Timeline View"
+    view: "Timeline View"
+    list_view: "List View"
+    month: "Month"
+    year: "Year"
+
+  # Guest Check-In
+  checkin:
+    title: "Guest Check-In"
+    mode: "Check-In Mode"
+    checked_in: "Checked In"
+    expected: "Expected"
+    check_in: "Check In"
+    undo: "Undo"
+    checked_in_successfully: "Guest checked in successfully"
+
+  # Expense Split
+  expense_split:
+    title: "Expense Split"
+    total_expenses: "Total Expenses"
+    split_method: "Split Method"
+    equal: "Equal"
+    by_headcount: "By Headcount"
+    custom: "Custom"
+    per_person: "Per Person"
+    amount_owed: "Amount Owed"
+    send_requests: "Send Payment Requests"
+
+  # Event Messaging
+  messaging:
+    title: "Messages"
+    send_message: "Send Message"
+    message_placeholder: "Write your message..."
+    no_messages: "No messages yet"
+    message_sent: "Message sent successfully"
+
+  # Reminders & Notifications
+  reminders:
+    automatic: "Automatic Reminders"
+    one_week_before: "One week before"
+    one_day_before: "One day before"
+    event_day: "Event day"
+    task_assigned: "Task assigned"
+    rsvp_reminder: "RSVP reminder"
+
   # Errors
   errors:
     required: "This field is required"
