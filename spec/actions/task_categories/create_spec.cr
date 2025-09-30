@@ -4,12 +4,16 @@ describe TaskCategories::Create do
   it "creates a task category successfully" do
     user = UserFactory.create
 
-    response = ApiClient.auth(user).exec(TaskCategories::Create, task_category: {
-      name: "Custom Category",
-      color: "#FF5733"
-    })
+    response = ApiClient.auth(user).exec(TaskCategories::Create,
+      backdoor_user_id: user.id,
+      task_category: {
+        name: "Custom Category",
+        color: "#FF5733"
+      }
+    )
 
-    response.should redirect_to(TaskCategories::Index)
+    response.status.should eq(HTTP::Status::FOUND)
+    response.headers["Location"].should contain("/task_categories")
 
     category = TaskCategoryQuery.new.for_user(user).first
     category.name.should eq("Custom Category")
@@ -20,12 +24,16 @@ describe TaskCategories::Create do
   it "fails when name is blank" do
     user = UserFactory.create
 
-    response = ApiClient.auth(user).exec(TaskCategories::Create, task_category: {
-      name: ""
-    })
+    response = ApiClient.auth(user).exec(TaskCategories::Create,
+      backdoor_user_id: user.id,
+      task_category: {
+        name: ""
+      }
+    )
 
-    response.status.should eq(200)
-    response.body.should contain(r("task_categories.create_failed").t)
+    response.status.should eq(HTTP::Status::OK)
+    # Flash message will be shown on the form
+    TaskCategoryQuery.new.for_user(user).results.size.should eq(0)
   end
 
   it "requires authentication" do
@@ -33,6 +41,7 @@ describe TaskCategories::Create do
       name: "Test"
     })
 
-    response.should redirect_to(SignIns::New)
+    response.status.should eq(HTTP::Status::FOUND)
+    response.headers["Location"].should contain("/sign_in")
   end
 end

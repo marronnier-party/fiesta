@@ -4,6 +4,11 @@
 # Read more on configuration:
 #   https://luckyframework.org/guides/getting-started/configuration#configuring-your-own-code
 
+# Disable CSRF protection in test mode
+Lucky::ProtectFromForgery.configure do |settings|
+  settings.allow_forgery_protection = !LuckyEnv.test?
+end
+
 # Use this code as an example:
 #
 # ```

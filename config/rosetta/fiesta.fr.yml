@@ -66,6 +66,7 @@ fr:
     publish_event: "Publier l'événement"
     select_location: "Sélectionner un lieu..."
     or_create_location: "Ou créer un nouveau lieu"
+    no_location: "Aucun lieu sélectionné"
     my_events: "Mes événements"
     no_events: "Aucun événement pour le moment"
     no_events_hint: "Créez votre premier événement pour commencer !"
@@ -147,6 +148,7 @@ fr:
   # Guests
   guests:
     title: "Invités"
+    guests: "invités"
     rsvp: "Répondre"
     rsvp_title: "Votre réponse"
     invitation: "Invitation"
@@ -188,6 +190,7 @@ fr:
   # Tasks
   tasks:
     title: "Tâches"
+    tasks: "tâches"
     complete: "Terminer la tâche"
     mark_complete: "Marquer comme terminée"
     start_task: "Commencer la tâche"
@@ -288,6 +291,88 @@ fr:
     minutes_ago: "Il y a %{count} min"
     hours_ago: "Il y a %{count}h"
     days_ago: "Il y a %{count}j"
+
+  # Users
+  users:
+    import:
+      title: "Importer des membres de la famille"
+      description: "Téléchargez un fichier CSV pour ajouter rapidement plusieurs membres de votre famille à votre liste de contacts."
+      instructions_title: "Instructions"
+      instructions: "Votre fichier CSV doit avoir deux colonnes : 'name' et 'email'. La première ligne doit contenir ces en-têtes."
+      format_title: "Exemple de format CSV"
+      select_file: "Sélectionner un fichier CSV"
+      upload: "Télécharger et importer"
+      no_file: "Veuillez sélectionner un fichier CSV à télécharger"
+      missing_fields: "Nom ou email manquant"
+      success: "%{created} nouveaux membres importés et %{updated} membres existants mis à jour avec succès"
+      errors: "%{count} lignes comportaient des erreurs et ont été ignorées"
+      invalid_csv: "Format de fichier CSV invalide"
+      failed: "L'importation a échoué"
+
+  # Event Templates
+  event_templates:
+    title: "Modèles d'événements"
+    new: "Nouveau modèle"
+    name: "Nom du modèle"
+    name_placeholder: "ex: Réunion familiale annuelle"
+    description_placeholder: "Description de ce modèle..."
+    created: "Modèle créé avec succès"
+    create_failed: "Échec de la création du modèle"
+    created_from_event: "Modèle créé à partir de l'événement avec succès"
+    deleted: "Modèle supprimé avec succès"
+    no_templates: "Aucun modèle pour le moment"
+    no_templates_hint: "Créez des modèles pour configurer rapidement des événements récurrents"
+    template_suffix: "Modèle"
+    use_template: "Utiliser le modèle"
+    hint: "Après avoir créé un modèle, vous pouvez ajouter des tâches et des invités par défaut lors de son utilisation pour créer des événements"
+
+  # Polls
+  polls:
+    title: "Sondages"
+    new: "Créer un sondage"
+    question: "Question"
+    question_placeholder: "Quel horaire convient le mieux à tout le monde ?"
+    options: "Options"
+    options_hint: "Ajoutez au moins 2 options parmi lesquelles choisir"
+    option_placeholder: "Option %{number}"
+    add_option: "Ajouter une autre option"
+    hint: "Tous les invités peuvent voter sur ce sondage"
+    created: "Sondage créé avec succès"
+    create_failed: "Échec de la création du sondage"
+    voted: "Votre vote a été enregistré"
+    poll_locked: "Ce sondage est verrouillé et n'accepte plus de votes"
+    locked: "Sondage verrouillé avec succès"
+    unlocked: "Sondage déverrouillé avec succès"
+    lock_failed: "Échec du verrouillage/déverrouillage du sondage"
+    deleted: "Sondage supprimé avec succès"
+    total_votes: "%{count} votes au total"
+    votes: "votes"
+    your_vote: "✓ Votre choix"
+    vote_for_this: "Voter pour ceci"
+    lock: "Verrouiller le sondage"
+    unlock: "Déverrouiller le sondage"
+    locked_badge: "Verrouillé"
+    open_badge: "Ouvert"
+    view_results: "Voir les résultats"
+
+  # Dependent Guests (Plus-Ones)
+  dependent_guests:
+    manage: "Gérer les accompagnateurs"
+    manage_subtitle: "Ajoutez des détails sur les personnes que vous amenez à : %{event}"
+    your_plus_ones: "Vos accompagnateurs"
+    no_plus_ones: "Vous n'avez pas encore ajouté de détails sur vos accompagnateurs"
+    add_new: "Ajouter un autre invité"
+    add_plus_one: "Ajouter un accompagnateur"
+    name: "Nom"
+    age: "Âge"
+    relationship: "Relation"
+    dietary: "Restrictions alimentaires"
+    name_placeholder: "Marie Dupont"
+    relationship_placeholder: "Conjoint, Enfant, Ami, etc."
+    dietary_placeholder: "Végétarien, Pas de noix, etc."
+    created: "Accompagnateur ajouté avec succès"
+    create_failed: "Échec de l'ajout de l'accompagnateur"
+    deleted: "Accompagnateur supprimé avec succès"
 
   # Task Categories
   task_categories:

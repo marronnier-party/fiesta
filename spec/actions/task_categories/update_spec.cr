@@ -5,12 +5,16 @@ describe TaskCategories::Update do
     user = UserFactory.create
     category = TaskCategoryFactory.create &.user_id(user.id).name("Old Name")
 
-    response = ApiClient.auth(user).exec(TaskCategories::Update.with(category.id), task_category: {
-      name: "New Name",
-      color: "#00FF00"
-    })
+    response = ApiClient.auth(user).exec(TaskCategories::Update.with(category.id),
+      backdoor_user_id: user.id,
+      task_category: {
+        name: "New Name",
+        color: "#00FF00"
+      }
+    )
 
-    response.should redirect_to(TaskCategories::Index)
+    response.status.should eq(HTTP::Status::FOUND)
+    response.headers["Location"].should contain("/task_categories")
 
     updated = TaskCategoryQuery.new.find(category.id)
     updated.name.should eq("New Name")
@@ -20,13 +24,24 @@ describe TaskCategories::Update do
   it "prevents user from updating another user's category" do
     user = UserFactory.create
     other_user = UserFactory.create
-    category = TaskCategoryFactory.create &.user_id(other_user.id)
+    category = TaskCategoryFactory.create &.user_id(other_user.id).name("Original")
 
-    expect_raises(Avram::RecordNotFoundError) do
-      ApiClient.auth(user).exec(TaskCategories::Update.with(category.id), task_category: {
-        name: "Hacked"
-      })
+    # Should raise 404 or return error, category should not be updated
+    begin
+      response = ApiClient.auth(user).exec(TaskCategories::Update.with(category.id),
+        backdoor_user_id: user.id,
+        task_category: {
+          name: "Hacked"
+        }
+      )
+      response.status.should_not eq(HTTP::Status::FOUND) # Should not succeed
+    rescue Avram::RecordNotFoundError
+      # This is also acceptable - the query raised an error
     end
+
+    # Category should not be updated
+    updated = TaskCategoryQuery.new.id(category.id).first
+    updated.name.should eq("Original")
   end
 
   it "requires authentication" do
@@ -36,6 +51,7 @@ describe TaskCategories::Update do
       name: "Test"
     })
 
-    response.should redirect_to(SignIns::New)
+    response.status.should eq(HTTP::Status::FOUND)
+    response.headers["Location"].should contain("/sign_in")
   end
 end

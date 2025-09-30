@@ -66,6 +66,7 @@ en:
     publish_event: "Publish Event"
     select_location: "Select a location..."
     or_create_location: "Or create a new location"
+    no_location: "No location selected"
     my_events: "My Events"
     no_events: "No events yet"
     no_events_hint: "Create your first event to get started!"
@@ -147,6 +148,7 @@ en:
   # Guests
   guests:
     title: "Guests"
+    guests: "guests"
     rsvp: "RSVP"
     rsvp_title: "Your RSVP"
     invitation: "Invitation"
@@ -188,6 +190,7 @@ en:
   # Tasks
   tasks:
     title: "Tasks"
+    tasks: "tasks"
     complete: "Complete Task"
     mark_complete: "Mark as Complete"
     start_task: "Start Task"
@@ -288,6 +291,88 @@ en:
     minutes_ago: "%{count} min ago"
     hours_ago: "%{count}h ago"
     days_ago: "%{count}d ago"
+
+  # Users
+  users:
+    import:
+      title: "Import Family Members"
+      description: "Upload a CSV file to quickly add multiple family members to your contact list."
+      instructions_title: "Instructions"
+      instructions: "Your CSV file should have two columns: 'name' and 'email'. The first row should contain these headers."
+      format_title: "CSV Format Example"
+      select_file: "Select CSV File"
+      upload: "Upload and Import"
+      no_file: "Please select a CSV file to upload"
+      missing_fields: "Missing name or email"
+      success: "Successfully imported %{created} new members and updated %{updated} existing members"
+      errors: "%{count} rows had errors and were skipped"
+      invalid_csv: "Invalid CSV file format"
+      failed: "Import failed"
+
+  # Event Templates
+  event_templates:
+    title: "Event Templates"
+    new: "New Template"
+    name: "Template Name"
+    name_placeholder: "e.g., Annual Family Reunion"
+    description_placeholder: "Description of this template..."
+    created: "Template created successfully"
+    create_failed: "Failed to create template"
+    created_from_event: "Template created from event successfully"
+    deleted: "Template deleted successfully"
+    no_templates: "No templates yet"
+    no_templates_hint: "Create templates to quickly set up recurring events"
+    template_suffix: "Template"
+    use_template: "Use Template"
+    hint: "After creating a template, you can add default tasks and guests when using it to create events"
+
+  # Polls
+  polls:
+    title: "Polls"
+    new: "Create Poll"
+    question: "Question"
+    question_placeholder: "What time works best for everyone?"
+    options: "Options"
+    options_hint: "Add at least 2 options for people to choose from"
+    option_placeholder: "Option %{number}"
+    add_option: "Add Another Option"
+    hint: "All invited guests can vote on this poll"
+    created: "Poll created successfully"
+    create_failed: "Failed to create poll"
+    voted: "Your vote has been recorded"
+    poll_locked: "This poll is locked and cannot accept votes"
+    locked: "Poll locked successfully"
+    unlocked: "Poll unlocked successfully"
+    lock_failed: "Failed to lock/unlock poll"
+    deleted: "Poll deleted successfully"
+    total_votes: "%{count} total votes"
+    votes: "votes"
+    your_vote: "✓ Your choice"
+    vote_for_this: "Vote for this"
+    lock: "Lock Poll"
+    unlock: "Unlock Poll"
+    locked_badge: "Locked"
+    open_badge: "Open"
+    view_results: "View Results"
+
+  # Dependent Guests (Plus-Ones)
+  dependent_guests:
+    manage: "Manage Plus-Ones"
+    manage_subtitle: "Add details about who you're bringing to: %{event}"
+    your_plus_ones: "Your Plus-Ones"
+    no_plus_ones: "You haven't added any plus-one details yet"
+    add_new: "Add Another Guest"
+    add_plus_one: "Add Plus-One"
+    name: "Name"
+    age: "Age"
+    relationship: "Relationship"
+    dietary: "Dietary Restrictions"
+    name_placeholder: "Jane Doe"
+    relationship_placeholder: "Spouse, Child, Friend, etc."
+    dietary_placeholder: "Vegetarian, No nuts, etc."
+    created: "Plus-one added successfully"
+    create_failed: "Failed to add plus-one"
+    deleted: "Plus-one removed successfully"
 
   # Task Categories
   task_categories:

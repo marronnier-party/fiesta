@@ -668,7 +668,7 @@ This document maps out 20+ user stories for the Fiesta family event organizer ap
 - Confirm import
 - See success/error summary
 
-**Status:** 🔨 To Be Implemented
+**Status:** ✅ Implemented (Users::Import and Users::ProcessImport actions with CSV parsing, specs, and full i18n)
 
 ---
 
@@ -684,7 +684,7 @@ This document maps out 20+ user stories for the Fiesta family event organizer ap
 - Template pre-fills all fields
 - Make adjustments as needed
 
-**Status:** 🔨 To Be Implemented
+**Status:** ✅ Implemented (EventTemplates::Index, New, Create, Delete, CreateFromEvent, Events::CreateFromTemplate) - with comprehensive specs (12 total)
 
 ---
 
@@ -701,7 +701,7 @@ This document maps out 20+ user stories for the Fiesta family event organizer ap
 - Save plus-one details
 - Organizer sees full list with names
 
-**Status:** 🔨 To Be Implemented
+**Status:** ✅ Implemented (DependentGuests::Manage, Create, Delete with DependentGuest model) - with comprehensive specs (9 total)
 
 ---
 
@@ -719,7 +719,7 @@ This document maps out 20+ user stories for the Fiesta family event organizer ap
 - See results in real-time
 - Lock poll when decided
 
-**Status:** 🔨 To Be Implemented
+**Status:** ✅ Implemented (Polls::New, Create, Show, Vote, ToggleLock, Delete with Poll, PollOption, PollVote models) - with comprehensive specs (17 total)
 
 ---
 
