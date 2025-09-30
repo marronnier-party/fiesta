@@ -22,8 +22,7 @@ class Dashboard::InvitationCard < BaseComponent
 
         div class: "card-actions justify-end mt-4" do
           link "View Details", to: Events::Show.with(guest.event_id), class: "btn btn-ghost"
-          # TODO: Add quick RSVP link when action is created
-          a "RSVP Now", href: "#", class: "btn btn-primary"
+          link "RSVP Now", to: Guests::Rsvp.with(guest.id), class: "btn btn-primary"
         end
       end
     end

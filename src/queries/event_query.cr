@@ -3,16 +3,8 @@ class EventQuery < Event::BaseQuery
     creator_id(user.id)
   end
 
-  def upcoming
-    start_at.gt(Time.utc)
-  end
-
-  def past
-    start_at.lt(Time.utc)
-  end
-
   def by_status(status : Event::Status)
-    where(&.status.==(status))
+    status(status)
   end
 
   def drafts

@@ -87,16 +87,14 @@ class Shared::Navbar < BaseComponent
     # Show organizer menu if user has created events
     if user_is_organizer?
       li do
-        # Will create this action later
-        a href: "#", class: "opacity-50 cursor-not-allowed" do
+        link to: Events::Index, class: "" do
           mount UI::Icon, name: "calendar", classes: "w-4 h-4 mr-1"
           text "My Events"
         end
       end
 
       li do
-        # Will create this action later
-        a href: "#", class: "btn btn-primary btn-sm" do
+        link to: Events::New, class: "btn btn-primary btn-sm" do
           mount UI::Icon, name: "plus", classes: "w-4 h-4 mr-1"
           text "Create Event"
         end
@@ -115,11 +113,11 @@ class Shared::Navbar < BaseComponent
 
     if user_is_organizer?
       li do
-        a "My Events", href: "#", class: "opacity-50"
+        link "My Events", to: Events::Index
       end
 
       li do
-        a "Create Event", href: "#", class: "opacity-50"
+        link "Create Event", to: Events::New
       end
     end
 
@@ -134,8 +132,6 @@ class Shared::Navbar < BaseComponent
   end
 
   private def user_is_organizer?
-    # TODO: Check if user has created any events
-    # For now, return false - will implement when we add Events::Index
-    false
+    current_user.is_organizer?
   end
 end

@@ -10,8 +10,4 @@ class LocationQuery < Location::BaseQuery
   def alphabetical
     order_by(:name, :asc)
   end
-
-  def with_coordinates
-    where { (latitude.is_not(nil)) & (longitude.is_not(nil)) }
-  end
 end

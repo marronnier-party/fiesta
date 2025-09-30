@@ -15,4 +15,8 @@ class User < BaseModel
   def emailable : Carbon::Address
     Carbon::Address.new(email)
   end
+
+  def is_organizer? : Bool
+    EventQuery.new.for_user(self).any?
+  end
 end

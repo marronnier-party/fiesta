@@ -1,10 +1,13 @@
 class Me::Show < BrowserAction
   get "/me" do
+    # Build event query with nested preloads
+    event_query = EventQuery.new.preload_creator.preload_location
+
     # Query pending invitations (awaiting response)
     pending_invitations = GuestQuery.new
       .for_user(current_user)
       .awaiting_response
-      .preload_event
+      .preload_event(event_query)
       .preload_dependent_guests
       .results
 
@@ -12,7 +15,7 @@ class Me::Show < BrowserAction
     confirmed_events = GuestQuery.new
       .for_user(current_user)
       .confirmed
-      .preload_event
+      .preload_event(event_query)
       .preload_dependent_guests
       .results
 

@@ -53,9 +53,9 @@ class Dashboard::TaskListItem < BaseComponent
     div class: "flex flex-col gap-2" do
       case task.status
       when Task::Status::Pending
-        link "Start Task", to: Tasks::Update.with(task.id), class: "btn btn-sm btn-primary"
+        link "Start Task", to: Tasks::Complete.with(task.id), class: "btn btn-sm btn-primary"
       when Task::Status::InProgress
-        link "Mark Complete", to: Tasks::Update.with(task.id), class: "btn btn-sm btn-success"
+        link "Mark Complete", to: Tasks::Complete.with(task.id), class: "btn btn-sm btn-success"
       when Task::Status::Completed
         if completed_at = task.completed_at
           para class: "text-xs text-base-content/60" do

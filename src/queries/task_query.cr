@@ -7,12 +7,9 @@ class TaskQuery < Task::BaseQuery
     guest_id(guest.id)
   end
 
-  def unassigned
-    guest_id.is_nil
-  end
 
   def by_status(status : Task::Status)
-    where(&.status.==(status))
+    status(status)
   end
 
   def pending
@@ -27,8 +24,8 @@ class TaskQuery < Task::BaseQuery
     by_status(Task::Status::InProgress)
   end
 
-  def by_category(category : String)
-    where(&.category.==(category))
+  def by_category(category_value : String)
+    category(category_value)
   end
 
   def ordered_by_position
