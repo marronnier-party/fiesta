@@ -5,7 +5,8 @@ class SecretSantaAssignmentPolicy < ApplicationPolicy(SecretSantaAssignment)
   end
 
   private def giver?
+    return false unless current_user = user
     return false unless giver = record.giver
-    giver.user_id == user.id
+    giver.user_id == current_user.id
   end
 end

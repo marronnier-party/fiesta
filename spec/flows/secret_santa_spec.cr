@@ -68,15 +68,18 @@ describe "Secret Santa flow", tags: "flow" do
     event = EventFactory.create &.creator_id(organizer.id)
     secret_santa = SecretSantaFactory.create &.event_id(event.id)
 
-    giver = UserFactory.create
-    receiver = UserFactory.create
+    giver_user = UserFactory.create
+    receiver_user = UserFactory.create
+
+    giver = GuestFactory.create &.event_id(event.id).user_id(giver_user.id)
+    receiver = GuestFactory.create &.event_id(event.id).user_id(receiver_user.id)
 
     assignment = SecretSantaAssignmentFactory.create &.secret_santa_id(secret_santa.id)
       .giver_id(giver.id)
       .receiver_id(receiver.id)
-      .gift_preferences("Loves books and coffee")
+      .notes("Loves books and coffee")
 
-    assignment.gift_preferences.should eq "Loves books and coffee"
+    assignment.notes.should eq "Loves books and coffee"
   end
 
   it "allows marking gifts as purchased" do
@@ -84,18 +87,21 @@ describe "Secret Santa flow", tags: "flow" do
     event = EventFactory.create &.creator_id(organizer.id)
     secret_santa = SecretSantaFactory.create &.event_id(event.id)
 
-    giver = UserFactory.create
-    receiver = UserFactory.create
+    giver_user = UserFactory.create
+    receiver_user = UserFactory.create
+
+    giver = GuestFactory.create &.event_id(event.id).user_id(giver_user.id)
+    receiver = GuestFactory.create &.event_id(event.id).user_id(receiver_user.id)
 
     assignment = SecretSantaAssignmentFactory.create &.secret_santa_id(secret_santa.id)
       .giver_id(giver.id)
       .receiver_id(receiver.id)
-      .is_gift_purchased(false)
+      .status(SecretSantaAssignment::Status::Pending)
 
-    SaveSecretSantaAssignment.update!(assignment, is_gift_purchased: true)
+    SaveSecretSantaAssignment.update!(assignment, status: SecretSantaAssignment::Status::Purchased)
 
     assignment = SecretSantaAssignmentQuery.find(assignment.id)
-    assignment.is_gift_purchased.should be_true
+    assignment.status.should eq SecretSantaAssignment::Status::Purchased
   end
 
   it "allows locking assignments to prevent changes" do
@@ -123,48 +129,48 @@ describe "Secret Santa flow", tags: "flow" do
       .assignments_locked(false)
 
     # Create participants
-    alice = UserFactory.create
-    bob = UserFactory.create
-    charlie = UserFactory.create
-    diana = UserFactory.create
+    alice_user = UserFactory.create
+    bob_user = UserFactory.create
+    charlie_user = UserFactory.create
+    diana_user = UserFactory.create
 
-    GuestFactory.create &.user_id(alice.id).event_id(event.id)
-    GuestFactory.create &.user_id(bob.id).event_id(event.id)
-    GuestFactory.create &.user_id(charlie.id).event_id(event.id)
-    GuestFactory.create &.user_id(diana.id).event_id(event.id)
+    alice = GuestFactory.create &.user_id(alice_user.id).event_id(event.id)
+    bob = GuestFactory.create &.user_id(bob_user.id).event_id(event.id)
+    charlie = GuestFactory.create &.user_id(charlie_user.id).event_id(event.id)
+    diana = GuestFactory.create &.user_id(diana_user.id).event_id(event.id)
 
     # Create circular assignments: Alice -> Bob -> Charlie -> Diana -> Alice
     assignment1 = SecretSantaAssignmentFactory.create &.secret_santa_id(secret_santa.id)
       .giver_id(alice.id)
       .receiver_id(bob.id)
-      .gift_preferences("Likes sports")
+      .notes("Likes sports")
 
     assignment2 = SecretSantaAssignmentFactory.create &.secret_santa_id(secret_santa.id)
       .giver_id(bob.id)
       .receiver_id(charlie.id)
-      .gift_preferences("Enjoys cooking")
+      .notes("Enjoys cooking")
 
     assignment3 = SecretSantaAssignmentFactory.create &.secret_santa_id(secret_santa.id)
       .giver_id(charlie.id)
       .receiver_id(diana.id)
-      .gift_preferences("Loves reading")
+      .notes("Loves reading")
 
     assignment4 = SecretSantaAssignmentFactory.create &.secret_santa_id(secret_santa.id)
       .giver_id(diana.id)
       .receiver_id(alice.id)
-      .gift_preferences("Enjoys music")
+      .notes("Enjoys music")
 
     # Verify all assignments created
     SecretSantaAssignmentQuery.new.secret_santa_id(secret_santa.id).select_count.should eq 4
 
     # Participants mark gifts as purchased
-    SaveSecretSantaAssignment.update!(assignment1, is_gift_purchased: true)
-    SaveSecretSantaAssignment.update!(assignment2, is_gift_purchased: true)
-    SaveSecretSantaAssignment.update!(assignment3, is_gift_purchased: true)
+    SaveSecretSantaAssignment.update!(assignment1, status: SecretSantaAssignment::Status::Purchased)
+    SaveSecretSantaAssignment.update!(assignment2, status: SecretSantaAssignment::Status::Purchased)
+    SaveSecretSantaAssignment.update!(assignment3, status: SecretSantaAssignment::Status::Purchased)
 
     # Check purchase status
     SecretSantaAssignmentQuery.new.secret_santa_id(secret_santa.id)
-      .is_gift_purchased(true).select_count.should eq 3
+      .status(SecretSantaAssignment::Status::Purchased).select_count.should eq 3
 
     # Lock assignments before event
     SaveSecretSanta.update!(secret_santa, assignments_locked: true)

@@ -1,6 +1,11 @@
 class Tasks::Complete < BrowserAction
   include RequireTaskFromId
 
+  # Preload associations needed for authorization
+  private def task_query
+    TaskQuery.new.preload_event.preload_guest
+  end
+
   get "/tasks/:task_id/complete" do
     authorize task, policy: TaskPolicy, query: :complete?
     html CompletePage, task: task

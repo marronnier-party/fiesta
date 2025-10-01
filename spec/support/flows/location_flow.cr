@@ -9,7 +9,7 @@ class LocationFlow < BaseFlow
     fill_form SaveLocation,
       name: name,
       address: address,
-      creator_id: user.id
+      creator_id: user.id.to_s
     click "@create-location-button"
   end
 

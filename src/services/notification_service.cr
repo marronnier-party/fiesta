@@ -108,7 +108,7 @@ class NotificationService
     message : String,
     scheduled_for : Time
   )
-    SaveNotification.create(
+    SaveNotification.create!(
       user_id: user.id,
       event_id: event.id,
       notification_type: notification_type,
@@ -126,7 +126,7 @@ class NotificationService
     notifications.each do |notification|
       # In a real implementation, this would send an email or push notification
       # For now, just mark as sent
-      SaveNotification.update(notification, status: Notification::Status::Sent, sent_at: Time.utc)
+      SaveNotification.update!(notification, status: Notification::Status::Sent, sent_at: Time.utc)
     end
   end
 end

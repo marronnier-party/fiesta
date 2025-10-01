@@ -9,7 +9,7 @@ class EventFlow < BaseFlow
     fill_form SaveEvent,
       name: name,
       description: description,
-      status: Event::Status::Draft
+      status: Event::Status::Draft.to_s
     click "@create-event-button"
   end
 
