@@ -9,12 +9,12 @@ class UI::StatusBadge < BaseComponent
   private def badge_classes
     base = "badge"
     color = status_color
-    size_class = size == "sm" ? "badge-sm" : size == "lg" ? "badge-lg" : ""
+    size_class = @size == "sm" ? "badge-sm" : @size == "lg" ? "badge-lg" : ""
 
-    [base, color, size_class].reject(&.empty?).join(" ")
+    [base, color, size_class].compact.reject(&.empty?).join(" ")
   end
 
-  private def status_color
+  private def status_color : String
     case status
     # Event statuses
     when Event::Status::Draft
@@ -41,10 +41,12 @@ class UI::StatusBadge < BaseComponent
       "badge-warning"
     when Task::Status::Completed
       "badge-success"
+    else
+      "badge-ghost"
     end
   end
 
-  private def status_text
+  private def status_text : String
     case status
     when Event::Status::Draft
       r("events.statuses.draft").t
@@ -68,6 +70,8 @@ class UI::StatusBadge < BaseComponent
       r("tasks.statuses.in_progress").t
     when Task::Status::Completed
       r("tasks.statuses.completed").t
+    else
+      ""
     end
   end
 end

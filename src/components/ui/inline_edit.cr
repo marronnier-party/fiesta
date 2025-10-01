@@ -13,9 +13,9 @@ class UI::InlineEdit < BaseComponent
       # Display mode
       div "x-show": "!editing",
           "@click": "editing = true",
-          class: "cursor-pointer hover:bg-base-200 p-2 rounded transition #{display_class}" do
-        span "x-text": "value || '#{escape_js(placeholder)}'",
-             class: value.empty? ? "text-base-content/50 italic" : ""
+          class: "cursor-pointer hover:bg-base-200 p-2 rounded transition #{@display_class}" do
+        span "x-text": "value || '#{escape_js(@placeholder)}'",
+             class: @value.empty? ? "text-base-content/50 italic" : ""
         icon "edit", "w-3 h-3 ml-2 opacity-50 inline"
       end
 
@@ -24,28 +24,28 @@ class UI::InlineEdit < BaseComponent
         class: "flex gap-2",
         x_show: "editing",
         x_cloak: true,
-        hx_put: update_url,
+        hx_put: @update_url,
         hx_swap: "none",
         "@htmx:before-request": "saving = true",
         "@htmx:after-request.window": "handleResponse($event)"
       ) do
 
-        if multiline
+        if @multiline
           tag "textarea",
-              name: field_name,
+              name: @field_name,
               "x-model": "value",
               "x-init": "$nextTick(() => $el.focus())",
-              placeholder: placeholder,
+              placeholder: @placeholder,
               class: "textarea textarea-bordered textarea-sm flex-1",
               rows: "3",
               "@keydown.escape": "cancel()",
               "@blur.debounce.200ms": "if (!saving) cancel()"
         else
           input type: "text",
-                name: field_name,
+                name: @field_name,
                 "x-model": "value",
                 "x-init": "$nextTick(() => $el.focus())",
-                placeholder: placeholder,
+                placeholder: @placeholder,
                 class: "input input-sm input-bordered flex-1",
                 "@keydown.escape": "cancel()",
                 "@keydown.enter": "$el.form.requestSubmit()",
@@ -75,8 +75,8 @@ class UI::InlineEdit < BaseComponent
   private def inline_edit_data
     "{
       editing: false,
-      value: '#{escape_js(value)}',
-      originalValue: '#{escape_js(value)}',
+      value: '#{escape_js(@value)}',
+      originalValue: '#{escape_js(@value)}',
       saving: false,
 
       cancel() {

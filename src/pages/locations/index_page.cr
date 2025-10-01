@@ -12,7 +12,7 @@ class Locations::IndexPage < MainLayout
         title: r("locations.my_locations").t,
         title_size: "4xl",
         action_text: r("locations.create").t,
-        action_path: Locations::New
+        action_path: Locations::New.route
 
       # Search box
       unless locations.empty? && search_query.blank?
@@ -30,7 +30,7 @@ class Locations::IndexPage < MainLayout
             description: r("locations.no_locations_hint").t,
             icon_name: "map-pin",
             action_text: r("locations.create").t,
-            action_path: Locations::New
+            action_path: Locations::New.route
         else
           render_no_results
         end

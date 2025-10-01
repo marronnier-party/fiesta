@@ -4,11 +4,11 @@ class UI::EmptyState < BaseComponent
   needs icon_name : String = "inbox"
   needs with_card : Bool = true
   needs action_text : String? = nil
-  needs action_path : (Lucky::Action.class)? = nil
+  needs action_path : Lucky::RouteHelper? = nil
   needs button_variant : String = "btn-primary"
 
   def render
-    if with_card
+    if @with_card
       render_with_card
     else
       render_without_card
@@ -40,8 +40,8 @@ class UI::EmptyState < BaseComponent
       para desc, class: "text-base-content/60 mb-6 max-w-md"
     end
 
-    if action_text && action_path
-      link action_text, to: action_path, class: "btn #{button_variant} btn-lg"
+    if (text = action_text) && (path = action_path)
+      link text, to: path, class: "btn #{button_variant} btn-lg"
     end
   end
 end

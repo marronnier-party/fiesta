@@ -6,11 +6,11 @@ class UI::SearchBox < BaseComponent
   needs max_width : String = "md"
 
   def render
-    form method: "get", action: get_path, class: "max-w-#{max_width}" do
+    form method: "get", action: get_path, class: "max-w-#{@max_width}" do
       div class: "form-control" do
         div class: "input-group" do
-          input type: "text", name: name, value: query || "",
-            placeholder: placeholder, class: "input input-bordered w-full"
+          input type: "text", name: @name, value: @query || "",
+            placeholder: @placeholder, class: "input input-bordered w-full"
           button type: "submit", class: "btn btn-square" do
             icon "search", "w-5 h-5"
           end
@@ -20,6 +20,6 @@ class UI::SearchBox < BaseComponent
   end
 
   private def get_path
-    action.is_a?(String) ? action : action.path
+    @action.is_a?(String) ? @action : @action.path
   end
 end

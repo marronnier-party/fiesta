@@ -9,18 +9,22 @@ class UI::Button < BaseComponent
   needs classes : String = ""
 
   def render(&)
-    button type: type, class: button_classes, disabled: disabled do
-      if icon_name && icon_position == "left"
-        icon icon_name, icon_size_class + " mr-2"
+    button type: @type, class: button_classes, disabled: @disabled.to_s do
+      if icon_value = @icon_name
+        if @icon_position == "left"
+          icon icon_value, icon_size_class + " mr-2"
+        end
       end
 
-      self.text text
+      self.text @text
 
-      if icon_name && icon_position == "right"
-        icon icon_name, icon_size_class + " ml-2"
+      if icon_value = @icon_name
+        if @icon_position == "right"
+          icon icon_value, icon_size_class + " ml-2"
+        end
       end
 
-      yield if block_given?
+      yield
     end
   end
 
@@ -30,14 +34,14 @@ class UI::Button < BaseComponent
 
   private def button_classes
     base = "btn"
-    variant_class = "btn-#{variant}" unless variant == "default"
-    size_class = "btn-#{size}" unless size == "md"
+    variant_class = "btn-#{@variant}" unless @variant == "default"
+    size_class = "btn-#{@size}" unless @size == "md"
 
-    [base, variant_class, size_class, classes].compact.reject(&.empty?).join(" ")
+    [base, variant_class, size_class, @classes].compact.reject(&.empty?).join(" ")
   end
 
   private def icon_size_class
-    case size
+    case @size
     when "xs"
       "w-3 h-3"
     when "sm"

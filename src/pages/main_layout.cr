@@ -1,6 +1,7 @@
 abstract class MainLayout
   include Lucky::HTMLPage
   include Rosetta::Translatable
+  include DateFormatHelper
 
   # 'needs current_user : User' makes it so that the current_user
   # is always required for pages using MainLayout

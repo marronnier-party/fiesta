@@ -10,23 +10,23 @@ class UI::DependentSelect < BaseComponent
 
   def render
     div class: "form-control" do
-      label label_text, class: "label font-semibold"
+      label @label_text, class: "label font-semibold"
 
       tag "select", **attrs(
-        id: id,
-        name: name,
+        id: @id,
+        name: @name,
         class: "select select-bordered w-full",
-        hx_get: dependent_url,
-        hx_trigger: trigger_event,
-        hx_target: dependent_target,
+        hx_get: @dependent_url,
+        hx_trigger: @trigger_event,
+        hx_target: @dependent_target,
         hx_swap: "innerHTML",
-        hx_include: "[name='#{name}']"
+        hx_include: "[name='#{@name}']"
       ) do
 
-        options.each do |(value, text)|
+        @options.each do |(value, text)|
           tag "option",
               value: value,
-              selected: (selected_value == value) do
+              selected: (@selected_value == value).to_s do
             text text
           end
         end

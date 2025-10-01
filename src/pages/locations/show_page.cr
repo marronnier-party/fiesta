@@ -12,6 +12,21 @@ class Locations::ShowPage < MainLayout
         action_text: r("actions.edit").t,
         action_path: Locations::Edit.with(location.id)
 
+      # Map display (if coordinates available)
+      if location.latitude && location.longitude
+        div class: "card bg-base-100 shadow-xl" do
+          div class: "card-body" do
+            h2 "Map", class: "card-title text-2xl mb-4"
+            mount UI::Map,
+              latitude: location.latitude,
+              longitude: location.longitude,
+              zoom: 15,
+              height: "400px",
+              editable: false
+          end
+        end
+      end
+
       div class: "card bg-base-100 shadow-xl" do
         div class: "card-body" do
           h2 r("locations.details").t, class: "card-title text-2xl mb-4"

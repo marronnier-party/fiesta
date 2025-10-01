@@ -20,14 +20,21 @@ class Locations::NewPage < MainLayout
               placeholder: r("locations.placeholder.name").t,
               required: true
 
-            # Address
-            mount UI::FormInput,
+            # Address with autocomplete
+            mount UI::AddressAutocomplete,
               label_text: r("locations.address").t,
               name: "location:address",
               value: save_operation.address.value.to_s,
-              placeholder: r("locations.placeholder.address").t
+              placeholder: r("locations.placeholder.address").t,
+              help_text: "Start typing to search for an address",
+              address_name: "location:address",
+              city_name: "location:city",
+              postal_code_name: "location:postal_code",
+              country_name: "location:country",
+              latitude_name: "location:latitude",
+              longitude_name: "location:longitude"
 
-            # City and Postal Code
+            # City and Postal Code (auto-filled from autocomplete)
             div class: "grid grid-cols-1 md:grid-cols-2 gap-4" do
               mount UI::FormInput,
                 label_text: r("locations.city").t,
@@ -42,7 +49,7 @@ class Locations::NewPage < MainLayout
                 placeholder: r("locations.placeholder.postal_code").t
             end
 
-            # Country
+            # Country (auto-filled from autocomplete)
             mount UI::FormInput,
               label_text: r("locations.country").t,
               name: "location:country",
@@ -56,6 +63,19 @@ class Locations::NewPage < MainLayout
               value: save_operation.description.value,
               placeholder: r("locations.placeholder.description").t,
               rows: 3
+
+            # Map preview
+            div class: "divider" do
+              text "Map Preview"
+            end
+            mount UI::Map,
+              latitude: save_operation.latitude.value,
+              longitude: save_operation.longitude.value,
+              zoom: 13,
+              height: "300px",
+              editable: true,
+              latitude_input_name: "location:latitude",
+              longitude_input_name: "location:longitude"
 
             # Actions
             div class: "card-actions justify-end mt-8" do

@@ -20,6 +20,8 @@ Alpine.data('modal', components.modal);
 Alpine.data('dropdown', components.dropdown);
 Alpine.data('tabs', components.tabs);
 Alpine.data('collapsible', components.collapsible);
+Alpine.data('map', components.map);
+Alpine.data('addressAutocomplete', components.addressAutocomplete);
 
 // Custom htmx configuration for performance
 htmx.config.historyCacheSize = 20;

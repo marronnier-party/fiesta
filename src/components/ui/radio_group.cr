@@ -13,10 +13,10 @@ class UI::RadioGroup < BaseComponent
 
   def render
     div class: "form-control" do
-      label label_text, class: "label font-semibold"
+      label @label_text, class: "label font-semibold"
 
       div class: layout_class do
-        options.each do |option|
+        @options.each do |option|
           render_option(option)
         end
       end
@@ -24,16 +24,16 @@ class UI::RadioGroup < BaseComponent
   end
 
   private def layout_class
-    layout == "horizontal" ? "flex flex-row gap-3" : "flex flex-col gap-3"
+    @layout == "horizontal" ? "flex flex-row gap-3" : "flex flex-col gap-3"
   end
 
   private def render_option(option)
-    is_selected = option.value == selected_value
+    is_selected = option.value == @selected_value
     border_color = "hover:border-#{option.color}"
 
     label class: "label cursor-pointer justify-start gap-4 border-2 border-base-300 rounded-lg p-4 #{border_color}" do
-      input type: "radio", name: name, value: option.value,
-        class: "radio radio-#{option.color}", checked: is_selected
+      input type: "radio", name: @name, value: option.value,
+        class: "radio radio-#{option.color}", checked: is_selected.to_s
       div do
         span option.label, class: "font-semibold"
         if subtitle = option.subtitle

@@ -10,7 +10,7 @@ class Tasks::EditPage < MainLayout
   end
 
   def render_task_form(op)
-    form_for Tasks::Update.with(task.id) do
+    form_for Tasks::Modify.with(task.id) do
       # Edit fields in src/components/tasks/form_fields.cr
       mount Tasks::FormFields, op
 

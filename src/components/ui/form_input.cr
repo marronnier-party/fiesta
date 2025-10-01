@@ -9,11 +9,17 @@ class UI::FormInput < BaseComponent
 
   def render
     div class: "form-control" do
-      label label_text, class: "label font-semibold"
-      input type: input_type, name: name, value: value.to_s,
-        placeholder: placeholder, class: "input input-bordered w-full", required: required
+      label @label_text, class: "label font-semibold"
 
-      if hint_text = hint
+      if ph = @placeholder
+        input type: @input_type, name: @name, value: @value.to_s,
+          placeholder: ph, class: "input input-bordered w-full", required: @required.to_s
+      else
+        input type: @input_type, name: @name, value: @value.to_s,
+          class: "input input-bordered w-full", required: @required.to_s
+      end
+
+      if hint_text = @hint
         label class: "label" do
           span hint_text, class: "label-text-alt"
         end

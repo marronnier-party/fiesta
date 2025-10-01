@@ -3,3 +3,6 @@
 @import "tailwindcss/components";
 
 @import "tailwindcss/utilities";
+
+/* Leaflet CSS */
+@import "leaflet/dist/leaflet.css";

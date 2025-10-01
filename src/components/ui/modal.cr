@@ -7,24 +7,24 @@ class UI::Modal < BaseComponent
 
   def render(&)
     dialog **attrs(
-      id: "modal-#{id}",
+      id: "modal-#{@id}",
       class: "modal",
-      open: open_by_default.to_s,
+      open: @open_by_default.to_s,
       role: "dialog",
       aria_modal: "true",
-      aria_labelledby: "modal-title-#{id}",
+      aria_labelledby: "modal-title-#{@id}",
       x_data: modal_data,
       x_init: "init($el)"
     ).merge({
-      "@open-modal-#{id}.window" => "open()",
-      "@close-modal-#{id}.window" => "close()"
+      "@open-modal-#{@id}.window" => "open()",
+      "@close-modal-#{@id}.window" => "close()"
     }) do
 
       div class: "modal-box w-full max-w-#{size_class}", role: "document" do
         div class: "flex items-center justify-between mb-4" do
-          h3 title, id: "modal-title-#{id}", class: "text-lg font-bold"
+          h3 @title, id: "modal-title-#{@id}", class: "text-lg font-bold"
 
-          if closeable
+          if @closeable
             form method: "dialog" do
               button class: "btn btn-sm btn-circle btn-ghost absolute right-2 top-2",
                      "aria-label": "Close dialog" do
@@ -38,7 +38,7 @@ class UI::Modal < BaseComponent
         yield
       end
 
-      if closeable
+      if @closeable
         form method: "dialog", class: "modal-backdrop" do
           button "Close", "aria-label": "Close dialog"
         end
@@ -58,7 +58,7 @@ class UI::Modal < BaseComponent
         this.$el.close();
       },
       init(el) {
-        if (!#{closeable}) {
+        if (!#{@closeable}) {
           el.addEventListener('cancel', (e) => e.preventDefault());
         }
       }
@@ -66,7 +66,7 @@ class UI::Modal < BaseComponent
   end
 
   private def size_class
-    case size
+    case @size
     when "sm"
       "sm"
     when "lg"

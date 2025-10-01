@@ -2,7 +2,7 @@ class UI::PageHeader < BaseComponent
   needs title : String
   needs title_size : String = "3xl" # 2xl, 3xl, 4xl
   needs action_text : String? = nil
-  needs action_path : (Lucky::Action.class)? = nil
+  needs action_path : Lucky::RouteHelper? = nil
   needs action_icon : String? = nil
   needs subtitle : String? = nil
 
@@ -15,16 +15,16 @@ class UI::PageHeader < BaseComponent
         end
       end
 
-      if action_text && (path = action_path)
+      if (action_text_value = action_text) && (path = action_path)
         link to: path, class: "btn btn-primary" do
-          if action_icon
-            icon action_icon, "w-5 h-5 mr-2"
+          if icon_name = action_icon
+            icon icon_name, "w-5 h-5 mr-2"
           end
-          text action_text
+          text action_text_value
         end
       end
 
-      yield if block_given?
+      yield
     end
   end
 

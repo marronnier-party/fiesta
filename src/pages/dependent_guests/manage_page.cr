@@ -61,7 +61,7 @@ class DependentGuests::ManagePage < MainLayout
             text r("dependent_guests.add_new").t
           end
 
-          form_for DependentGuests::Create.with(guest.id), class: "space-y-4" do
+          form action: DependentGuests::Create.with(guest.id).path, method: "post", class: "space-y-4" do
             div class: "grid grid-cols-1 md:grid-cols-2 gap-4" do
               # Name
               mount UI::FormInput,

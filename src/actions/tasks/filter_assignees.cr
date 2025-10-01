@@ -3,9 +3,8 @@ class Tasks::FilterAssignees < BrowserAction
     event = EventQuery.find(event_id)
 
     # Authorization check
-    unless event.creator_id == current_user.id
-      head 403
-      return
+    if event.creator_id != current_user.id
+      return head 403
     end
 
     # Get filter parameter (could be status, category, etc.)
@@ -25,32 +24,7 @@ class Tasks::FilterAssignees < BrowserAction
     end
 
     if htmx_request?
-      # Return just the options HTML
-      html_string do
-        tag "option", value: "", disabled: true, selected: true do
-          text r("tasks.select_assignee").t
-        end
-
-        if filtered_guests.empty?
-          tag "option", value: "", disabled: true do
-            text r("tasks.no_assignees_available").t
-          end
-        else
-          filtered_guests.each do |guest|
-            tag "option", value: guest.id.to_s do
-              status_emoji = case guest.status
-              when Guest::Status::Confirmed
-                "✓"
-              when Guest::Status::NoAnswer
-                "?"
-              else
-                "✗"
-              end
-              text "#{status_emoji} #{guest.user!.name}"
-            end
-          end
-        end
-      end
+      component Tasks::AssigneeOptions, guests: filtered_guests
     else
       head 404
     end

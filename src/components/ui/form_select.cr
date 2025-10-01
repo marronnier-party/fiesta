@@ -11,20 +11,20 @@ class UI::FormSelect(T) < BaseComponent
 
   def render
     div class: "form-control" do
-      label label_text, class: "label font-semibold"
-      tag "select", name: name, class: "select select-bordered w-full", required: required do
-        if prompt_text = prompt
-          tag "option", value: "", disabled: true, selected: selected_value.nil? do
+      label @label_text, class: "label font-semibold"
+      tag "select", name: @name, class: "select select-bordered w-full", required: @required.to_s do
+        if prompt_text = @prompt
+          tag "option", value: "", disabled: true, selected: @selected_value.nil? do
             text prompt_text
           end
         end
 
-        options.each do |option|
+        @options.each do |option|
           render_option(option)
         end
       end
 
-      if hint_text = hint
+      if hint_text = @hint
         label class: "label" do
           span hint_text, class: "label-text-alt"
         end
@@ -35,7 +35,7 @@ class UI::FormSelect(T) < BaseComponent
   private def render_option(option)
     val = get_option_value(option)
     label = get_option_label(option)
-    is_selected = val.to_s == selected_value.to_s
+    is_selected = val.to_s == @selected_value.to_s
 
     tag "option", value: val, selected: is_selected do
       text label
@@ -43,7 +43,7 @@ class UI::FormSelect(T) < BaseComponent
   end
 
   private def get_option_value(option)
-    if proc = option_value
+    if proc = @option_value
       proc.call(option)
     elsif option.is_a?(Tuple)
       option[0]
@@ -53,7 +53,7 @@ class UI::FormSelect(T) < BaseComponent
   end
 
   private def get_option_label(option)
-    if proc = option_label
+    if proc = @option_label
       proc.call(option)
     elsif option.is_a?(Tuple)
       option[1]

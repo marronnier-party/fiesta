@@ -19,7 +19,7 @@ class Profile::ShowPage < MainLayout
     mount UI::PageHeader,
       title: r("profile.title").t,
       action_text: r("profile.edit_profile").t,
-      action_path: Profile::Edit
+      action_path: Profile::Edit.route
   end
 
   private def render_profile_info

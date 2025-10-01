@@ -7,13 +7,13 @@ class UI::SectionHeader < BaseComponent
   def render(&)
     div class: "flex items-center justify-between mb-4" do
       div class: "flex items-center gap-2" do
-        if icon = icon_name
-          self.icon icon, "w-6 h-6 #{icon_color}"
+        if icon_value = @icon_name
+          icon icon_value, "w-6 h-6 #{@icon_color}"
         end
-        h2 title, class: "text-#{size} font-semibold"
+        h2 @title, class: "text-#{@size} font-semibold"
       end
 
-      yield if block_given?
+      yield
     end
   end
 

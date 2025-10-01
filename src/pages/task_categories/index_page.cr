@@ -11,7 +11,7 @@ class TaskCategories::IndexPage < MainLayout
         title: r("task_categories.title").t,
         title_size: "4xl",
         action_text: r("task_categories.new").t,
-        action_path: TaskCategories::New
+        action_path: TaskCategories::New.route
 
       if categories.empty?
         render_empty_state
@@ -30,7 +30,7 @@ class TaskCategories::IndexPage < MainLayout
       title: r("task_categories.no_categories").t,
       icon_name: "tag",
       action_text: r("task_categories.new").t,
-      action_path: TaskCategories::New
+      action_path: TaskCategories::New.route
   end
 
   private def render_category_card(category : TaskCategory)
