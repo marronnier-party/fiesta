@@ -21,10 +21,15 @@ Alpine.data('dropdown', components.dropdown);
 Alpine.data('tabs', components.tabs);
 Alpine.data('collapsible', components.collapsible);
 
-// Custom htmx configuration
+// Custom htmx configuration for performance
 htmx.config.historyCacheSize = 20;
 htmx.config.timeout = 30000;
 htmx.config.refreshOnHistoryMiss = true;
+htmx.config.defaultSwapDelay = 0; // Immediate swap for better perceived performance
+htmx.config.defaultSettleDelay = 20; // Fast settle for smoother transitions
+
+// Disable cache busting for better caching
+htmx.config.getCacheBusterParam = false;
 
 // Global htmx event handlers
 document.body.addEventListener('htmx:configRequest', (event) => {
@@ -32,6 +37,18 @@ document.body.addEventListener('htmx:configRequest', (event) => {
   const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
   if (csrf) {
     event.detail.headers['X-CSRF-Token'] = csrf;
+  }
+
+  // Add cache control headers for GET requests
+  if (event.detail.verb === 'get') {
+    // Cache stats requests for 30 seconds
+    if (event.detail.path.includes('/guest_stats')) {
+      event.detail.headers['Cache-Control'] = 'max-age=30';
+    }
+    // Cache other GET requests for 5 minutes
+    else {
+      event.detail.headers['Cache-Control'] = 'max-age=300';
+    }
   }
 });
 

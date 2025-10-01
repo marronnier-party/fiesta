@@ -216,15 +216,16 @@ class Events::ShowPage < MainLayout
           end
         end
 
-        # Search box with Alpine
+        # Search box with Alpine (debounced for performance)
         if guests.size > 3
           div class: "mb-4" do
             div class: "form-control" do
               div class: "input-group" do
                 input type: "text",
-                      "x-model": "query",
+                      "x-model.debounce.300ms": "query",
                       placeholder: r("search.guests").t,
-                      class: "input input-bordered w-full"
+                      class: "input input-bordered w-full",
+                      "aria-label": r("search.guests").t
                 div class: "btn btn-square" do
                   icon "search", "w-5 h-5"
                 end

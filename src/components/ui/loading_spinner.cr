@@ -15,6 +15,9 @@ class UI::LoadingSpinner < BaseComponent
 
     visibility = show_by_default ? "" : "hidden"
 
-    span class: "loading loading-spinner #{size_class} #{@classes} htmx-indicator #{visibility}"
+    span class: "loading loading-spinner #{size_class} #{@classes} htmx-indicator #{visibility}",
+         role: "status",
+         "aria-live": "polite",
+         "aria-label": "Loading"
   end
 end

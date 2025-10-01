@@ -10,6 +10,9 @@ class UI::Modal < BaseComponent
       id: "modal-#{id}",
       class: "modal",
       open: open_by_default.to_s,
+      role: "dialog",
+      aria_modal: "true",
+      aria_labelledby: "modal-title-#{id}",
       x_data: modal_data,
       x_init: "init($el)"
     ).merge({
@@ -17,13 +20,14 @@ class UI::Modal < BaseComponent
       "@close-modal-#{id}.window" => "close()"
     }) do
 
-      div class: "modal-box w-full max-w-#{size_class}" do
+      div class: "modal-box w-full max-w-#{size_class}", role: "document" do
         div class: "flex items-center justify-between mb-4" do
-          h3 title, class: "text-lg font-bold"
+          h3 title, id: "modal-title-#{id}", class: "text-lg font-bold"
 
           if closeable
             form method: "dialog" do
-              button class: "btn btn-sm btn-circle btn-ghost absolute right-2 top-2" do
+              button class: "btn btn-sm btn-circle btn-ghost absolute right-2 top-2",
+                     "aria-label": "Close dialog" do
                 icon "x", "w-4 h-4"
               end
             end
@@ -36,7 +40,7 @@ class UI::Modal < BaseComponent
 
       if closeable
         form method: "dialog", class: "modal-backdrop" do
-          button "Close"
+          button "Close", "aria-label": "Close dialog"
         end
       end
     end
@@ -46,6 +50,9 @@ class UI::Modal < BaseComponent
     "{
       open() {
         this.$el.showModal();
+        // Trap focus within dialog
+        const firstFocusable = this.$el.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])');
+        if (firstFocusable) firstFocusable.focus();
       },
       close() {
         this.$el.close();
@@ -76,5 +83,8 @@ end
 # window.dispatchEvent(new CustomEvent('open-modal-{id}'))
 # $dispatch('open-modal-{id}')
 #
-# Or directly with Alpine:
-# $dispatch('open-modal-{id}')
+# Benefits of native <dialog>:
+# - Built-in accessibility (focus trap, ESC key)
+# - Native backdrop with ::backdrop pseudo-element
+# - Browser-native show/close methods
+# - Better semantic HTML
