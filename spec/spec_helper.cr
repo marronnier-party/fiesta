@@ -21,6 +21,8 @@ include Carbon::Expectations
 include Lucky::RequestExpectations
 include LuckyFlow::Expectations
 include HttpStatusHelpers
+include HtmxHelpers
+include TaskSpecHelpers
 
 Avram::Migrator::Runner.new.ensure_migrated!
 Avram::SchemaEnforcer.ensure_correct_column_mappings!

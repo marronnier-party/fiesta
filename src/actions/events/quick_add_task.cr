@@ -22,6 +22,9 @@ class Events::QuickAddTask < BrowserAction
         # Return new task card with confirmation dialog
         guests = GuestQuery.new.event_id(event_id).preload_user.results
 
+        # Reload task with associations
+        task = TaskQuery.new.preload_guest.find(task.id)
+
         # Set success message header
         context.response.headers["X-Success-Message"] = r("tasks.created_successfully").t
 

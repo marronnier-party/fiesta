@@ -9,10 +9,11 @@ describe Events::QuickAddTask do
       .headers("HX-Request": "true")
       .exec(
         Events::QuickAddTask.with(event.id),
+        backdoor_user_id: user.id,
         "task:name": "New Task"
       )
 
-    response.status.should eq(200)
+    response.status.should eq(HTTP::Status::OK)
 
     # Verify task was created
     task = TaskQuery.new.event_id(event.id).first
@@ -36,13 +37,14 @@ describe Events::QuickAddTask do
       .headers("HX-Request": "true")
       .exec(
         Events::QuickAddTask.with(event.id),
+        backdoor_user_id: other_user.id,
         "task:name": "Unauthorized Task"
       )
 
-    response.status.should eq(403)
+    response.status.should eq(HTTP::Status::FORBIDDEN)
 
     # Verify task was not created
-    TaskQuery.new.event_id(event.id).count.should eq(0)
+    TaskQuery.new.event_id(event.id).select_count.should eq(0)
   end
 
   it "works without htmx (progressive enhancement)" do
@@ -52,10 +54,11 @@ describe Events::QuickAddTask do
     response = ApiClient.auth(user)
       .exec(
         Events::QuickAddTask.with(event.id),
+        backdoor_user_id: user.id,
         "task:name": "Task Without HTMX"
       )
 
-    response.status.should eq(302)
+    response.status.should eq(HTTP::Status::FOUND)
 
     # Verify task was created
     task = TaskQuery.new.event_id(event.id).first
@@ -70,6 +73,7 @@ describe Events::QuickAddTask do
       .headers("HX-Request": "true")
       .exec(
         Events::QuickAddTask.with(event.id),
+        backdoor_user_id: user.id,
         "task:name": "Task With Dialog"
       )
 

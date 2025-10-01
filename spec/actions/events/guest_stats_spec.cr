@@ -14,7 +14,7 @@ describe Events::GuestStats do
     GuestFactory.create &.event_id(event.id).user_id(another_user.id).status(:no_answer)
 
     response = ApiClient.auth(user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(Events::GuestStats.with(event.id))
 
     response.status.should eq(200)
@@ -30,7 +30,7 @@ describe Events::GuestStats do
     event = EventFactory.create &.creator_id(organizer.id)
 
     response = ApiClient.auth(other_user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(Events::GuestStats.with(event.id))
 
     response.status.should eq(403)
@@ -43,7 +43,7 @@ describe Events::GuestStats do
     GuestFactory.create &.event_id(event.id).user_id(guest_user.id)
 
     response = ApiClient.auth(guest_user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(Events::GuestStats.with(event.id))
 
     response.status.should eq(200)

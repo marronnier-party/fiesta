@@ -7,7 +7,7 @@ describe Guests::UpdateStatus do
     guest = GuestFactory.create &.event_id(event.id).user_id(user.id).status(:no_answer)
 
     response = ApiClient.auth(user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(
         Guests::UpdateStatus.with(guest.id),
         status: "confirmed"
@@ -27,7 +27,7 @@ describe Guests::UpdateStatus do
     guest = GuestFactory.create &.event_id(event.id).user_id(other_user.id)
 
     response = ApiClient.auth(other_user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(
         Guests::UpdateStatus.with(guest.id),
         status: "confirmed"

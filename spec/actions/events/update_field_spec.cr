@@ -6,7 +6,7 @@ describe Events::UpdateField do
     event = EventFactory.create &.creator_id(user.id).name("Old Name")
 
     response = ApiClient.auth(user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(
         Events::UpdateField.with(event.id),
         "event:name": "New Name"
@@ -24,7 +24,7 @@ describe Events::UpdateField do
     event = EventFactory.create &.creator_id(user.id).description("Old Description")
 
     response = ApiClient.auth(user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(
         Events::UpdateField.with(event.id),
         "event:description": "New Description"
@@ -42,7 +42,7 @@ describe Events::UpdateField do
     new_location = LocationFactory.create &.name("New Location")
 
     response = ApiClient.auth(user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(
         Events::UpdateField.with(event.id),
         "event:location": new_location.id.to_s
@@ -57,7 +57,7 @@ describe Events::UpdateField do
     event = EventFactory.create &.creator_id(organizer.id).name("Original")
 
     response = ApiClient.auth(other_user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(
         Events::UpdateField.with(event.id),
         "event:name": "Hacked Name"

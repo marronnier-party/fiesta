@@ -20,23 +20,44 @@ class UI::AddressAutocomplete < BaseComponent
     input_id = "address-input-#{@name.gsub(":", "-")}"
     input_value = @value || ""
 
-    div class: "form-control w-full" do
+    div class: "form-control w-full relative",
+        "x-data": "addressAutocomplete()",
+        "x-init": init_handler,
+        "@address-selected": "locationData = $event.detail" do
+
       # Label
       label class: "label" do
         span @label_text + (@required ? " *" : ""), class: "label-text font-semibold"
       end
 
-      # Simple address input (will add autocomplete via JavaScript later)
+      # Address input with autocomplete
       input type: "text",
         name: @name,
-        value: input_value,
+        "x-model": "query",
+        "@input": "search()",
+        "@keydown": "handleKeydown($event)",
         placeholder: @placeholder,
         class: "input input-bordered w-full",
         required: @required,
-        id: input_id
+        id: input_id,
+        autocomplete: "off"
 
-      # Hidden fields for coordinates
-      render_hidden_coordinates
+      # Autocomplete dropdown
+      div "x-show": "showResults",
+          "x-transition": "",
+          class: "absolute z-50 w-full mt-1 bg-base-100 border border-base-300 rounded-lg shadow-lg max-h-60 overflow-auto" do
+
+        tag "template", "x-for": "(result, index) in results", ":key": "result.place_id" do
+          div "@click": "selectResult(result)",
+              class: "px-4 py-2 hover:bg-base-200 cursor-pointer",
+              ":class": "{ 'bg-base-200': index === selectedIndex }" do
+            para "x-text": "result.display_name", class: "text-sm"
+          end
+        end
+      end
+
+      # Hidden fields that will be populated by Alpine
+      render_hidden_fields
 
       # Help text
       if help_text_value = @help_text
@@ -47,15 +68,44 @@ class UI::AddressAutocomplete < BaseComponent
     end
   end
 
-  private def render_hidden_coordinates
-    if lat_name = @latitude_name
-      lat_id = "latitude-#{@name.gsub(":", "-")}"
-      input type: "hidden", name: lat_name, value: "", id: lat_id
+  private def init_handler
+    "locationData = {}"
+  end
+
+  private def render_hidden_fields
+    # City field
+    if city_name = @city_name
+      input type: "hidden",
+        name: city_name,
+        "x-model": "locationData.city"
     end
 
-    if lng_name = @longitude_name
-      lng_id = "longitude-#{@name.gsub(":", "-")}"
-      input type: "hidden", name: lng_name, value: "", id: lng_id
+    # Postal code field
+    if postal_code_name = @postal_code_name
+      input type: "hidden",
+        name: postal_code_name,
+        "x-model": "locationData.postal_code"
+    end
+
+    # Country field
+    if country_name = @country_name
+      input type: "hidden",
+        name: country_name,
+        "x-model": "locationData.country"
+    end
+
+    # Coordinates
+    if latitude_name = @latitude_name
+      input type: "hidden",
+        name: latitude_name,
+        "x-model": "locationData.latitude",
+        "@change": "if (locationData.latitude && locationData.longitude) $dispatch('update-map', { lat: locationData.latitude, lng: locationData.longitude })"
+    end
+
+    if longitude_name = @longitude_name
+      input type: "hidden",
+        name: longitude_name,
+        "x-model": "locationData.longitude"
     end
   end
 end
