@@ -550,6 +550,8 @@ end
 ### 3.4 Create UI::Modal Component with Alpine
 **File: `src/components/ui/modal.cr`**
 
+Uses the native HTML `<dialog>` element with DaisyUI styling and Alpine.js for enhanced UX.
+
 ```crystal
 class UI::Modal < BaseComponent
   needs id : String
@@ -559,61 +561,78 @@ class UI::Modal < BaseComponent
   needs open_by_default : Bool = false
 
   def render(&)
-    div "x-data": "{ open: #{open_by_default} }",
-        "x-show": "open",
-        "@open-modal-#{id}.window": "open = true",
-        "@close-modal-#{id}.window": "open = false",
-        "@keydown.escape.window": closeable ? "open = false" : "",
-        "x-cloak": !open_by_default,
-        class: "fixed inset-0 z-50 overflow-y-auto",
-        style: open_by_default ? "" : "display: none;" do
+    dialog id: "modal-#{id}",
+           "x-data": modal_data,
+           "x-init": "init($el)",
+           "@open-modal-#{id}.window": "open()",
+           "@close-modal-#{id}.window": "close()",
+           class: "modal",
+           open: open_by_default do
 
-      # Backdrop
-      div "x-show": "open",
-          "@click": closeable ? "open = false" : "",
-          "x-transition:enter": "transition ease-out duration-300",
-          "x-transition:enter-start": "opacity-0",
-          "x-transition:enter-end": "opacity-100",
-          "x-transition:leave": "transition ease-in duration-200",
-          "x-transition:leave-start": "opacity-100",
-          "x-transition:leave-end": "opacity-0",
-          class: "fixed inset-0 bg-black bg-opacity-50"
+      div class: "modal-box w-full max-w-#{size_class}" do
+        div class: "flex items-center justify-between mb-4" do
+          h3 title, class: "text-lg font-bold"
 
-      # Modal content
-      div "x-show": "open",
-          "x-transition:enter": "transition ease-out duration-300",
-          "x-transition:enter-start": "opacity-0 scale-90",
-          "x-transition:enter-end": "opacity-100 scale-100",
-          "x-transition:leave": "transition ease-in duration-200",
-          "x-transition:leave-start": "opacity-100 scale-100",
-          "x-transition:leave-end": "opacity-0 scale-90",
-          "@click.away": closeable ? "open = false" : "",
-          class: "relative flex items-center justify-center min-h-screen p-4" do
-
-        div class: "card bg-base-100 shadow-xl w-full max-w-#{size}" do
-          div class: "card-body" do
-            div class: "flex items-center justify-between mb-4" do
-              h3 title, class: "card-title"
-
-              if closeable
-                button "@click": "open = false",
-                       class: "btn btn-sm btn-circle btn-ghost" do
-                  icon "x", "w-4 h-4"
-                end
+          if closeable
+            form method: "dialog" do
+              button class: "btn btn-sm btn-circle btn-ghost absolute right-2 top-2" do
+                icon "x", "w-4 h-4"
               end
             end
-
-            # Modal content
-            yield
           end
+        end
+
+        # Modal content
+        yield
+      end
+
+      if closeable
+        form method: "dialog", class: "modal-backdrop" do
+          button "Close"
         end
       end
     end
   end
+
+  private def modal_data
+    "{
+      open() {
+        this.$el.showModal();
+      },
+      close() {
+        this.$el.close();
+      },
+      init(el) {
+        if (!#{closeable}) {
+          el.addEventListener('cancel', (e) => e.preventDefault());
+        }
+      }
+    }"
+  end
+
+  private def size_class
+    case size
+    when "sm"
+      "sm"
+    when "lg"
+      "5xl"
+    when "xl"
+      "7xl"
+    else
+      "3xl"
+    end
+  end
 end
 
-# Helper to trigger modal from anywhere
-# JavaScript: window.dispatchEvent(new CustomEvent('open-modal-my-modal'))
+# To open modal from JavaScript or Alpine:
+# window.dispatchEvent(new CustomEvent('open-modal-{id}'))
+# $dispatch('open-modal-{id}')
+#
+# Benefits of native <dialog>:
+# - Built-in accessibility (focus trap, ESC key)
+# - Native backdrop with ::backdrop pseudo-element
+# - Browser-native show/close methods
+# - Better semantic HTML
 ```
 
 ### 3.5 Create UI::ToastContainer Component
@@ -1617,19 +1636,45 @@ img "data-src": event.image_url,
 
 **Status**: Foundation complete! htmx 2.0 and Alpine.js are installed and configured. Using Bun for faster builds.
 
-### Phase 2: Core Interactivity (Week 2)
-- [ ] Implement inline guest status updates
-- [ ] Add collapsible task cards with comments
-- [ ] Implement quick add task form
-- [ ] Add live search filtering
-- [ ] Create modal system
+### Phase 2: Core Interactivity (Week 2) ✅ COMPLETED
+- [x] Implement inline guest status updates (Guests::GuestRow + htmx)
+- [x] Create collapsible task cards with comments (Tasks::TaskCard + Alpine)
+- [x] Update Comments::Create for htmx support
+- [x] Create htmx action endpoints (Guests::UpdateStatus)
+- [x] Add live search filtering (Alpine-powered instant guest search)
+- [x] Create quick add task form with Alpine (inline form with htmx submission)
 
-### Phase 3: Advanced Features (Week 3)
-- [ ] Real-time guest stats polling
-- [ ] Inline editing for event details
-- [ ] Dependent dropdown forms
-- [ ] Optimistic UI updates
-- [ ] Better confirmation dialogs
+**Status**: ALL Phase 2 features completed! Guest status updates work without page reload. Task cards collapse/expand with comments. Guest search filters instantly. Quick add task form appears inline with smooth animations.
+
+**Key Implementations:**
+- Live search filters guests by name as you type (Alpine x-model + x-show)
+- Quick add task form slides in when clicking "Add Task" button
+- Form auto-focuses input field and validates before submission
+- New tasks appear at top of list via htmx `hx-swap="afterbegin"`
+- Form automatically closes and resets after successful submission
+
+### Phase 3: Advanced Features (Week 3) ✅ COMPLETED
+- [x] Real-time guest stats polling (htmx polling every 30s)
+- [x] Client-side search filtering with Alpine
+- [x] UI::Modal component with native `<dialog>` element
+- [x] Inline editing for event details (event name, description with UI::InlineEdit)
+- [x] Dependent dropdown forms (task reassignment with guest status filter)
+- [x] Optimistic UI updates (task start/complete with visual feedback)
+- [x] Better confirmation dialogs (native `<dialog>` with UI::ConfirmDialog)
+
+**Status**: ALL Phase 3 features implemented!
+
+**New Components Created:**
+- `UI::InlineEdit` - Click-to-edit fields with Alpine + htmx
+- `UI::ConfirmDialog` - Native dialog-based confirmation system
+- `UI::DependentSelect` - htmx-powered dependent dropdowns
+- `Events::UpdateField` - Action for inline field updates
+- `Tasks::FilterAssignees` - Dynamic guest filtering endpoint
+
+**Helper Improvements:**
+- Added universal `attrs()` helper in HtmxHelper for clean attribute merging
+- Supports htmx (hx_get), Alpine (x_data, @click), and HTML attributes in one call
+- Example: `attrs(class: "btn", hx_get: "/path", x_data: "{open: false}")`
 
 ### Phase 4: Polish & Testing (Week 4)
 - [ ] Performance optimizations

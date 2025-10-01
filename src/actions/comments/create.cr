@@ -29,19 +29,24 @@ class Comments::Create < BrowserAction
 
     SaveComment.create(params, user_id: current_user.id) do |operation, comment|
       if operation.saved?
-        flash.success = r("comments.created_successfully").t
+        if htmx_request?
+          # Return just the new comment for htmx
+          html UI::Comment, comment: comment.not_nil!
+        else
+          flash.success = r("comments.created_successfully").t
+          # Redirect back to the appropriate page
+          case commentable_type
+          when "Task"
+            task = TaskQuery.new.preload_event.find(commentable_id)
+            redirect to: Events::Show.with(task.event_id)
+          when "Event"
+            redirect to: Events::Show.with(commentable_id)
+          else
+            redirect_back fallback: Me::Show
+          end
+        end
       else
         flash.failure = r("errors.invalid").t
-      end
-
-      # Redirect back to the appropriate page
-      case commentable_type
-      when "Task"
-        task = TaskQuery.new.preload_event.find(commentable_id)
-        redirect to: Events::Show.with(task.event_id)
-      when "Event"
-        redirect to: Events::Show.with(commentable_id)
-      else
         redirect_back fallback: Me::Show
       end
     end

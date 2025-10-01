@@ -51,10 +51,9 @@ class DependentGuests::ManagePage < MainLayout
               end
             end
           else
-            div class: "alert alert-info mb-8" do
-              icon "info-circle", "w-5 h-5"
-              span r("dependent_guests.no_plus_ones").t
-            end
+            mount UI::Alert,
+              message: r("dependent_guests.no_plus_ones").t,
+              type: "info"
           end
 
           # Add new dependent guest form
@@ -65,49 +64,36 @@ class DependentGuests::ManagePage < MainLayout
           form_for DependentGuests::Create.with(guest.id), class: "space-y-4" do
             div class: "grid grid-cols-1 md:grid-cols-2 gap-4" do
               # Name
-              div class: "form-control" do
-                label r("dependent_guests.name").t + " *", class: "label font-semibold"
-                input type: "text",
-                  name: "dependent_guest:name",
-                  value: save_operation.name.value.to_s,
-                  placeholder: r("dependent_guests.name_placeholder").t,
-                  class: "input input-bordered",
-                  required: true
-              end
+              mount UI::FormInput,
+                label_text: r("dependent_guests.name").t + " *",
+                name: "dependent_guest:name",
+                value: save_operation.name.value.to_s,
+                placeholder: r("dependent_guests.name_placeholder").t,
+                required: true
 
               # Age
-              div class: "form-control" do
-                label r("dependent_guests.age").t + " (" + r("guests.notes_optional").t.downcase + ")", class: "label font-semibold"
-                input type: "number",
-                  name: "dependent_guest:age",
-                  value: save_operation.age.value.to_s,
-                  placeholder: "25",
-                  min: "0",
-                  max: "150",
-                  class: "input input-bordered"
-              end
+              mount UI::FormInput,
+                label_text: r("dependent_guests.age").t + " (" + r("guests.notes_optional").t.downcase + ")",
+                name: "dependent_guest:age",
+                value: save_operation.age.value.to_s,
+                input_type: "number",
+                placeholder: "25"
             end
 
             div class: "grid grid-cols-1 md:grid-cols-2 gap-4" do
               # Relationship
-              div class: "form-control" do
-                label r("dependent_guests.relationship").t + " (" + r("guests.notes_optional").t.downcase + ")", class: "label font-semibold"
-                input type: "text",
-                  name: "dependent_guest:relationship",
-                  value: save_operation.relationship.value.to_s,
-                  placeholder: r("dependent_guests.relationship_placeholder").t,
-                  class: "input input-bordered"
-              end
+              mount UI::FormInput,
+                label_text: r("dependent_guests.relationship").t + " (" + r("guests.notes_optional").t.downcase + ")",
+                name: "dependent_guest:relationship",
+                value: save_operation.relationship.value.to_s,
+                placeholder: r("dependent_guests.relationship_placeholder").t
 
               # Dietary restrictions
-              div class: "form-control" do
-                label r("dependent_guests.dietary").t + " (" + r("guests.notes_optional").t.downcase + ")", class: "label font-semibold"
-                input type: "text",
-                  name: "dependent_guest:dietary_restrictions",
-                  value: save_operation.dietary_restrictions.value.to_s,
-                  placeholder: r("dependent_guests.dietary_placeholder").t,
-                  class: "input input-bordered"
-              end
+              mount UI::FormInput,
+                label_text: r("dependent_guests.dietary").t + " (" + r("guests.notes_optional").t.downcase + ")",
+                name: "dependent_guest:dietary_restrictions",
+                value: save_operation.dietary_restrictions.value.to_s,
+                placeholder: r("dependent_guests.dietary_placeholder").t
             end
 
             div class: "card-actions justify-end mt-6" do

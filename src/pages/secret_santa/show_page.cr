@@ -61,13 +61,7 @@ class SecretSanta::ShowPage < MainLayout
         h2 r("secret_santa.your_assignment").t, class: "card-title text-2xl mb-4"
 
         div class: "text-center py-8" do
-          div class: "avatar placeholder mb-4" do
-            div class: "bg-neutral text-neutral-content rounded-full w-24" do
-              span class: "text-3xl" do
-                text assignment.receiver!.user!.name[0..0].upcase
-              end
-            end
-          end
+          mount UI::Avatar, user: assignment.receiver!.user!, size: "2xl", initials_count: 1
 
           h3 assignment.receiver!.user!.name, class: "text-2xl font-bold mb-4"
 
@@ -107,11 +101,11 @@ class SecretSanta::ShowPage < MainLayout
         end
 
         if assignments.empty?
-          div class: "text-center py-8 text-base-content/60" do
-            icon "gift", "w-12 h-12 mx-auto mb-2 opacity-40"
-            para "Aucune attribution pour le moment"
-            para "Cliquez sur 'Tirer au sort' pour créer les attributions", class: "text-sm"
-          end
+          mount UI::EmptyState,
+            title: "Aucune attribution pour le moment",
+            description: "Cliquez sur 'Tirer au sort' pour créer les attributions",
+            icon_name: "gift",
+            with_card: false
         else
           div class: "space-y-2" do
             assignments.each do |assignment|
@@ -126,13 +120,7 @@ class SecretSanta::ShowPage < MainLayout
   private def render_assignment_row(assignment : SecretSantaAssignment)
     div class: "flex items-center justify-between p-3 bg-base-200 rounded-lg" do
       div class: "flex items-center gap-3" do
-        div class: "avatar placeholder" do
-          div class: "bg-neutral text-neutral-content rounded-full w-10" do
-            span class: "text-xs" do
-              text assignment.giver!.user!.name[0..0].upcase
-            end
-          end
-        end
+        mount UI::Avatar, user: assignment.giver!.user!, size: "md", initials_count: 1
 
         div do
           span assignment.giver!.user!.name, class: "font-semibold"
@@ -183,13 +171,7 @@ class SecretSanta::ShowPage < MainLayout
         div class: "space-y-2" do
           guests.each do |guest|
             div class: "flex items-center gap-3 p-2" do
-              div class: "avatar placeholder" do
-                div class: "bg-neutral text-neutral-content rounded-full w-8" do
-                  span class: "text-xs" do
-                    text guest.user!.name[0..0].upcase
-                  end
-                end
-              end
+              mount UI::Avatar, user: guest.user!, size: "sm", initials_count: 1
               span guest.user!.name, class: "text-sm"
             end
           end

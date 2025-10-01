@@ -18,15 +18,12 @@ class Polls::NewPage < MainLayout
 
           form_for Polls::Create.with(event.id), class: "space-y-6", id: "poll-form" do
             # Question
-            div class: "form-control" do
-              label r("polls.question").t, class: "label font-semibold"
-              input type: "text",
-                name: "poll:question",
-                value: save_operation.question.value.to_s,
-                placeholder: r("polls.question_placeholder").t,
-                class: "input input-bordered w-full",
-                required: true
-            end
+            mount UI::FormInput,
+              label_text: r("polls.question").t,
+              name: "poll:question",
+              value: save_operation.question.value.to_s,
+              placeholder: r("polls.question_placeholder").t,
+              required: true
 
             # Poll options
             div class: "form-control" do
@@ -53,10 +50,9 @@ class Polls::NewPage < MainLayout
               end
             end
 
-            div class: "alert alert-info" do
-              icon "info-circle", "w-5 h-5"
-              span r("polls.hint").t
-            end
+            mount UI::Alert,
+              message: r("polls.hint").t,
+              type: "info"
 
             # Actions
             div class: "card-actions justify-end mt-8" do

@@ -18,10 +18,9 @@ class Events::TaskSuggestionsPage < MainLayout
           para r("task_suggestions.subtitle").t(event_type: format_event_type(event.event_type)), class: "text-gray-600 mb-6"
 
           form_for Events::ApplyTaskSuggestions.with(event.id), class: "space-y-6" do
-            div class: "alert alert-info mb-4" do
-              icon "info-circle", "w-5 h-5"
-              span r("task_suggestions.hint").t
-            end
+            mount UI::Alert,
+              message: r("task_suggestions.hint").t,
+              type: "info"
 
             # Group suggestions by category
             grouped = suggestions.group_by { |s| s[:category] }

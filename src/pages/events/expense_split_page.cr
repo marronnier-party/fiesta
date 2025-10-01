@@ -27,30 +27,23 @@ class Events::ExpenseSplitPage < MainLayout
       div class: "card-body" do
         h1 r("expense_split.title").t, class: "card-title text-3xl mb-4"
 
-        div class: "stats shadow w-full" do
-          div class: "stat" do
-            div class: "stat-title" do
-              text r("expense_split.total_expenses").t
-            end
-            div "$#{"%.2f" % event.actual_cost}", class: "stat-value text-primary"
-          end
-
-          div class: "stat" do
-            div class: "stat-title" do
-              text "Invités"
-            end
-            div guests.size.to_s, class: "stat-value text-info"
-          end
-
-          div class: "stat" do
-            div class: "stat-title" do
-              text r("expense_split.per_person").t
-            end
-            if guests.size > 0
-              div "$#{"%.2f" % (event.actual_cost / guests.size)}", class: "stat-value text-success"
-            end
-          end
-        end
+        mount UI::StatsWidget, stats: [
+          UI::StatsWidget::Stat.new(
+            title: r("expense_split.total_expenses").t,
+            value: "$#{"%.2f" % event.actual_cost}",
+            color: "text-primary"
+          ),
+          UI::StatsWidget::Stat.new(
+            title: "Invités",
+            value: guests.size.to_s,
+            color: "text-info"
+          ),
+          UI::StatsWidget::Stat.new(
+            title: r("expense_split.per_person").t,
+            value: guests.size > 0 ? "$#{"%.2f" % (event.actual_cost / guests.size)}" : "$0.00",
+            color: "text-success"
+          )
+        ]
       end
     end
   end
@@ -100,13 +93,7 @@ class Events::ExpenseSplitPage < MainLayout
   private def render_split_item(split : ExpenseSplitService::ExpenseSplit)
     div class: "flex items-center justify-between p-4 bg-base-200 rounded-lg" do
       div class: "flex items-center gap-3" do
-        div class: "avatar placeholder" do
-          div class: "bg-neutral text-neutral-content rounded-full w-10" do
-            span class: "text-xs" do
-              text split.guest.user!.name[0..0].upcase
-            end
-          end
-        end
+        mount UI::Avatar, user: split.guest.user!, size: "md", initials_count: 1
 
         div do
           div split.guest.user!.name, class: "font-semibold"

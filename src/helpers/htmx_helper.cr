@@ -50,6 +50,36 @@ module HtmxHelper
     result
   end
 
+  # Universal attributes helper - combines htmx, Alpine, and regular HTML attributes
+  # Usage: attrs(class: "btn", hx_get: "/path", hx_target: "#result", x_data: "{}", **alpine_attrs)
+  # For Alpine event handlers with interpolation, pass them separately with .merge()
+  def attrs(**attributes)
+    result = {} of String => String
+    attributes.each do |key, value|
+      key_str = key.to_s
+      if key_str.starts_with?("hx_")
+        # Convert hx_get to hx-get
+        result["hx-#{key_str[3..-1].gsub('_', '-')}"] = value.to_s
+      elsif key_str.starts_with?("x_")
+        # Convert x_data to x-data
+        result["x-#{key_str[2..-1].gsub('_', '-')}"] = value.to_s
+      elsif key_str.starts_with?("@") || key_str.starts_with?(":")
+        # Alpine event/bind attributes - use as-is
+        result[key_str] = value.to_s
+      else
+        # Regular HTML attributes - convert underscores to dashes
+        result[key_str.gsub('_', '-')] = value.to_s
+      end
+    end
+    result
+  end
+
+  # Helper for building Alpine event attributes that need string interpolation
+  # Usage: alpine_events({"@open-modal-#{id}.window" => "open()"})
+  def alpine_events(**events)
+    {} of String => String
+  end
+
   # Check if request is from htmx
   def htmx_request?
     context.request.headers["HX-Request"]? == "true"

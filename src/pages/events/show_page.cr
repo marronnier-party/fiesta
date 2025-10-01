@@ -39,7 +39,15 @@ class Events::ShowPage < MainLayout
       div class: "card-body" do
         div class: "flex items-start justify-between" do
           div class: "flex-1" do
-            h1 event.name, class: "card-title text-4xl mb-2"
+            if is_organizer?
+              mount UI::InlineEdit,
+                value: event.name,
+                field_name: "event:name",
+                update_url: Events::UpdateField.with(event.id).path,
+                display_class: "text-4xl font-bold mb-2"
+            else
+              h1 event.name, class: "card-title text-4xl mb-2"
+            end
             para r("events.organized_by").t(name: event.creator!.name), class: "text-base-content/70"
           end
 
@@ -91,10 +99,19 @@ class Events::ShowPage < MainLayout
         h2 r("events.show").t, class: "card-title text-2xl mb-4"
 
         div class: "space-y-4" do
-          if description = event.description
-            div do
-              label r("events.description").t, class: "font-semibold"
-              para description, class: "text-base-content/80 mt-1"
+          div do
+            label r("events.description").t, class: "font-semibold block mb-1"
+            if is_organizer?
+              mount UI::InlineEdit,
+                value: event.description || "",
+                field_name: "event:description",
+                update_url: Events::UpdateField.with(event.id).path,
+                placeholder: r("events.add_description").t,
+                multiline: true
+            elsif description = event.description
+              para description, class: "text-base-content/80"
+            else
+              para r("events.no_description").t, class: "text-base-content/50 italic"
             end
           end
 
@@ -150,6 +167,17 @@ class Events::ShowPage < MainLayout
   end
 
   private def render_guest_stats
+    div **attrs(
+      id: "guest-stats",
+      hx_get: Events::GuestStats.with(event.id).path,
+      hx_trigger: "every 30s",
+      hx_swap: "innerHTML"
+    ) do
+      render_guest_stats_content
+    end
+  end
+
+  private def render_guest_stats_content
     confirmed = guests.count { |g| g.status == Guest::Status::Confirmed }
     pending = guests.count { |g| g.status == Guest::Status::NoAnswer }
     declined = guests.count { |g| g.status == Guest::Status::Declined }
@@ -174,7 +202,7 @@ class Events::ShowPage < MainLayout
   end
 
   private def render_guest_list
-    div class: "card bg-base-100 shadow-xl" do
+    div class: "card bg-base-100 shadow-xl", "x-data": "{ query: '' }" do
       div class: "card-body" do
         mount UI::SectionHeader, title: r("events.guest_list").t do
           # Send reminders button for organizers
@@ -188,9 +216,29 @@ class Events::ShowPage < MainLayout
           end
         end
 
+        # Search box with Alpine
+        if guests.size > 3
+          div class: "mb-4" do
+            div class: "form-control" do
+              div class: "input-group" do
+                input type: "text",
+                      "x-model": "query",
+                      placeholder: r("search.guests").t,
+                      class: "input input-bordered w-full"
+                div class: "btn btn-square" do
+                  icon "search", "w-5 h-5"
+                end
+              end
+            end
+          end
+        end
+
+        # Guest list with Alpine filtering
         div class: "space-y-2" do
           guests.each do |guest|
-            render_guest_item(guest)
+            div "x-show": "!query || '#{guest.user!.name.downcase}'.includes(query.toLowerCase())" do
+              render_guest_item(guest)
+            end
           end
         end
       end
@@ -198,35 +246,11 @@ class Events::ShowPage < MainLayout
   end
 
   private def render_guest_item(guest : Guest)
-    div class: "flex items-center justify-between p-3 bg-base-200 rounded-lg" do
-      div class: "flex items-center gap-3" do
-        mount UI::Avatar, user: guest.user!, size: "md"
-
-        div do
-          div guest.user!.name, class: "font-semibold"
-          if guest.guest_count > 1
-            small "(+#{guest.guest_count - 1})", class: "text-sm text-base-content/60"
-          end
-        end
-      end
-
-      div class: "flex items-center gap-2" do
-        render_guest_status_badge(guest)
-
-        # Show attendance marking for organizers on past events
-        if is_organizer? && event.start_at && event.start_at.not_nil! < Time.utc
-          if guest.status == Guest::Status::Confirmed
-            form_for Guests::MarkAttended.with(guest.id), class: "inline" do
-              button r("guests.mark_attended").t, type: "submit", class: "btn btn-xs btn-success"
-            end
-          elsif guest.status == Guest::Status::Attended
-            form_for Guests::UnmarkAttended.with(guest.id), class: "inline" do
-              button r("guests.unmark_attended").t, type: "submit", class: "btn btn-xs btn-ghost"
-            end
-          end
-        end
-      end
-    end
+    mount Guests::GuestRow,
+      guest: guest,
+      current_user: current_user,
+      is_organizer: is_organizer?,
+      event: event
   end
 
   private def render_guest_status_badge(guest : Guest)
@@ -238,7 +262,26 @@ class Events::ShowPage < MainLayout
       div class: "card-body" do
         mount UI::SectionHeader, title: r("events.task_list").t do
           if is_organizer?
-            link r("events.add_task").t, to: Events::AddTask.with(event.id), class: "btn btn-sm btn-primary"
+            div "x-data": "{ showQuickAdd: false }" do
+              button "@click": "showQuickAdd = !showQuickAdd",
+                     class: "btn btn-sm btn-primary" do
+                icon "plus", "w-4 h-4"
+                text " #{r("events.add_task").t}"
+              end
+
+              # Quick add form (shown when button clicked)
+              div "x-show": "showQuickAdd",
+                  "x-transition:enter": "transition ease-out duration-200",
+                  "x-transition:enter-start": "opacity-0 -translate-y-2",
+                  "x-transition:enter-end": "opacity-100 translate-y-0",
+                  "x-transition:leave": "transition ease-in duration-150",
+                  "x-transition:leave-start": "opacity-100 translate-y-0",
+                  "x-transition:leave-end": "opacity-0 -translate-y-2",
+                  class: "mt-4 p-4 bg-base-200 rounded-lg",
+                  style: "display: none;" do
+                render_quick_add_task_form
+              end
+            end
           end
         end
 
@@ -248,9 +291,26 @@ class Events::ShowPage < MainLayout
             icon_name: "clipboard-list",
             with_card: false
         else
-          div class: "space-y-3" do
+          div id: "task-list", class: "space-y-3" do
             tasks.each do |task|
-              render_task_item(task)
+              mount Tasks::TaskCard,
+                task: task,
+                comments: task_comments[task.id]? || [] of Comment,
+                current_user: current_user,
+                is_organizer: is_organizer?,
+                guests: guests,
+                can_comment: can_comment_on_task?(task)
+
+              # Add confirmation dialog for each task
+              if is_organizer?
+                mount UI::ConfirmDialog,
+                  id: "confirm-delete-task-#{task.id}",
+                  title: r("actions.confirm").t,
+                  message: r("tasks.delete_confirm").t(name: task.name),
+                  confirm_text: r("actions.delete").t,
+                  cancel_text: r("actions.cancel").t,
+                  confirm_class: "btn-error"
+              end
             end
           end
         end
@@ -576,5 +636,54 @@ class Events::ShowPage < MainLayout
 
   private def is_organizer?
     event.creator_id == current_user.id
+  end
+
+  private def can_comment_on_task?(task : Task)
+    # Anyone who is a guest or organizer can comment
+    is_organizer? || guests.any? { |g| g.user_id == current_user.id }
+  end
+
+  private def render_quick_add_task_form
+    form **attrs(
+      class: "space-y-3",
+      hx_post: Events::QuickAddTask.with(event.id).path,
+      hx_target: "#task-list",
+      hx_swap: "afterbegin",
+      x_data: "{ taskName: '', submitting: false }",
+      "@htmx:before-request": "submitting = true",
+      "@htmx:after-request": "submitting = false; taskName = ''; showQuickAdd = false"
+    ) do
+      div class: "form-control" do
+        label r("tasks.name").t, class: "label label-text font-semibold"
+        input type: "text",
+              name: "task:name",
+              "x-model": "taskName",
+              placeholder: r("tasks.placeholder.name").t,
+              class: "input input-bordered",
+              required: true,
+              "x-ref": "taskInput",
+              "x-init": "$nextTick(() => $refs.taskInput.focus())"
+      end
+
+      div class: "flex gap-2 justify-end" do
+        button type: "button",
+               "@click": "showQuickAdd = false; taskName = ''",
+               class: "btn btn-sm btn-ghost" do
+          text r("actions.cancel").t
+        end
+
+        button type: "submit",
+               class: "btn btn-sm btn-primary",
+               "x-bind:disabled": "!taskName.trim() || submitting" do
+          span "x-show": "!submitting" do
+            icon "plus", "w-4 h-4"
+            text " #{r("actions.add").t}"
+          end
+          span "x-show": "submitting", "x-cloak": true do
+            mount UI::LoadingSpinner, size: "sm"
+          end
+        end
+      end
+    end
   end
 end

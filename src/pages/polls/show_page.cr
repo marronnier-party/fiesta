@@ -19,11 +19,10 @@ class Polls::ShowPage < MainLayout
           # Poll question and status
           div class: "flex justify-between items-start mb-6" do
             h1 poll.question, class: "card-title text-3xl"
-            if poll.is_locked
-              span r("polls.locked_badge").t, class: "badge badge-warning"
-            else
-              span r("polls.open_badge").t, class: "badge badge-success"
-            end
+            mount UI::StatusBadge,
+              status: poll.is_locked ? "locked" : "open",
+              text: poll.is_locked ? r("polls.locked_badge").t : r("polls.open_badge").t,
+              color: poll.is_locked ? "warning" : "success"
           end
 
           # Total votes
