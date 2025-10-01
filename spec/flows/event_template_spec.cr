@@ -103,9 +103,9 @@ describe "Event template flow", tags: "flow" do
     template = EventTemplateFactory.create &.creator_id(user.id)
       .name("Old Template Name")
 
-    template.update!(name: "New Template Name")
+    SaveEventTemplate.update!(template, name: "New Template Name")
 
-    template.reload
+    template = EventTemplateQuery.find(template.id)
     template.name.should eq "New Template Name"
   end
 
@@ -153,7 +153,8 @@ describe "Event template flow", tags: "flow" do
 
     # Update template
     updated_tasks = task_templates + [{"name" => "Arrange transportation", "category" => "logistics"}]
-    template.update!(task_templates: updated_tasks.to_json)
+    SaveEventTemplate.update!(template, task_templates: updated_tasks.to_json)
+    template = EventTemplateQuery.find(template.id)
 
     # Create second event from updated template
     event2 = EventFactory.create &.creator_id(user.id)

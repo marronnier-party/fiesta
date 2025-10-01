@@ -4,11 +4,7 @@ class Events::CheckInMode < BrowserAction
       .preload_creator
       .find(event_id)
 
-    # Only allow organizer to access check-in mode
-    unless event.creator_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(event.id)
-    end
+    authorize event, policy: EventPolicy, query: :check_in_mode?
 
     # Load confirmed guests
     guests = GuestQuery.new

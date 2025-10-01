@@ -2,6 +2,8 @@ module RequireTaskFromId
   macro included
     include Rosetta::Translatable
     before enforce_task_found
+
+    @_task : Task?
   end
 
   private def task : Task
@@ -10,7 +12,7 @@ module RequireTaskFromId
 
   private def enforce_task_found
     task_id = params.get(:task_id).to_i64
-    @_task = TaskQuery.find(task_id)
+    @_task = TaskQuery.new.preload_event.preload_guest.find(task_id)
     continue
   rescue Avram::RecordNotFoundError
     flash.failure = r("tasks.not_found").t

@@ -17,15 +17,17 @@ class SecretSantaPolicy < ApplicationPolicy(SecretSanta)
   end
 
   private def organizer?
+    return false unless current_user = user
     event = record.event
-    event.creator_id == user.id
+    event.creator_id == current_user.id
   end
 
   private def confirmed_guest?
+    return false unless current_user = user
     event = record.event
     GuestQuery.new
       .event_id(event.id)
-      .user_id(user.id)
+      .user_id(current_user.id)
       .confirmed
       .first?
       .present?

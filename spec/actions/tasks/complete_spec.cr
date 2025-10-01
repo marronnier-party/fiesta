@@ -8,7 +8,7 @@ describe Tasks::Complete do
       guest = GuestFactory.create &.event_id(event.id).user_id(user.id)
       task = TaskFactory.create &.event_id(event.id).guest_id(guest.id).name("Test Task")
 
-      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id), backdoor_user_id: user.id)
+      response = ApiClient.auth(user).get(Tasks::Complete.with(task.id).path, backdoor_user_id: user.id)
 
       response.status.should eq(be_ok)
       response.body.should contain("Test Task")

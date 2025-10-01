@@ -5,18 +5,7 @@ class Events::ExportCalendar < BrowserAction
       .preload_location
       .find(event_id)
 
-    # Check if user is invited or is the organizer
-    unless event.creator_id == current_user.id
-      guest = GuestQuery.new
-        .for_event(event)
-        .user_id(current_user.id)
-        .first?
-
-      unless guest
-        flash.failure = r("errors.unauthorized").t
-        redirect to: Events::Show.with(event.id)
-      end
-    end
+    authorize event, policy: EventPolicy, query: :export_calendar?
 
     # Generate iCal content
     ical_content = ICalendarService.generate_ical(event)

@@ -2,17 +2,16 @@ class SecretSanta::Randomize < BrowserAction
   post "/events/:event_id/secret_santa/randomize" do
     event = EventQuery.find(event_id)
 
-    # Only allow creator to randomize
-    unless event.creator_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(event.id)
-    end
-
     secret_santa = SecretSantaQuery.new.for_event(event).first
 
     unless secret_santa
       flash.failure = r("errors.not_found").t
       redirect to: Events::Show.with(event.id)
+    end
+
+    # Manual authorization check (Pundit macro has issues with compound model names)
+    unless SecretSantaPolicy.new(current_user, secret_santa).randomize?
+      raise Pundit::NotAuthorizedError.new
     end
 
     # Get confirmed guests

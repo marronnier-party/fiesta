@@ -4,13 +4,9 @@ class Guests::UndoCheckIn < BrowserAction
       .preload_event
       .find(guest_id)
 
-    event = guest.event!
+    authorize guest, policy: GuestPolicy, query: :undo_check_in?
 
-    # Only allow organizer to undo check-in
-    unless event.creator_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(event.id)
-    end
+    event = guest.event!
 
     SaveGuest.update(guest, status: Guest::Status::Confirmed) do |operation, updated|
       if updated

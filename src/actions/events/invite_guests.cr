@@ -4,11 +4,7 @@ class Events::InviteGuests < BrowserAction
       .preload_creator
       .find(event_id)
 
-    # Only allow creator to invite guests
-    unless event.creator_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(event.id)
-    end
+    authorize event, policy: EventPolicy, query: :invite_guests?
 
     # Get all users except those already invited
     invited_user_ids = GuestQuery.new.for_event(event).results.map(&.user_id)
@@ -22,11 +18,7 @@ class Events::InviteGuests < BrowserAction
   post "/events/:event_id/invite" do
     event = EventQuery.find(event_id)
 
-    # Only allow creator to invite guests
-    unless event.creator_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(event.id)
-    end
+    authorize event, policy: EventPolicy, query: :invite_guests?
 
     user_ids = params.get_all?(:user_ids) || [] of String
 

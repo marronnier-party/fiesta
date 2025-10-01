@@ -20,12 +20,14 @@ class TaskPolicy < ApplicationPolicy(Task)
   end
 
   private def assigned_to_user?
+    return false unless current_user = user
     return false unless guest = record.guest
-    guest.user_id == user.id
+    guest.user_id == current_user.id
   end
 
   private def organizer?
+    return false unless current_user = user
     event = record.event
-    event.creator_id == user.id
+    event.creator_id == current_user.id
   end
 end

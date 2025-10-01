@@ -2,11 +2,7 @@ class Guests::Rsvp < BrowserAction
   include RequireGuestFromId
 
   get "/guests/:guest_id/rsvp" do
-    # Ensure the guest belongs to the current user
-    if guest.user_id != current_user.id
-      flash.failure = r("guests.not_authorized").t
-      redirect to: Me::Show
-    end
+    authorize guest, policy: GuestPolicy, query: :rsvp?
 
     # Preload event and location for the page
     loaded_guest = GuestQuery.new
@@ -18,11 +14,7 @@ class Guests::Rsvp < BrowserAction
   end
 
   post "/guests/:guest_id/rsvp" do
-    # Ensure the guest belongs to the current user
-    if guest.user_id != current_user.id
-      flash.failure = r("guests.not_authorized").t
-      redirect to: Me::Show
-    end
+    authorize guest, policy: GuestPolicy, query: :rsvp?
 
     # Update guest status
     SaveGuest.update(guest, params) do |operation, updated_guest|

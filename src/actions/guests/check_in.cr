@@ -4,13 +4,9 @@ class Guests::CheckIn < BrowserAction
       .preload_event
       .find(guest_id)
 
-    event = guest.event!
+    authorize guest, policy: GuestPolicy, query: :check_in?
 
-    # Only allow organizer to check in guests
-    unless event.creator_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(event.id)
-    end
+    event = guest.event!
 
     SaveGuest.update(guest, status: Guest::Status::Attended) do |operation, updated|
       if updated

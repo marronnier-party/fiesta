@@ -2,25 +2,16 @@ class SecretSanta::Show < BrowserAction
   get "/events/:event_id/secret_santa" do
     event = EventQuery.new.preload_creator.find(event_id)
 
-    # Check authorization
-    unless event.creator_id == current_user.id
-      # Check if user is a confirmed guest
-      user_guest = GuestQuery.new
-        .for_event(event)
-        .user_id(current_user.id)
-        .first?
-
-      unless user_guest && user_guest.status.confirmed?
-        flash.failure = r("errors.unauthorized").t
-        redirect to: Events::Show.with(event.id)
-      end
-    end
-
     secret_santa = SecretSantaQuery.new.for_event(event).first
 
     unless secret_santa
       flash.failure = r("errors.not_found").t
       redirect to: Events::Show.with(event.id)
+    end
+
+    # Manual authorization check (Pundit macro has issues with compound model names)
+    unless SecretSantaPolicy.new(current_user, secret_santa).show?
+      raise Pundit::NotAuthorizedError.new
     end
 
     # Get all assignments

@@ -39,21 +39,24 @@ class EventPolicy < ApplicationPolicy(Event)
   end
 
   private def organizer?
-    record.creator_id == user.id
+    return false unless current_user = user
+    record.creator_id == current_user.id
   end
 
   private def guest?
+    return false unless current_user = user
     GuestQuery.new
       .event_id(record.id)
-      .user_id(user.id)
+      .user_id(current_user.id)
       .first?
       .present?
   end
 
   private def confirmed_guest?
+    return false unless current_user = user
     GuestQuery.new
       .event_id(record.id)
-      .user_id(user.id)
+      .user_id(current_user.id)
       .confirmed
       .first?
       .present?

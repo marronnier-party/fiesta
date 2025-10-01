@@ -76,7 +76,7 @@ describe "Event check-in flow", tags: "flow" do
 
     # Check in 3 guests
     GuestQuery.new.event_id(event.id).limit(3).each do |guest|
-      guest.update!(status: Guest::Status::Attended)
+      SaveGuest.update!(guest, status: Guest::Status::Attended)
     end
 
     GuestQuery.new.event_id(event.id).status(Guest::Status::Attended).select_count.should eq 3
@@ -105,9 +105,9 @@ describe "Event check-in flow", tags: "flow" do
     flow.visit Events::CheckInMode.with(event.id), as: organizer
 
     # Check in guests as they arrive
-    guest1.update!(status: Guest::Status::Attended)
-    guest2.update!(status: Guest::Status::Attended)
-    guest3.update!(status: Guest::Status::Attended)
+    SaveGuest.update!(guest1, status: Guest::Status::Attended)
+    SaveGuest.update!(guest2, status: Guest::Status::Attended)
+    SaveGuest.update!(guest3, status: Guest::Status::Attended)
 
     # Guest 4 doesn't show up (remains Confirmed)
 
@@ -124,10 +124,10 @@ describe "Event check-in flow", tags: "flow" do
     guest = GuestFactory.create &.user_id(guest_user.id).event_id(event.id).status(Guest::Status::Confirmed)
 
     # Check in guest
-    guest.update!(status: Guest::Status::Attended)
+    SaveGuest.update!(guest, status: Guest::Status::Attended)
 
     # Mark event as done
-    event.update!(status: Event::Status::Done)
+    SaveEvent.update!(event, status: Event::Status::Done)
 
     event.reload
     event.status.should eq Event::Status::Done

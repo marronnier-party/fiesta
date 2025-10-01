@@ -2,10 +2,9 @@ class SecretSanta::Enable < BrowserAction
   post "/events/:event_id/secret_santa/enable" do
     event = EventQuery.find(event_id)
 
-    # Only allow creator to enable Secret Santa
-    unless event.creator_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(event.id)
+    # Manual authorization check (Pundit macro has issues with SecretSanta namespace)
+    unless EventPolicy.new(current_user, event).update?
+      raise Pundit::NotAuthorizedError.new
     end
 
     # Check if Secret Santa already exists

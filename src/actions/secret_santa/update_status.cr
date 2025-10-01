@@ -5,10 +5,9 @@ class SecretSanta::UpdateStatus < BrowserAction
       .preload_secret_santa
       .find(assignment_id)
 
-    # Only the giver can update their assignment
-    unless assignment.giver!.user_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(assignment.secret_santa!.event_id)
+    # Manual authorization check (Pundit macro has issues with compound model names)
+    unless SecretSantaAssignmentPolicy.new(current_user, assignment).update_status?
+      raise Pundit::NotAuthorizedError.new
     end
 
     status_param = params.get?("status").to_s

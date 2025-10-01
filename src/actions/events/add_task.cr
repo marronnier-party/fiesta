@@ -4,11 +4,7 @@ class Events::AddTask < BrowserAction
       .preload_creator
       .find(event_id)
 
-    # Only allow creator to add tasks
-    unless event.creator_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(event.id)
-    end
+    authorize event, policy: EventPolicy, query: :add_task?
 
     # Get confirmed guests for this event
     guests = GuestQuery.new
@@ -26,11 +22,7 @@ class Events::AddTask < BrowserAction
   post "/events/:event_id/tasks" do
     event = EventQuery.find(event_id)
 
-    # Only allow creator to add tasks
-    unless event.creator_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(event.id)
-    end
+    authorize event, policy: EventPolicy, query: :add_task?
 
     SaveTask.create(params, event_id: event.id) do |operation, task|
       if task

@@ -1,7 +1,8 @@
 class GuestPolicy < ApplicationPolicy(Guest)
   def rsvp?
+    return false unless current_user = user
     # Users can RSVP if they are the guest
-    record.user_id == user.id
+    record.user_id == current_user.id
   end
 
   def check_in?
@@ -15,7 +16,8 @@ class GuestPolicy < ApplicationPolicy(Guest)
   end
 
   private def organizer?
+    return false unless current_user = user
     event = record.event
-    event.creator_id == user.id
+    event.creator_id == current_user.id
   end
 end

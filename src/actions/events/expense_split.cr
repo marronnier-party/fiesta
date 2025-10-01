@@ -4,11 +4,7 @@ class Events::ExpenseSplit < BrowserAction
       .preload_creator
       .find(event_id)
 
-    # Only allow organizer
-    unless event.creator_id == current_user.id
-      flash.failure = r("errors.unauthorized").t
-      redirect to: Events::Show.with(event.id)
-    end
+    authorize event, policy: EventPolicy, query: :expense_split?
 
     # Get confirmed guests
     guests = GuestQuery.new

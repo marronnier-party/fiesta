@@ -6,17 +6,17 @@ class TaskFlow < BaseFlow
   end
 
   def create_task(name : String, category : String? = nil)
-    visit Tasks::New.with(event.id), as: user
+    visit Events::AddTask.with(event.id), as: user
     fill_form SaveTask,
       name: name,
-      event_id: event.id,
       category: category
     click "@create-task-button"
   end
 
   def assign_task_to_guest(task : Task, guest : Guest)
     visit Tasks::Edit.with(task.id), as: user
-    fill "guest_id", guest.id.to_s
+    fill_form SaveTask,
+      guest_id: guest.id.to_s
     click "@update-task-button"
   end
 
