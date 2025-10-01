@@ -2,6 +2,7 @@ abstract class BrowserAction < Lucky::Action
   include Lucky::ProtectFromForgery
   include HTMX
   include Rosetta::Translatable
+  include Pundit::ActionHelpers(User)
 
   # By default all actions are required to use underscores.
   # Add `include Lucky::SkipRouteStyleCheck` to your actions if you wish to ignore this check for specific routes.
@@ -44,4 +45,5 @@ abstract class BrowserAction < Lucky::Action
   private memoize def find_current_user(id : String | User::PrimaryKeyType) : User?
     UserQuery.new.id(id).first?
   end
+
 end

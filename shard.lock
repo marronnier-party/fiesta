@@ -108,6 +108,10 @@ shards:
     git: https://github.com/luckyframework/pulsar.git
     version: 0.2.3
 
+  pundit:
+    git: https://github.com/stephendolan/pundit.git
+    version: 0.4.0
+
   rosetta:
     git: https://github.com/wout/rosetta.git
     version: 0.11.4

@@ -32,6 +32,9 @@ dependencies:
     version: ~> 1.6.1
   rosetta:
     github: wout/rosetta
+  pundit:
+    github: stephendolan/pundit
+    version: ~> 0.4.0
 development_dependencies:
   lucky_flow:
     github: luckyframework/lucky_flow

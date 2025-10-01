@@ -13,6 +13,7 @@ class Task < BaseModel
     column position : Int32 = 0
     column category : String?
     column notes : String?
+    column cost : Float64?
 
     belongs_to event : Event
     belongs_to guest : Guest?

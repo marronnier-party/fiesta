@@ -4,7 +4,15 @@
 class Errors::Show < Lucky::ErrorAction
   DEFAULT_MESSAGE = "Something went wrong."
   default_format :html
-  dont_report [Lucky::RouteNotFoundError, Avram::RecordNotFoundError]
+  dont_report [Lucky::RouteNotFoundError, Avram::RecordNotFoundError, Pundit::NotAuthorizedError]
+
+  def render(error : Pundit::NotAuthorizedError)
+    if html?
+      error_html "You are not authorized to perform this action.", status: 403
+    else
+      error_json "Not authorized", status: 403
+    end
+  end
 
   def render(error : Lucky::RouteNotFoundError | Avram::RecordNotFoundError)
     if html?
