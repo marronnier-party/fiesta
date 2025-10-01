@@ -5,10 +5,11 @@ describe SecretSanta::Randomize do
     setup = create_secret_santa_with_participants(4)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      SecretSanta::Randomize.with(setup[:event].id)
+      SecretSanta::Randomize.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
 
     assignments = SecretSantaAssignmentQuery.new
       .for_secret_santa(setup[:secret_santa])
@@ -22,10 +23,11 @@ describe SecretSanta::Randomize do
     other_user = UserFactory.create
 
     response = ApiClient.auth(other_user).exec(
-      SecretSanta::Randomize.with(setup[:event].id)
+      SecretSanta::Randomize.with(setup[:event].id),
+      backdoor_user_id: other_user.id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
   end
 
   it "requires at least 2 participants" do
@@ -33,10 +35,11 @@ describe SecretSanta::Randomize do
     secret_santa = SecretSantaFactory.create &.event_id(setup[:event].id)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      SecretSanta::Randomize.with(setup[:event].id)
+      SecretSanta::Randomize.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
 
     assignments = SecretSantaAssignmentQuery.new
       .for_secret_santa(secret_santa)

@@ -8,9 +8,9 @@ describe Events::AddTask do
       guest_user = UserFactory.create
       guest = GuestFactory.create &.event_id(event.id).user_id(guest_user.id).status(Guest::Status::Confirmed)
 
-      response = ApiClient.auth(organizer).exec(Events::AddTask.with(event.id))
+      response = ApiClient.auth(organizer).exec(Events::AddTask.with(event.id), backdoor_user_id: organizer.id)
 
-      response.status.should eq(200)
+      response.status.should eq(be_ok)
       response.body.should contain("Ajouter une tâche") # Add task
       response.body.should contain(guest_user.name)
     end
@@ -23,7 +23,7 @@ describe Events::AddTask do
       GuestFactory.create &.event_id(event.id).user_id(confirmed_user.id).status(Guest::Status::Confirmed)
       GuestFactory.create &.event_id(event.id).user_id(pending_user.id).status(Guest::Status::NoAnswer)
 
-      response = ApiClient.auth(organizer).exec(Events::AddTask.with(event.id))
+      response = ApiClient.auth(organizer).exec(Events::AddTask.with(event.id), backdoor_user_id: organizer.id)
 
       response.body.should contain(confirmed_user.name)
       response.body.should_not contain(pending_user.name)
@@ -34,9 +34,9 @@ describe Events::AddTask do
       other_user = UserFactory.create
       event = EventFactory.create &.creator_id(organizer.id)
 
-      response = ApiClient.auth(other_user).exec(Events::AddTask.with(event.id))
+      response = ApiClient.auth(other_user).exec(Events::AddTask.with(event.id), backdoor_user_id: other_user.id)
 
-      response.status.should eq(302)
+      response.status.should eq(be_found)
     end
   end
 
@@ -47,14 +47,14 @@ describe Events::AddTask do
       guest_user = UserFactory.create
       guest = GuestFactory.create &.event_id(event.id).user_id(guest_user.id).status(Guest::Status::Confirmed)
 
-      response = ApiClient.auth(organizer).exec(Events::AddTask.with(event.id), task: {
+      response = ApiClient.auth(organizer).exec(Events::AddTask.with(event.id), backdoor_user_id: organizer.id, task: {
         name:     "Bring desserts",
         guest_id: guest.id,
         category: "food",
         notes:    "Chocolate cake preferred",
       })
 
-      response.status.should eq(302)
+      response.status.should eq(be_found)
 
       task = TaskQuery.new.name("Bring desserts").first
       task.event_id.should eq(event.id)
@@ -67,11 +67,11 @@ describe Events::AddTask do
       event = EventFactory.create &.creator_id(organizer.id)
       guest = GuestFactory.create &.event_id(event.id)
 
-      response = ApiClient.auth(organizer).exec(Events::AddTask.with(event.id), task: {
+      response = ApiClient.auth(organizer).exec(Events::AddTask.with(event.id), backdoor_user_id: organizer.id, task: {
         guest_id: guest.id,
       })
 
-      response.status.should eq(200)
+      response.status.should eq(be_ok)
       response.body.should contain("name")
     end
 
@@ -81,12 +81,12 @@ describe Events::AddTask do
       event = EventFactory.create &.creator_id(organizer.id)
       guest = GuestFactory.create &.event_id(event.id)
 
-      response = ApiClient.auth(other_user).exec(Events::AddTask.with(event.id), task: {
+      response = ApiClient.auth(other_user).exec(Events::AddTask.with(event.id), backdoor_user_id: other_user.id, task: {
         name:     "Test Task",
         guest_id: guest.id,
       })
 
-      response.status.should eq(302)
+      response.status.should eq(be_found)
       TaskQuery.new.name("Test Task").first?.should be_nil
     end
   end

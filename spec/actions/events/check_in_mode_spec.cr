@@ -5,10 +5,11 @@ describe Events::CheckInMode do
     setup = create_event_with_guests(3)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::CheckInMode.with(setup[:event].id)
+      Events::CheckInMode.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(200)
+    response.status.should eq(be_ok)
     response.body.should contain("Enregistrement")
   end
 
@@ -16,7 +17,8 @@ describe Events::CheckInMode do
     setup = create_event_with_guests(4)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::CheckInMode.with(setup[:event].id)
+      Events::CheckInMode.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
     setup[:guests].each do |guest|
@@ -28,7 +30,8 @@ describe Events::CheckInMode do
     setup = create_event_with_guests(5)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::CheckInMode.with(setup[:event].id)
+      Events::CheckInMode.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
     response.body.should contain("Attendus")
@@ -40,9 +43,10 @@ describe Events::CheckInMode do
     other_user = UserFactory.create
 
     response = ApiClient.auth(other_user).exec(
-      Events::CheckInMode.with(setup[:event].id)
+      Events::CheckInMode.with(setup[:event].id),
+      backdoor_user_id: other_user.id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
   end
 end

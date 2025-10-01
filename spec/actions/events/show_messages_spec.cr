@@ -5,10 +5,11 @@ describe Events::ShowMessages do
     setup = create_event_with_organizer
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ShowMessages.with(setup[:event].id)
+      Events::ShowMessages.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(200)
+    response.status.should eq(be_ok)
     response.body.should contain("Messages")
   end
 
@@ -17,10 +18,11 @@ describe Events::ShowMessages do
     guest = setup[:guests].first
 
     response = ApiClient.auth(guest.user!).exec(
-      Events::ShowMessages.with(setup[:event].id)
+      Events::ShowMessages.with(setup[:event].id),
+      backdoor_user_id: guest.user!.id
     )
 
-    response.status.should eq(200)
+    response.status.should eq(be_ok)
   end
 
   it "displays existing messages" do
@@ -30,7 +32,8 @@ describe Events::ShowMessages do
       .content("Welcome everyone!")
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ShowMessages.with(setup[:event].id)
+      Events::ShowMessages.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
     response.body.should contain("Welcome everyone!")
@@ -40,7 +43,8 @@ describe Events::ShowMessages do
     setup = create_event_with_organizer
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ShowMessages.with(setup[:event].id)
+      Events::ShowMessages.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
     response.body.should contain("textarea")
@@ -52,17 +56,19 @@ describe Events::ShowMessages do
     other_user = UserFactory.create
 
     response = ApiClient.auth(other_user).exec(
-      Events::ShowMessages.with(setup[:event].id)
+      Events::ShowMessages.with(setup[:event].id),
+      backdoor_user_id: other_user.id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
   end
 
   it "shows empty state when no messages" do
     setup = create_event_with_organizer
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ShowMessages.with(setup[:event].id)
+      Events::ShowMessages.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
     response.body.should contain("Aucun message")

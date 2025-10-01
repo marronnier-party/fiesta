@@ -7,9 +7,9 @@ describe Guests::Rsvp do
       event = EventFactory.create &.name("Test Event")
       guest = GuestFactory.create &.event_id(event.id).user_id(guest_user.id)
 
-      response = ApiClient.auth(guest_user).exec(Guests::Rsvp.with(guest.id))
+      response = ApiClient.auth(guest_user).exec(Guests::Rsvp.with(guest.id), backdoor_user_id: guest_user.id)
 
-      response.status.should eq(200)
+      response.status.should eq(be_ok)
       response.body.should contain("Test Event")
     end
 
@@ -18,7 +18,7 @@ describe Guests::Rsvp do
 
       response = ApiClient.exec(Guests::Rsvp.with(guest.id))
 
-      response.status.should eq(302)
+      response.status.should eq(be_found)
     end
   end
 
@@ -28,13 +28,13 @@ describe Guests::Rsvp do
       event = EventFactory.create
       guest = GuestFactory.create &.event_id(event.id).user_id(guest_user.id).status(Guest::Status::NoAnswer)
 
-      response = ApiClient.auth(guest_user).exec(Guests::Rsvp.with(guest.id), guest: {
+      response = ApiClient.auth(guest_user).exec(Guests::Rsvp.with(guest.id), backdoor_user_id: guest_user.id, guest: {
         status:       Guest::Status::Confirmed.value,
         guest_count:  3,
         notes:        "Excited to attend!",
       })
 
-      response.status.should eq(302)
+      response.status.should eq(be_found)
       response.headers["Location"].should contain("/me")
 
       updated_guest = GuestQuery.find(guest.id)
@@ -48,7 +48,7 @@ describe Guests::Rsvp do
       event = EventFactory.create
       guest = GuestFactory.create &.event_id(event.id).user_id(guest_user.id)
 
-      response = ApiClient.auth(guest_user).exec(Guests::Rsvp.with(guest.id), guest: {
+      response = ApiClient.auth(guest_user).exec(Guests::Rsvp.with(guest.id), backdoor_user_id: guest_user.id, guest: {
         status: Guest::Status::Declined.value,
         notes:  "Can't make it, sorry!",
       })
@@ -62,11 +62,11 @@ describe Guests::Rsvp do
       guest_user = UserFactory.create
       guest = GuestFactory.create &.user_id(guest_user.id)
 
-      response = ApiClient.auth(guest_user).exec(Guests::Rsvp.with(guest.id), guest: {
+      response = ApiClient.auth(guest_user).exec(Guests::Rsvp.with(guest.id), backdoor_user_id: guest_user.id, guest: {
         status: Guest::Status::Confirmed.value,
       })
 
-      response.status.should eq(302)
+      response.status.should eq(be_found)
       # Flash success message would be set
     end
 
@@ -75,12 +75,12 @@ describe Guests::Rsvp do
       guest = GuestFactory.create &.user_id(guest_user.id)
 
       # Assuming guest_count must be positive
-      response = ApiClient.auth(guest_user).exec(Guests::Rsvp.with(guest.id), guest: {
+      response = ApiClient.auth(guest_user).exec(Guests::Rsvp.with(guest.id), backdoor_user_id: guest_user.id, guest: {
         status:      Guest::Status::Confirmed.value,
         guest_count: -1,
       })
 
-      response.status.should eq(200)
+      response.status.should eq(be_ok)
     end
   end
 end

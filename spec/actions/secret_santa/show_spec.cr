@@ -5,10 +5,11 @@ describe SecretSanta::Show do
     setup = create_secret_santa_with_participants(3)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      SecretSanta::Show.with(setup[:event].id)
+      SecretSanta::Show.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(200)
+    response.status.should eq(be_ok)
     response.body.should contain("Père Noël secret")
   end
 
@@ -20,7 +21,8 @@ describe SecretSanta::Show do
     )
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      SecretSanta::Show.with(setup[:event].id)
+      SecretSanta::Show.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
     response.body.should contain("Attributions")
@@ -41,10 +43,11 @@ describe SecretSanta::Show do
     participant_user = participant_guest.user!
 
     response = ApiClient.auth(participant_user).exec(
-      SecretSanta::Show.with(setup[:event].id)
+      SecretSanta::Show.with(setup[:event].id),
+      backdoor_user_id: participant_user.id
     )
 
-    response.status.should eq(200)
+    response.status.should eq(be_ok)
     response.body.should contain("Vous offrez un cadeau")
   end
 
@@ -53,19 +56,21 @@ describe SecretSanta::Show do
     other_user = UserFactory.create
 
     response = ApiClient.auth(other_user).exec(
-      SecretSanta::Show.with(setup[:event].id)
+      SecretSanta::Show.with(setup[:event].id),
+      backdoor_user_id: other_user.id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
   end
 
   it "returns 404 when Secret Santa doesn't exist" do
     setup = create_event_with_organizer
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      SecretSanta::Show.with(setup[:event].id)
+      SecretSanta::Show.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
   end
 end

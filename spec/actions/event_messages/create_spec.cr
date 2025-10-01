@@ -6,10 +6,11 @@ describe EventMessages::Create do
 
     response = ApiClient.auth(setup[:organizer]).exec(
       EventMessages::Create.with(setup[:event].id),
-      body: "content=Hello%20everyone"
+      backdoor_user_id: setup[:organizer].id,
+      content: "Hello everyone"
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
 
     messages = EventMessageQuery.new.for_event(setup[:event]).results
     messages.size.should eq(1)
@@ -19,13 +20,15 @@ describe EventMessages::Create do
   it "creates message for confirmed guest" do
     setup = create_event_with_guests(1)
     guest = setup[:guests].first
+    guest_user = guest.user!
 
-    response = ApiClient.auth(guest.user!).exec(
+    response = ApiClient.auth(guest_user).exec(
       EventMessages::Create.with(setup[:event].id),
-      body: "content=Thanks%20for%20organizing"
+      backdoor_user_id: guest_user.id,
+      content: "Thanks for organizing"
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
 
     messages = EventMessageQuery.new.for_event(setup[:event]).results
     messages.size.should eq(1)
@@ -37,10 +40,11 @@ describe EventMessages::Create do
 
     response = ApiClient.auth(other_user).exec(
       EventMessages::Create.with(setup[:event].id),
-      body: "content=Test"
+      backdoor_user_id: other_user.id,
+      content: "Test"
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
 
     messages = EventMessageQuery.new.for_event(setup[:event]).results
     messages.size.should eq(0)
@@ -51,6 +55,7 @@ describe EventMessages::Create do
 
     ApiClient.auth(setup[:organizer]).exec(
       EventMessages::Create.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id,
       body: "content=My%20message"
     )
 

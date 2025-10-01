@@ -5,10 +5,11 @@ describe Events::ExportCalendar do
     setup = create_upcoming_event(7)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ExportCalendar.with(setup[:event].id)
+      Events::ExportCalendar.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(200)
+    response.status.should eq(be_ok)
     response.headers["Content-Type"].should contain("text/calendar")
     response.headers["Content-Disposition"].should contain("attachment")
     response.body.should contain("BEGIN:VCALENDAR")
@@ -22,10 +23,11 @@ describe Events::ExportCalendar do
       .status(Guest::Status::Confirmed)
 
     response = ApiClient.auth(guest_user).exec(
-      Events::ExportCalendar.with(setup[:event].id)
+      Events::ExportCalendar.with(setup[:event].id),
+      backdoor_user_id: guest_user.id
     )
 
-    response.status.should eq(200)
+    response.status.should eq(be_ok)
     response.headers["Content-Type"].should contain("text/calendar")
   end
 
@@ -34,27 +36,30 @@ describe Events::ExportCalendar do
     other_user = UserFactory.create
 
     response = ApiClient.auth(other_user).exec(
-      Events::ExportCalendar.with(setup[:event].id)
+      Events::ExportCalendar.with(setup[:event].id),
+      backdoor_user_id: other_user.id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
   end
 
   it "redirects when event has no start date" do
     setup = create_event_with_organizer
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ExportCalendar.with(setup[:event].id)
+      Events::ExportCalendar.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
   end
 
   it "includes .ics filename in Content-Disposition" do
     setup = create_upcoming_event(3)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ExportCalendar.with(setup[:event].id)
+      Events::ExportCalendar.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
     response.headers["Content-Disposition"].should contain(".ics")

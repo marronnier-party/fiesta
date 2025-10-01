@@ -7,10 +7,11 @@ describe Guests::UndoCheckIn do
     SaveGuest.update!(guest, status: Guest::Status::Attended)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Guests::UndoCheckIn.with(guest.id)
+      Guests::UndoCheckIn.with(guest.id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
 
     updated_guest = GuestQuery.find(guest.id)
     updated_guest.status.should eq(Guest::Status::Confirmed)
@@ -23,10 +24,11 @@ describe Guests::UndoCheckIn do
     other_user = UserFactory.create
 
     response = ApiClient.auth(other_user).exec(
-      Guests::UndoCheckIn.with(guest.id)
+      Guests::UndoCheckIn.with(guest.id),
+      backdoor_user_id: other_user.id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
 
     updated_guest = GuestQuery.find(guest.id)
     updated_guest.status.should eq(Guest::Status::Attended)

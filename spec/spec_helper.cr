@@ -20,6 +20,7 @@ require "./setup/**"
 include Carbon::Expectations
 include Lucky::RequestExpectations
 include LuckyFlow::Expectations
+include HttpStatusHelpers
 
 Avram::Migrator::Runner.new.ensure_migrated!
 Avram::SchemaEnforcer.ensure_correct_column_mappings!

@@ -6,10 +6,11 @@ describe Guests::CheckIn do
     guest = setup[:guests].first
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Guests::CheckIn.with(guest.id)
+      Guests::CheckIn.with(guest.id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
 
     updated_guest = GuestQuery.find(guest.id)
     updated_guest.status.should eq(Guest::Status::Attended)
@@ -21,10 +22,11 @@ describe Guests::CheckIn do
     other_user = UserFactory.create
 
     response = ApiClient.auth(other_user).exec(
-      Guests::CheckIn.with(guest.id)
+      Guests::CheckIn.with(guest.id),
+      backdoor_user_id: other_user.id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
 
     updated_guest = GuestQuery.find(guest.id)
     updated_guest.status.should_not eq(Guest::Status::Attended)
@@ -36,9 +38,10 @@ describe Guests::CheckIn do
     SaveGuest.update!(guest, status: Guest::Status::Attended)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Guests::CheckIn.with(guest.id)
+      Guests::CheckIn.with(guest.id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
   end
 end

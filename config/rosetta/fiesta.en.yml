@@ -186,6 +186,7 @@ en:
     attended_activity: "%{name} attended the event"
     errors:
       must_be_confirmed: "Guest must be confirmed to mark as attended"
+    not_authorized: "You are not authorized to access this guest invitation"
 
   # Tasks
   tasks:

@@ -6,10 +6,11 @@ describe Events::ExpenseSplit do
     SaveEvent.update!(setup[:event], total_cost: 90.0)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ExpenseSplit.with(setup[:event].id)
+      Events::ExpenseSplit.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
-    response.status.should eq(200)
+    response.status.should eq(be_ok)
     response.body.should contain("Répartition des dépenses")
   end
 
@@ -18,7 +19,8 @@ describe Events::ExpenseSplit do
     SaveEvent.update!(setup[:event], total_cost: 150.0)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ExpenseSplit.with(setup[:event].id)
+      Events::ExpenseSplit.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
     response.body.should contain("150.00")
@@ -29,7 +31,8 @@ describe Events::ExpenseSplit do
     SaveEvent.update!(setup[:event], total_cost: 90.0)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ExpenseSplit.with(setup[:event].id)
+      Events::ExpenseSplit.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
     setup[:guests].each do |guest|
@@ -43,17 +46,19 @@ describe Events::ExpenseSplit do
     SaveEvent.update!(setup[:event], total_cost: 100.0)
 
     # Test equal split
-    response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ExpenseSplit.with(setup[:event].id) + "?method=equal"
+    response = ApiClient.auth(setup[:organizer]).get(
+      Events::ExpenseSplit.with(setup[:event].id).url + "?method=equal"
     )
     response.body.should contain("50.00")
 
     # Test by headcount
-    SaveGuest.update!(setup[:guests][0], guest_count: 2)
-    response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ExpenseSplit.with(setup[:event].id) + "?method=by_headcount"
+    SaveGuest.update(setup[:guests][0], guest_count: 2) do |op, guest|
+      op.saved? || raise "Failed to update guest"
+    end
+    response = ApiClient.auth(setup[:organizer]).get(
+      Events::ExpenseSplit.with(setup[:event].id).url + "?method=by_headcount"
     )
-    response.status.should eq(200)
+    response.status.should eq(be_ok)
   end
 
   it "denies access to non-organizer" do
@@ -61,10 +66,11 @@ describe Events::ExpenseSplit do
     other_user = UserFactory.create
 
     response = ApiClient.auth(other_user).exec(
-      Events::ExpenseSplit.with(setup[:event].id)
+      Events::ExpenseSplit.with(setup[:event].id),
+      backdoor_user_id: other_user.id
     )
 
-    response.status.should eq(302)
+    response.status.should eq(be_found)
   end
 
   it "shows split method selector" do
@@ -72,7 +78,8 @@ describe Events::ExpenseSplit do
     SaveEvent.update!(setup[:event], total_cost: 80.0)
 
     response = ApiClient.auth(setup[:organizer]).exec(
-      Events::ExpenseSplit.with(setup[:event].id)
+      Events::ExpenseSplit.with(setup[:event].id),
+      backdoor_user_id: setup[:organizer].id
     )
 
     response.body.should contain("Égale")

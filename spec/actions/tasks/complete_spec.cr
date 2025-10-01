@@ -8,9 +8,9 @@ describe Tasks::Complete do
       guest = GuestFactory.create &.event_id(event.id).user_id(user.id)
       task = TaskFactory.create &.event_id(event.id).guest_id(guest.id).name("Test Task")
 
-      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id))
+      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id), backdoor_user_id: user.id)
 
-      response.status.should eq(200)
+      response.status.should eq(be_ok)
       response.body.should contain("Test Task")
     end
 
@@ -19,7 +19,7 @@ describe Tasks::Complete do
 
       response = ApiClient.exec(Tasks::Complete.with(task.id))
 
-      response.status.should eq(302)
+      response.status.should eq(be_found)
     end
   end
 
@@ -30,12 +30,14 @@ describe Tasks::Complete do
       guest = GuestFactory.create &.event_id(event.id).user_id(user.id)
       task = TaskFactory.create &.event_id(event.id).guest_id(guest.id).status(Task::Status::Pending)
 
-      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id), task: {
-        notes: "All done!",
-        cost:  "25.50",
-      })
+      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id),
+        backdoor_user_id: user.id,
+        task: {
+          notes: "All done!",
+          cost:  "25.50",
+        })
 
-      response.status.should eq(302)
+      response.status.should eq(be_found)
 
       updated_task = TaskQuery.find(task.id)
       updated_task.status.should eq(Task::Status::Completed)
@@ -49,7 +51,7 @@ describe Tasks::Complete do
       guest = GuestFactory.create &.event_id(event.id).user_id(user.id)
       task = TaskFactory.create &.event_id(event.id).guest_id(guest.id).status(Task::Status::InProgress)
 
-      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id))
+      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id), backdoor_user_id: user.id)
 
       updated_task = TaskQuery.find(task.id)
       updated_task.status.should eq(Task::Status::Completed)
@@ -62,7 +64,7 @@ describe Tasks::Complete do
       task = TaskFactory.create &.event_id(event.id).guest_id(guest.id)
 
       before_time = Time.utc
-      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id))
+      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id), backdoor_user_id: user.id)
       after_time = Time.utc
 
       updated_task = TaskQuery.find(task.id)
@@ -77,9 +79,9 @@ describe Tasks::Complete do
       guest = GuestFactory.create &.event_id(event.id).user_id(user.id)
       task = TaskFactory.create &.event_id(event.id).guest_id(guest.id)
 
-      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id))
+      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id), backdoor_user_id: user.id)
 
-      response.status.should eq(302)
+      response.status.should eq(be_found)
       # Flash success message would be set
     end
 
@@ -89,7 +91,7 @@ describe Tasks::Complete do
       guest = GuestFactory.create &.event_id(event.id).user_id(user.id)
       task = TaskFactory.create &.event_id(event.id).guest_id(guest.id)
 
-      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id))
+      response = ApiClient.auth(user).exec(Tasks::Complete.with(task.id), backdoor_user_id: user.id)
 
       response.headers["Location"].should contain("/me")
     end

@@ -34,7 +34,9 @@ module SpecHelpers
       location_id: location.id,
       start_at: Time.utc + days_from_now.days,
       status: Event::Status::Confirmed
-    )
+    ) do |operation, updated_event|
+      operation.saved? || raise "Failed to update event"
+    end
 
     {
       organizer: setup[:organizer],

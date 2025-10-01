@@ -186,6 +186,7 @@ fr:
     attended_activity: "%{name} a assisté à l'événement"
     errors:
       must_be_confirmed: "L'invité doit être confirmé pour être marqué comme présent"
+    not_authorized: "Vous n'êtes pas autorisé à accéder à cette invitation"
 
   # Tasks
   tasks:

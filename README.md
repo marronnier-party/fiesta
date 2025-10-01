@@ -1,6 +1,30 @@
-# fiesta
+# Fiesta
 
-This is a project written using [Lucky](https://luckyframework.org). Enjoy!
+A family event management platform built with [Lucky](https://luckyframework.org) and Crystal.
+
+## About
+
+Fiesta is a comprehensive event management system designed for organizing family gatherings and events. It features:
+
+- **Event Management**: Create and manage events with locations, dates, and guest lists
+- **Guest Management**: Track RSVPs, dietary restrictions, and plus-ones
+- **Task Organization**: Assign and track tasks with categories (food, decorations, logistics, etc.)
+- **Advanced Features**:
+  - Event templates for recurring celebrations
+  - Polling system for scheduling and decisions
+  - Secret Santa organization
+  - Event messaging and notifications
+  - Budget tracking and organizer notes
+  - Event activities tracking
+  - Comments system
+
+## Tech Stack
+
+- **Backend**: Crystal with Lucky Framework (v1.4.0)
+- **Database**: PostgreSQL with Avram ORM (v1.4.0)
+- **Frontend**: HTMX, TailwindCSS, DaisyUI
+- **Authentication**: Authentic gem with JWT support
+- **Email**: Carbon with SendGrid adapter
 
 ### Setting up the project
 
