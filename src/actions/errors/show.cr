@@ -8,8 +8,11 @@ class Errors::Show < Lucky::ErrorAction
 
   def render(error : Pundit::NotAuthorizedError)
     if html?
-      error_html "You are not authorized to perform this action.", status: 403
+      # Friendly redirect for family users instead of error page
+      context.flash.failure = Rosetta.find("errors.unauthorized").t
+      redirect to: Me::Show
     else
+      # API requests get proper 403 status
       error_json "Not authorized", status: 403
     end
   end
