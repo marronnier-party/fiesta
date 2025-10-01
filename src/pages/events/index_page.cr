@@ -22,26 +22,18 @@ class Events::IndexPage < MainLayout
   end
 
   private def render_search
-    form method: "get", action: Events::Index.path, class: "max-w-md" do
-      div class: "form-control" do
-        div class: "input-group" do
-          input type: "text", name: "search", value: search_query || "", placeholder: r("events.search_placeholder").t, class: "input input-bordered w-full"
-          button type: "submit", class: "btn btn-square" do
-            icon "search", "w-5 h-5"
-          end
-        end
-      end
-    end
+    mount UI::SearchBox,
+      action: Events::Index,
+      query: search_query,
+      placeholder: r("events.search_placeholder").t
   end
 
   private def render_header
-    div class: "flex items-center justify-between" do
-      h1 r("events.my_events").t, class: "text-3xl font-bold"
-      link to: Events::New, class: "btn btn-primary" do
-        icon "plus", "w-5 h-5 mr-2"
-        text r("nav.create_event").t
-      end
-    end
+    mount UI::PageHeader,
+      title: r("events.my_events").t,
+      action_text: r("nav.create_event").t,
+      action_path: Events::New,
+      action_icon: "plus"
   end
 
   private def render_events_list
@@ -57,16 +49,12 @@ class Events::IndexPage < MainLayout
   end
 
   private def render_empty_state
-    div class: "card bg-base-100 shadow-xl" do
-      div class: "card-body items-center text-center py-12" do
-        div class: "bg-base-300 rounded-full p-6 mb-4" do
-          icon "calendar", "w-16 h-16 text-base-content/40"
-        end
-        h2 r("events.no_events").t, class: "card-title text-2xl mb-2"
-        para r("events.no_events_hint").t, class: "text-base-content/70 mb-6"
-        link r("nav.create_event").t, to: Events::New, class: "btn btn-primary btn-lg"
-      end
-    end
+    mount UI::EmptyState,
+      title: r("events.no_events").t,
+      description: r("events.no_events_hint").t,
+      icon_name: "calendar",
+      action_text: r("nav.create_event").t,
+      action_path: Events::New
   end
 
   private def render_event_card(event : Event)
@@ -78,22 +66,22 @@ class Events::IndexPage < MainLayout
 
             div class: "space-y-2 mt-4" do
               if start_at = event.start_at
-                div class: "flex items-center gap-2 text-base-content/80" do
-                  icon "calendar", "w-5 h-5"
-                  text format_date(start_at)
-                end
+                mount UI::InfoRow,
+                  icon_name: "calendar",
+                  text: format_datetime_full(start_at),
+                  icon_color: "text-base-content"
               end
 
               if location = event.location
-                div class: "flex items-center gap-2 text-base-content/80" do
-                  icon "map-pin", "w-5 h-5"
-                  text location.name
-                end
+                mount UI::InfoRow,
+                  icon_name: "map-pin",
+                  text: location.name,
+                  icon_color: "text-base-content"
               end
             end
           end
 
-          render_status_badge(event)
+          mount UI::StatusBadge, status: event.status
         end
 
         div class: "card-actions justify-end mt-4" do
@@ -104,26 +92,22 @@ class Events::IndexPage < MainLayout
     end
   end
 
-  private def render_status_badge(event : Event)
-    case event.status
-    when Event::Status::Draft
-      span r("events.statuses.draft").t, class: "badge badge-warning"
-    when Event::Status::Confirmed
-      span r("events.statuses.confirmed").t, class: "badge badge-success"
-    when Event::Status::Cancelled
-      span r("events.statuses.cancelled").t, class: "badge badge-error"
-    when Event::Status::Done
-      span r("tasks.statuses.completed").t, class: "badge badge-ghost"
-    end
-  end
-
   private def render_view_mode_toggle
-    div class: "flex gap-2" do
-      a r("timeline.list_view").t, href: Events::Index.path + "?view=list",
-        class: "btn btn-sm #{view_mode == "list" ? "btn-primary" : "btn-ghost"}"
-      a r("timeline.view").t, href: Events::Index.path + "?view=timeline",
-        class: "btn btn-sm #{view_mode == "timeline" ? "btn-primary" : "btn-ghost"}"
-    end
+    mount UI::FilterTabs,
+      current_value: view_mode,
+      style: "buttons",
+      tabs: [
+        UI::FilterTabs::Tab.new(
+          label: r("timeline.list_view").t,
+          value: "list",
+          path: Events::Index.path + "?view=list"
+        ),
+        UI::FilterTabs::Tab.new(
+          label: r("timeline.view").t,
+          value: "timeline",
+          path: Events::Index.path + "?view=timeline"
+        )
+      ]
   end
 
   private def render_timeline_view
@@ -193,14 +177,10 @@ class Events::IndexPage < MainLayout
               end
             end
 
-            render_status_badge(event)
+            mount UI::StatusBadge, status: event.status
           end
         end
       end
     end
-  end
-
-  private def format_date(time : Time)
-    time.to_s("%B %-d, %Y at %-I:%M %p")
   end
 end

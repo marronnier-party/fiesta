@@ -40,12 +40,8 @@ class Shared::Navbar < BaseComponent
     div class: "navbar-end gap-2" do
       # User menu dropdown
       div class: "dropdown dropdown-end" do
-        label class: "btn btn-ghost btn-circle avatar placeholder", tabindex: "0" do
-          div class: "bg-neutral text-neutral-content rounded-full w-10" do
-            span class: "text-xs" do
-              text current_user.name.split.map(&.[0]).join.upcase[0..1]
-            end
-          end
+        label class: "btn btn-ghost btn-circle avatar", tabindex: "0" do
+          mount UI::Avatar, user: current_user, size: "md"
         end
 
         ul class: "mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52", tabindex: "0" do

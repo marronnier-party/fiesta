@@ -99,27 +99,19 @@ class Events::ShowPage < MainLayout
           end
 
           if start_at = event.start_at
-            div class: "flex items-center gap-3" do
-              icon "calendar", "w-6 h-6 text-primary"
-              div do
-                label r("events.start_at").t, class: "font-semibold block"
-                span class: "text-base-content/80" do
-                  text format_datetime(start_at)
-                end
-              end
-            end
+            mount UI::InfoRow,
+              icon_name: "calendar",
+              label: r("events.start_at").t,
+              text: format_datetime_formal(start_at),
+              size: "lg"
           end
 
           if end_at = event.end_at
-            div class: "flex items-center gap-3" do
-              icon "calendar", "w-6 h-6 text-primary"
-              div do
-                label r("events.end_at").t, class: "font-semibold block"
-                span class: "text-base-content/80" do
-                  text format_datetime(end_at)
-                end
-              end
-            end
+            mount UI::InfoRow,
+              icon_name: "calendar",
+              label: r("events.end_at").t,
+              text: format_datetime_formal(end_at),
+              size: "lg"
           end
 
           if location = event.location
@@ -162,36 +154,29 @@ class Events::ShowPage < MainLayout
     pending = guests.count { |g| g.status == Guest::Status::NoAnswer }
     declined = guests.count { |g| g.status == Guest::Status::Declined }
 
-    div class: "stats shadow w-full" do
-      div class: "stat" do
-        div class: "stat-title" do
-          text r("events.confirmed_count").t(count: confirmed)
-        end
-        div confirmed.to_s, class: "stat-value text-success"
-      end
-
-      div class: "stat" do
-        div class: "stat-title" do
-          text r("events.pending_count").t(count: pending)
-        end
-        div pending.to_s, class: "stat-value text-warning"
-      end
-
-      div class: "stat" do
-        div class: "stat-title" do
-          text r("events.declined_count").t(count: declined)
-        end
-        div declined.to_s, class: "stat-value text-error"
-      end
-    end
+    mount UI::StatsWidget, stats: [
+      UI::StatsWidget::Stat.new(
+        title: r("events.confirmed_count").t(count: confirmed),
+        value: confirmed.to_s,
+        color: "text-success"
+      ),
+      UI::StatsWidget::Stat.new(
+        title: r("events.pending_count").t(count: pending),
+        value: pending.to_s,
+        color: "text-warning"
+      ),
+      UI::StatsWidget::Stat.new(
+        title: r("events.declined_count").t(count: declined),
+        value: declined.to_s,
+        color: "text-error"
+      )
+    ]
   end
 
   private def render_guest_list
     div class: "card bg-base-100 shadow-xl" do
       div class: "card-body" do
-        div class: "flex items-center justify-between mb-4" do
-          h2 r("events.guest_list").t, class: "card-title text-2xl"
-
+        mount UI::SectionHeader, title: r("events.guest_list").t do
           # Send reminders button for organizers
           if is_organizer?
             pending_count = guests.count { |g| g.status == Guest::Status::NoAnswer }
@@ -215,13 +200,7 @@ class Events::ShowPage < MainLayout
   private def render_guest_item(guest : Guest)
     div class: "flex items-center justify-between p-3 bg-base-200 rounded-lg" do
       div class: "flex items-center gap-3" do
-        div class: "avatar placeholder" do
-          div class: "bg-neutral text-neutral-content rounded-full w-10" do
-            span class: "text-xs" do
-              text guest.user!.name.split.map(&.[0]).join.upcase[0..1]
-            end
-          end
-        end
+        mount UI::Avatar, user: guest.user!, size: "md"
 
         div do
           div guest.user!.name, class: "font-semibold"
@@ -251,36 +230,23 @@ class Events::ShowPage < MainLayout
   end
 
   private def render_guest_status_badge(guest : Guest)
-    case guest.status
-    when Guest::Status::Confirmed
-      span r("guests.statuses.confirmed").t, class: "badge badge-success"
-    when Guest::Status::Attended
-      span r("guests.statuses.attended").t, class: "badge badge-primary"
-    when Guest::Status::NoAnswer
-      span r("guests.statuses.pending").t, class: "badge badge-warning"
-    when Guest::Status::Declined
-      span r("guests.statuses.declined").t, class: "badge badge-error"
-    else
-      span r("guests.statuses.pending").t, class: "badge badge-ghost"
-    end
+    mount UI::StatusBadge, status: guest.status
   end
 
   private def render_tasks_section
     div class: "card bg-base-100 shadow-xl" do
       div class: "card-body" do
-        div class: "flex items-center justify-between mb-4" do
-          h2 r("events.task_list").t, class: "card-title text-2xl"
-
+        mount UI::SectionHeader, title: r("events.task_list").t do
           if is_organizer?
             link r("events.add_task").t, to: Events::AddTask.with(event.id), class: "btn btn-sm btn-primary"
           end
         end
 
         if tasks.empty?
-          div class: "text-center py-8 text-base-content/60" do
-            icon "clipboard-list", "w-12 h-12 mx-auto mb-2 opacity-40"
-            para r("dashboard.no_tasks").t
-          end
+          mount UI::EmptyState,
+            title: r("dashboard.no_tasks").t,
+            icon_name: "clipboard-list",
+            with_card: false
         else
           div class: "space-y-3" do
             tasks.each do |task|
@@ -400,38 +366,11 @@ class Events::ShowPage < MainLayout
   end
 
   private def render_comment(comment : Comment)
-    div class: "flex gap-3 p-3 bg-base-100 rounded-lg" do
-      div class: "avatar placeholder" do
-        div class: "bg-neutral text-neutral-content rounded-full w-8" do
-          span class: "text-xs" do
-            text comment.user!.name[0..0].upcase
-          end
-        end
-      end
-
-      div class: "flex-1" do
-        div class: "flex items-baseline gap-2" do
-          span class: "font-semibold text-sm" do
-            text comment.user!.name
-          end
-          small class: "text-xs text-base-content/60" do
-            text format_relative_time(comment.created_at)
-          end
-        end
-        para comment.content, class: "text-sm mt-1"
-      end
-    end
+    mount UI::Comment, comment: comment
   end
 
   private def render_task_status_icon(task : Task)
-    case task.status
-    when Task::Status::Pending
-      icon "circle", "w-5 h-5 text-base-content/40"
-    when Task::Status::InProgress
-      icon "clock", "w-5 h-5 text-warning"
-    when Task::Status::Completed
-      icon "check-circle", "w-5 h-5 text-success"
-    end
+    mount UI::TaskStatusIcon, status: task.status
   end
 
   private def render_task_actions(task : Task)
@@ -455,27 +394,11 @@ class Events::ShowPage < MainLayout
   end
 
   private def render_task_status_badge(task : Task)
-    case task.status
-    when Task::Status::Pending
-      span r("tasks.statuses.pending").t, class: "badge badge-ghost"
-    when Task::Status::InProgress
-      span r("tasks.statuses.in_progress").t, class: "badge badge-warning"
-    when Task::Status::Completed
-      span r("tasks.statuses.completed").t, class: "badge badge-success"
-    end
+    mount UI::StatusBadge, status: task.status
   end
 
   private def render_status_badge
-    case event.status
-    when Event::Status::Draft
-      span r("events.statuses.draft").t, class: "badge badge-warning badge-lg"
-    when Event::Status::Confirmed
-      span r("events.statuses.confirmed").t, class: "badge badge-success badge-lg"
-    when Event::Status::Cancelled
-      span r("events.statuses.cancelled").t, class: "badge badge-error badge-lg"
-    when Event::Status::Done
-      span r("tasks.statuses.completed").t, class: "badge badge-ghost badge-lg"
-    end
+    mount UI::StatusBadge, status: event.status, size: "lg"
   end
 
   private def render_budget_section
@@ -629,9 +552,7 @@ class Events::ShowPage < MainLayout
 
           # Weather alert if any
           if alert = WeatherService.get_weather_alert(forecast)
-            div class: "alert alert-warning mt-3 py-2" do
-              span alert, class: "text-sm"
-            end
+            mount UI::Alert, message: alert, type: "warning", size: "sm"
           end
         end
       end
@@ -640,13 +561,7 @@ class Events::ShowPage < MainLayout
 
   private def render_activity_item(activity : EventActivity)
     div class: "flex items-start gap-3 p-3 bg-base-200 rounded-lg" do
-      div class: "avatar placeholder" do
-        div class: "bg-neutral text-neutral-content rounded-full w-8" do
-          span class: "text-xs" do
-            text activity.user!.name[0..0].upcase
-          end
-        end
-      end
+      mount UI::Avatar, user: activity.user!, size: "sm", initials_count: 1
 
       div class: "flex-1" do
         para class: "text-sm" do
@@ -659,28 +574,7 @@ class Events::ShowPage < MainLayout
     end
   end
 
-  private def format_relative_time(time : Time)
-    diff = Time.utc - time
-    minutes = diff.total_minutes.to_i
-
-    if minutes < 1
-      r("time.just_now").t
-    elsif minutes < 60
-      r("time.minutes_ago").t(count: minutes)
-    elsif minutes < 1440 # 24 hours
-      hours = (minutes / 60).to_i
-      r("time.hours_ago").t(count: hours)
-    else
-      days = (minutes / 1440).to_i
-      r("time.days_ago").t(count: days)
-    end
-  end
-
   private def is_organizer?
     event.creator_id == current_user.id
-  end
-
-  private def format_datetime(time : Time)
-    time.to_s("%A %d %B %Y, %H:%M")
   end
 end

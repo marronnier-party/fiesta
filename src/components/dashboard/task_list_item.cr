@@ -8,22 +8,22 @@ class Dashboard::TaskListItem < BaseComponent
           div class: "flex-1" do
             div class: "flex items-center gap-2 mb-2" do
               h4 task.name, class: "font-semibold text-base"
-              render_status_badge
+              mount UI::StatusBadge, status: task.status, size: "sm"
             end
 
             div class: "flex flex-col gap-1 text-sm text-base-content/70" do
               if event = task.event
-                div class: "flex items-center gap-2" do
-                  icon "calendar", "w-4 h-4"
-                  text event.name
-                end
+                mount UI::InfoRow,
+                  icon_name: "calendar",
+                  text: event.name,
+                  size: "sm"
               end
 
               if category = task.category
-                div class: "flex items-center gap-2" do
-                  icon "tag", "w-4 h-4"
-                  text category
-                end
+                mount UI::InfoRow,
+                  icon_name: "tag",
+                  text: category,
+                  size: "sm"
               end
 
               if notes = task.notes
@@ -35,17 +35,6 @@ class Dashboard::TaskListItem < BaseComponent
           render_actions
         end
       end
-    end
-  end
-
-  private def render_status_badge
-    case task.status
-    when Task::Status::Pending
-      span class: "badge badge-warning badge-sm", text: "Pending"
-    when Task::Status::InProgress
-      span class: "badge badge-info badge-sm", text: "In Progress"
-    when Task::Status::Completed
-      span class: "badge badge-success badge-sm", text: "Completed"
     end
   end
 
@@ -61,14 +50,10 @@ class Dashboard::TaskListItem < BaseComponent
           para class: "text-xs text-base-content/60" do
             text "Completed"
             br
-            text format_date(completed_at)
+            text format_date_short(completed_at)
           end
         end
       end
     end
-  end
-
-  private def format_date(time : Time)
-    time.to_s("%b %-d, %Y")
   end
 end

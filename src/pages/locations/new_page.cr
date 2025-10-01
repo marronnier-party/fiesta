@@ -13,43 +13,49 @@ class Locations::NewPage < MainLayout
 
           form_for Locations::Create, class: "space-y-6" do
             # Location name
-            div class: "form-control" do
-              label r("locations.name").t, class: "label font-semibold"
-              input type: "text", name: "location:name", value: save_operation.name.value.to_s, placeholder: r("locations.placeholder.name").t, class: "input input-bordered w-full", required: true
-            end
+            mount UI::FormInput,
+              label_text: r("locations.name").t,
+              name: "location:name",
+              value: save_operation.name.value.to_s,
+              placeholder: r("locations.placeholder.name").t,
+              required: true
 
             # Address
-            div class: "form-control" do
-              label r("locations.address").t, class: "label font-semibold"
-              input type: "text", name: "location:address", value: save_operation.address.value.to_s, placeholder: r("locations.placeholder.address").t, class: "input input-bordered w-full"
-            end
+            mount UI::FormInput,
+              label_text: r("locations.address").t,
+              name: "location:address",
+              value: save_operation.address.value.to_s,
+              placeholder: r("locations.placeholder.address").t
 
             # City and Postal Code
             div class: "grid grid-cols-1 md:grid-cols-2 gap-4" do
-              div class: "form-control" do
-                label r("locations.city").t, class: "label font-semibold"
-                input type: "text", name: "location:city", value: save_operation.city.value.to_s, placeholder: r("locations.placeholder.city").t, class: "input input-bordered w-full"
-              end
+              mount UI::FormInput,
+                label_text: r("locations.city").t,
+                name: "location:city",
+                value: save_operation.city.value.to_s,
+                placeholder: r("locations.placeholder.city").t
 
-              div class: "form-control" do
-                label r("locations.postal_code").t, class: "label font-semibold"
-                input type: "text", name: "location:postal_code", value: save_operation.postal_code.value.to_s, placeholder: r("locations.placeholder.postal_code").t, class: "input input-bordered w-full"
-              end
+              mount UI::FormInput,
+                label_text: r("locations.postal_code").t,
+                name: "location:postal_code",
+                value: save_operation.postal_code.value.to_s,
+                placeholder: r("locations.placeholder.postal_code").t
             end
 
             # Country
-            div class: "form-control" do
-              label r("locations.country").t, class: "label font-semibold"
-              input type: "text", name: "location:country", value: (save_operation.country.value || "France").to_s, placeholder: r("locations.placeholder.country").t, class: "input input-bordered w-full"
-            end
+            mount UI::FormInput,
+              label_text: r("locations.country").t,
+              name: "location:country",
+              value: (save_operation.country.value || "France").to_s,
+              placeholder: r("locations.placeholder.country").t
 
             # Description
-            div class: "form-control" do
-              label r("guests.notes_optional").t, class: "label font-semibold"
-              tag "textarea", name: "location:description", class: "textarea textarea-bordered h-24", placeholder: r("locations.placeholder.description").t do
-                text save_operation.description.value || ""
-              end
-            end
+            mount UI::FormTextarea,
+              label_text: r("guests.notes_optional").t,
+              name: "location:description",
+              value: save_operation.description.value,
+              placeholder: r("locations.placeholder.description").t,
+              rows: 3
 
             # Actions
             div class: "card-actions justify-end mt-8" do

@@ -8,19 +8,29 @@ class Locations::IndexPage < MainLayout
 
   def content
     div class: "container mx-auto px-4 py-8" do
-      div class: "flex justify-between items-center mb-8" do
-        h1 r("locations.my_locations").t, class: "text-4xl font-bold"
-        link r("locations.create").t, to: Locations::New, class: "btn btn-primary"
-      end
+      mount UI::PageHeader,
+        title: r("locations.my_locations").t,
+        title_size: "4xl",
+        action_text: r("locations.create").t,
+        action_path: Locations::New
 
       # Search box
       unless locations.empty? && search_query.blank?
-        render_search_box
+        mount UI::SearchBox,
+          action: Locations::Index,
+          query: search_query,
+          placeholder: r("locations.search_placeholder").t,
+          max_width: "2xl"
       end
 
       if locations.empty?
         if search_query.blank?
-          render_empty_state
+          mount UI::EmptyState,
+            title: r("locations.no_locations").t,
+            description: r("locations.no_locations_hint").t,
+            icon_name: "map-pin",
+            action_text: r("locations.create").t,
+            action_path: Locations::New
         else
           render_no_results
         end
@@ -34,23 +44,6 @@ class Locations::IndexPage < MainLayout
     end
   end
 
-  private def render_search_box
-    form_for Locations::Index, method: "get", class: "mb-6" do
-      div class: "form-control" do
-        div class: "input-group" do
-          input type: "text",
-            name: "search",
-            value: search_query,
-            placeholder: r("locations.search_placeholder").t,
-            class: "input input-bordered w-full"
-          button type: "submit", class: "btn btn-square" do
-            icon "search", "w-5 h-5"
-          end
-        end
-      end
-    end
-  end
-
   private def render_no_results
     div class: "card bg-base-100 shadow-xl" do
       div class: "card-body text-center py-12" do
@@ -58,17 +51,6 @@ class Locations::IndexPage < MainLayout
         h2 r("locations.no_results").t, class: "text-2xl font-bold mb-2"
         para r("locations.no_results_hint").t(query: search_query), class: "text-base-content/70 mb-6"
         link r("locations.view_all").t, to: Locations::Index, class: "btn btn-ghost"
-      end
-    end
-  end
-
-  private def render_empty_state
-    div class: "card bg-base-100 shadow-xl" do
-      div class: "card-body text-center py-12" do
-        icon "map-pin", "w-16 h-16 mx-auto mb-4 text-base-content/40"
-        h2 r("locations.no_locations").t, class: "text-2xl font-bold mb-2"
-        para r("locations.no_locations_hint").t, class: "text-base-content/70 mb-6"
-        link r("locations.create").t, to: Locations::New, class: "btn btn-primary"
       end
     end
   end

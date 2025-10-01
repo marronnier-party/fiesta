@@ -36,28 +36,23 @@ class Events::CheckInPage < MainLayout
     checked_in = guests.count { |g| g.status == Guest::Status::Attended }
     expected = guests.size
 
-    div class: "stats shadow w-full" do
-      div class: "stat" do
-        div class: "stat-title" do
-          text r("checkin.checked_in").t
-        end
-        div checked_in.to_s, class: "stat-value text-success"
-      end
-
-      div class: "stat" do
-        div class: "stat-title" do
-          text r("checkin.expected").t
-        end
-        div expected.to_s, class: "stat-value text-primary"
-      end
-
-      div class: "stat" do
-        div class: "stat-title" do
-          text "Restant"
-        end
-        div (expected - checked_in).to_s, class: "stat-value text-warning"
-      end
-    end
+    mount UI::StatsWidget, stats: [
+      UI::StatsWidget::Stat.new(
+        title: r("checkin.checked_in").t,
+        value: checked_in.to_s,
+        color: "text-success"
+      ),
+      UI::StatsWidget::Stat.new(
+        title: r("checkin.expected").t,
+        value: expected.to_s,
+        color: "text-primary"
+      ),
+      UI::StatsWidget::Stat.new(
+        title: "Restant",
+        value: (expected - checked_in).to_s,
+        color: "text-warning"
+      )
+    ]
   end
 
   private def render_guest_list
@@ -79,13 +74,7 @@ class Events::CheckInPage < MainLayout
 
     div class: "flex items-center justify-between p-4 bg-base-200 rounded-lg #{is_checked_in ? "bg-success/20" : ""}" do
       div class: "flex items-center gap-4" do
-        div class: "avatar placeholder" do
-          div class: "bg-neutral text-neutral-content rounded-full w-12" do
-            span do
-              text guest.user!.name[0..0].upcase
-            end
-          end
-        end
+        mount UI::Avatar, user: guest.user!, size: "lg", initials_count: 1
 
         div do
           div guest.user!.name, class: "font-semibold text-lg"

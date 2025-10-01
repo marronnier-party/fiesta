@@ -20,17 +20,15 @@ class Guests::RsvpPage < MainLayout
 
         div class: "space-y-2 text-base-content/80" do
           if start_at = guest.event!.start_at
-            div class: "flex items-center gap-2" do
-              icon "calendar", "w-5 h-5"
-              text format_date(start_at)
-            end
+            mount UI::InfoRow,
+              icon_name: "calendar",
+              text: format_datetime_with_day(start_at)
           end
 
           if location = guest.event!.location
-            div class: "flex items-center gap-2" do
-              icon "map-pin", "w-5 h-5"
-              text location.name
-            end
+            mount UI::InfoRow,
+              icon_name: "map-pin",
+              text: location.name
           end
 
           if description = guest.event!.description
@@ -50,46 +48,40 @@ class Guests::RsvpPage < MainLayout
 
         form_for Guests::Rsvp.with(guest.id), class: "space-y-6" do
           # RSVP Status
-          div class: "form-control" do
-            label r("guests.will_attend").t, class: "label font-semibold"
-
-            div class: "flex flex-col gap-3" do
-              label class: "label cursor-pointer justify-start gap-4 border-2 border-base-300 rounded-lg p-4 hover:border-primary" do
-                input type: "radio", name: "guest:status", value: Guest::Status::Confirmed.value, class: "radio radio-primary", checked: guest.status.confirmed?
-                div do
-                  span r("guests.yes_coming").t, class: "font-semibold"
-                  br
-                  span r("guests.yes_coming_subtitle").t, class: "text-sm text-base-content/60"
-                end
-              end
-
-              label class: "label cursor-pointer justify-start gap-4 border-2 border-base-300 rounded-lg p-4 hover:border-error" do
-                input type: "radio", name: "guest:status", value: Guest::Status::Declined.value, class: "radio radio-error", checked: guest.status.declined?
-                div do
-                  span r("guests.no_sorry").t, class: "font-semibold"
-                  br
-                  span r("guests.no_sorry_subtitle").t, class: "text-sm text-base-content/60"
-                end
-              end
-            end
-          end
+          mount UI::RadioGroup,
+            label_text: r("guests.will_attend").t,
+            name: "guest:status",
+            selected_value: guest.status.value.to_s,
+            options: [
+              UI::RadioGroup::Option.new(
+                value: Guest::Status::Confirmed.value.to_s,
+                label: r("guests.yes_coming").t,
+                subtitle: r("guests.yes_coming_subtitle").t,
+                color: "primary"
+              ),
+              UI::RadioGroup::Option.new(
+                value: Guest::Status::Declined.value.to_s,
+                label: r("guests.no_sorry").t,
+                subtitle: r("guests.no_sorry_subtitle").t,
+                color: "error"
+              )
+            ]
 
           # Guest Count (only show if attending)
-          div class: "form-control", id: "guest-count-section" do
-            label r("guests.how_many").t, class: "label font-semibold"
-            input type: "number", name: "guest:guest_count", value: guest.guest_count.to_s, min: "1", max: "20", class: "input input-bordered w-full"
-            label class: "label" do
-              span r("guests.how_many_hint").t, class: "label-text-alt"
-            end
-          end
+          mount UI::FormInput,
+            label_text: r("guests.how_many").t,
+            name: "guest:guest_count",
+            value: guest.guest_count.to_s,
+            input_type: "number",
+            hint: r("guests.how_many_hint").t
 
           # Notes
-          div class: "form-control" do
-            label r("guests.notes_optional").t, class: "label font-semibold"
-            tag "textarea", name: "guest:notes", class: "textarea textarea-bordered h-24", placeholder: r("guests.notes_placeholder").t do
-              text guest.notes || ""
-            end
-          end
+          mount UI::FormTextarea,
+            label_text: r("guests.notes_optional").t,
+            name: "guest:notes",
+            value: guest.notes,
+            placeholder: r("guests.notes_placeholder").t,
+            rows: 3
 
           # Submit buttons
           div class: "card-actions justify-end mt-6" do
@@ -101,7 +93,4 @@ class Guests::RsvpPage < MainLayout
     end
   end
 
-  private def format_date(time : Time)
-    time.to_s("%A, %B %-d, %Y at %-I:%M %p")
-  end
 end

@@ -13,16 +13,19 @@ class Profile::EditPage < MainLayout
 
           form_for Profile::Update, class: "space-y-6" do
             # Name field
-            div class: "form-control" do
-              label r("profile.name").t, class: "label font-semibold"
-              input type: "text", name: "user:name", value: user.name, class: "input input-bordered w-full", required: true
-            end
+            mount UI::FormInput,
+              label_text: r("profile.name").t,
+              name: "user:name",
+              value: user.name,
+              required: true
 
             # Email field
-            div class: "form-control" do
-              label r("profile.email").t, class: "label font-semibold"
-              input type: "email", name: "user:email", value: user.email, class: "input input-bordered w-full", required: true
-            end
+            mount UI::FormInput,
+              label_text: r("profile.email").t,
+              name: "user:email",
+              value: user.email,
+              input_type: "email",
+              required: true
 
             # Password change section
             div class: "divider" do
@@ -30,25 +33,26 @@ class Profile::EditPage < MainLayout
             end
 
             # Current password (required if changing password)
-            div class: "form-control" do
-              label r("profile.current_password").t, class: "label font-semibold"
-              input type: "password", name: "user:current_password", class: "input input-bordered w-full", placeholder: r("profile.current_password").t
-              label class: "label" do
-                span r("profile.required_for_password_change").t, class: "label-text-alt"
-              end
-            end
+            mount UI::FormInput,
+              label_text: r("profile.current_password").t,
+              name: "user:current_password",
+              input_type: "password",
+              placeholder: r("profile.current_password").t,
+              hint: r("profile.required_for_password_change").t
 
             # New password
-            div class: "form-control" do
-              label r("profile.new_password").t, class: "label font-semibold"
-              input type: "password", name: "user:password", class: "input input-bordered w-full", placeholder: r("profile.new_password").t
-            end
+            mount UI::FormInput,
+              label_text: r("profile.new_password").t,
+              name: "user:password",
+              input_type: "password",
+              placeholder: r("profile.new_password").t
 
             # Confirm new password
-            div class: "form-control" do
-              label r("profile.new_password_confirmation").t, class: "label font-semibold"
-              input type: "password", name: "user:password_confirmation", class: "input input-bordered w-full", placeholder: r("profile.new_password_confirmation").t
-            end
+            mount UI::FormInput,
+              label_text: r("profile.new_password_confirmation").t,
+              name: "user:password_confirmation",
+              input_type: "password",
+              placeholder: r("profile.new_password_confirmation").t
 
             # Submit buttons
             div class: "card-actions justify-end mt-6" do

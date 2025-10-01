@@ -13,52 +13,44 @@ class Events::NewPage < MainLayout
 
           form_for Events::Create, class: "space-y-6" do
             # Event name
-            div class: "form-control" do
-              label r("events.name").t, class: "label font-semibold"
-              input type: "text", name: "event:name", value: save_operation.name.value.to_s, placeholder: r("events.placeholder.name").t, class: "input input-bordered w-full", required: true
-            end
+            mount UI::FormInput,
+              label_text: r("events.name").t,
+              name: "event:name",
+              value: save_operation.name.value.to_s,
+              placeholder: r("events.placeholder.name").t,
+              required: true
 
             # Description
-            div class: "form-control" do
-              label r("events.description").t, class: "label font-semibold"
-              tag "textarea", name: "event:description", class: "textarea textarea-bordered h-32", placeholder: r("events.placeholder.description").t do
-                text save_operation.description.value || ""
-              end
-            end
+            mount UI::FormTextarea,
+              label_text: r("events.description").t,
+              name: "event:description",
+              value: save_operation.description.value,
+              placeholder: r("events.placeholder.description").t,
+              rows: 4
 
             # Date and time
             div class: "grid grid-cols-1 md:grid-cols-2 gap-4" do
-              div class: "form-control" do
-                label r("events.start_at").t, class: "label font-semibold"
-                input type: "datetime-local", name: "event:start_at", value: format_datetime_input(save_operation.start_at.value), class: "input input-bordered w-full"
-              end
+              mount UI::FormInput,
+                label_text: r("events.start_at").t,
+                name: "event:start_at",
+                value: format_datetime_input(save_operation.start_at.value),
+                input_type: "datetime-local"
 
-              div class: "form-control" do
-                label r("events.end_at").t, class: "label font-semibold"
-                input type: "datetime-local", name: "event:end_at", value: format_datetime_input(save_operation.end_at.value), class: "input input-bordered w-full"
-              end
+              mount UI::FormInput,
+                label_text: r("events.end_at").t,
+                name: "event:end_at",
+                value: format_datetime_input(save_operation.end_at.value),
+                input_type: "datetime-local"
             end
 
             # Location selection
-            div class: "form-control" do
-              label r("events.location").t, class: "label font-semibold"
-              tag "select", name: "event:location_id", class: "select select-bordered w-full" do
-                tag "option", value: "" do
-                  text r("events.select_location").t
-                end
-
-                LocationQuery.new.alphabetical.results.each do |location|
-                  tag "option", value: location.id.to_s, selected: (save_operation.location_id.value == location.id) do
-                    text location.name
-                  end
-                end
-              end
-              label class: "label" do
-                span class: "label-text-alt" do
-                  text r("events.or_create_location").t
-                end
-              end
-            end
+            mount UI::FormSelect(Location),
+              label_text: r("events.location").t,
+              name: "event:location_id",
+              options: LocationQuery.new.alphabetical.results,
+              selected_value: save_operation.location_id.value.to_s,
+              prompt: r("events.select_location").t,
+              hint: r("events.or_create_location").t
 
             # Actions
             div class: "card-actions justify-end mt-8" do
@@ -70,10 +62,5 @@ class Events::NewPage < MainLayout
         end
       end
     end
-  end
-
-  private def format_datetime_input(time : Time?) : String
-    return "" unless time
-    time.to_s("%Y-%m-%dT%H:%M")
   end
 end

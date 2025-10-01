@@ -38,6 +38,7 @@ abstract class MainLayout
       body class: "min-h-screen bg-base-200" do
         mount Shared::Navbar, current_user: current_user
         mount Shared::FlashMessages, context.flash
+        mount UI::ToastContainer
 
         main class: "container mx-auto px-4 py-8 max-w-7xl" do
           content

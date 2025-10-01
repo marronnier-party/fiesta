@@ -1,33 +1,69 @@
 class Locations::ShowPage < MainLayout
   needs location : Location
-  quick_def page_title, "Location with id: #{location.id}"
+
+  def page_title
+    location.name
+  end
 
   def content
-    #link "Back to all Locations", to: Locations::Index
-    h1 "Location with id: #{location.id}"
-    render_actions
-    render_location_fields
-  end
+    div class: "max-w-4xl mx-auto space-y-6" do
+      mount UI::PageHeader,
+        title: location.name,
+        action_text: r("actions.edit").t,
+        action_path: Locations::Edit.with(location.id)
 
-  def render_actions
-    section do
-      link "Edit", to: Locations::Edit.with(location.id)
-      text " | "
-      link "Delete",
-        to: Locations::Delete.with(location.id),
-        data_confirm: "Are you sure?"
-    end
-  end
+      div class: "card bg-base-100 shadow-xl" do
+        div class: "card-body" do
+          h2 r("locations.details").t, class: "card-title text-2xl mb-4"
 
-  def render_location_fields
-    ul do
-      li do
-        text "name: "
-        strong location.name.to_s
-      end
-      li do
-        text "description: "
-        strong location.description.to_s
+          div class: "space-y-4" do
+            if address = location.address
+              mount UI::InfoRow,
+                icon_name: "map-pin",
+                label: r("locations.address").t,
+                text: address,
+                size: "lg"
+            end
+
+            if city = location.city
+              mount UI::InfoRow,
+                icon_name: "building",
+                label: r("locations.city").t,
+                text: city,
+                size: "lg"
+            end
+
+            if postal_code = location.postal_code
+              mount UI::InfoRow,
+                icon_name: "mail",
+                label: r("locations.postal_code").t,
+                text: postal_code,
+                size: "lg"
+            end
+
+            if country = location.country
+              mount UI::InfoRow,
+                icon_name: "globe",
+                label: r("locations.country").t,
+                text: country,
+                size: "lg"
+            end
+
+            if description = location.description
+              div do
+                label r("locations.description").t, class: "font-semibold"
+                para description, class: "text-base-content/80 mt-1"
+              end
+            end
+          end
+
+          div class: "card-actions justify-end mt-6 gap-2" do
+            link r("actions.back").t, to: Locations::Index, class: "btn btn-ghost"
+            form_for Locations::Delete.with(location.id), class: "inline" do
+              button r("actions.delete").t, type: "submit", class: "btn btn-error btn-outline", data_confirm: r("actions.confirm_delete").t
+            end
+          end
+        end
       end
     end
   end

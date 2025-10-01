@@ -16,10 +16,10 @@ class Profile::ShowPage < MainLayout
   end
 
   private def render_profile_header
-    div class: "flex items-center justify-between" do
-      h1 r("profile.title").t, class: "text-3xl font-bold"
-      link r("profile.edit_profile").t, to: Profile::Edit, class: "btn btn-primary"
-    end
+    mount UI::PageHeader,
+      title: r("profile.title").t,
+      action_text: r("profile.edit_profile").t,
+      action_path: Profile::Edit
   end
 
   private def render_profile_info
@@ -27,27 +27,21 @@ class Profile::ShowPage < MainLayout
       div class: "card-body" do
         div class: "flex items-center gap-6" do
           # Avatar
-          div class: "avatar placeholder" do
-            div class: "bg-neutral text-neutral-content rounded-full w-24" do
-              span class: "text-3xl" do
-                text user.name.split.map(&.[0]).join.upcase[0..1]
-              end
-            end
-          end
+          mount UI::Avatar, user: user, size: "xl"
 
           # User info
           div class: "flex-1" do
             h2 user.name, class: "text-2xl font-bold mb-2"
             div class: "space-y-1 text-base-content/70" do
-              div class: "flex items-center gap-2" do
-                icon "mail", "w-4 h-4"
-                text user.email
-              end
+              mount UI::InfoRow,
+                icon_name: "mail",
+                text: user.email,
+                size: "sm"
 
-              div class: "flex items-center gap-2" do
-                icon "calendar", "w-4 h-4"
-                text r("profile.member_since").t(date: format_date(user.created_at))
-              end
+              mount UI::InfoRow,
+                icon_name: "calendar",
+                text: r("profile.member_since").t(date: format_date_long(user.created_at)),
+                size: "sm"
             end
           end
         end
@@ -112,7 +106,4 @@ class Profile::ShowPage < MainLayout
     end
   end
 
-  private def format_date(time : Time)
-    time.to_s("%B %-d, %Y")
-  end
 end

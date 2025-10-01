@@ -7,10 +7,11 @@ class TaskCategories::IndexPage < MainLayout
 
   def content
     div class: "container mx-auto px-4 py-8" do
-      div class: "flex justify-between items-center mb-8" do
-        h1 r("task_categories.title").t, class: "text-4xl font-bold"
-        link r("task_categories.new").t, to: TaskCategories::New, class: "btn btn-primary"
-      end
+      mount UI::PageHeader,
+        title: r("task_categories.title").t,
+        title_size: "4xl",
+        action_text: r("task_categories.new").t,
+        action_path: TaskCategories::New
 
       if categories.empty?
         render_empty_state
@@ -25,13 +26,11 @@ class TaskCategories::IndexPage < MainLayout
   end
 
   private def render_empty_state
-    div class: "card bg-base-100 shadow-xl" do
-      div class: "card-body text-center py-12" do
-        icon "tag", "w-16 h-16 mx-auto mb-4 text-base-content/40"
-        h2 r("task_categories.no_categories").t, class: "text-2xl font-bold mb-2"
-        link r("task_categories.new").t, to: TaskCategories::New, class: "btn btn-primary mt-4"
-      end
-    end
+    mount UI::EmptyState,
+      title: r("task_categories.no_categories").t,
+      icon_name: "tag",
+      action_text: r("task_categories.new").t,
+      action_path: TaskCategories::New
   end
 
   private def render_category_card(category : TaskCategory)

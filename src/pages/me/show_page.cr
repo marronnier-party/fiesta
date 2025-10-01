@@ -29,13 +29,13 @@ class Me::ShowPage < MainLayout
 
   private def render_pending_invitations_section
     div class: "mb-8" do
-      div class: "flex items-center gap-2 mb-4" do
-        icon "alert-triangle", "w-6 h-6 text-warning"
-        h2 "Pending Invitations", class: "text-2xl font-semibold"
-      end
+      mount UI::SectionHeader,
+        title: "Pending Invitations",
+        icon_name: "alert-triangle",
+        icon_color: "text-warning"
 
       if pending_invitations.empty?
-        mount Dashboard::EmptyState,
+        mount UI::EmptyState,
           title: "No pending invitations",
           description: "You're all caught up! You'll see new event invitations here.",
           icon_name: "check-circle"
@@ -51,13 +51,13 @@ class Me::ShowPage < MainLayout
 
   private def render_confirmed_events_section
     div class: "mb-8" do
-      div class: "flex items-center gap-2 mb-4" do
-        icon "calendar", "w-6 h-6 text-primary"
-        h2 "Your Upcoming Events", class: "text-2xl font-semibold"
-      end
+      mount UI::SectionHeader,
+        title: "Your Upcoming Events",
+        icon_name: "calendar",
+        icon_color: "text-primary"
 
       if confirmed_events.empty?
-        mount Dashboard::EmptyState,
+        mount UI::EmptyState,
           title: "No upcoming events",
           description: "You haven't confirmed any events yet. Check your pending invitations above!",
           icon_name: "calendar"
@@ -73,15 +73,13 @@ class Me::ShowPage < MainLayout
 
   private def render_tasks_section
     div class: "mb-8" do
-      div class: "flex items-center justify-between mb-4" do
-        div class: "flex items-center gap-2" do
-          icon "clipboard-list", "w-6 h-6 text-info"
-          h2 "Your Tasks", class: "text-2xl font-semibold"
-        end
-      end
+      mount UI::SectionHeader,
+        title: "Your Tasks",
+        icon_name: "clipboard-list",
+        icon_color: "text-info"
 
       if user_tasks.empty?
-        mount Dashboard::EmptyState,
+        mount UI::EmptyState,
           title: "No tasks assigned",
           description: "You don't have any tasks yet. Event organizers will assign tasks as needed.",
           icon_name: "clipboard-list"

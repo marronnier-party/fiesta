@@ -24,11 +24,13 @@ class Events::InviteGuestsPage < MainLayout
   end
 
   private def render_no_users_message
-    div class: "text-center py-8" do
-      icon "users", "w-16 h-16 mx-auto mb-4 text-base-content/40"
-      para r("guests.all_invited").t, class: "text-base-content/70"
-      link r("actions.back").t, to: Events::Show.with(event.id), class: "btn btn-ghost mt-4"
-    end
+    mount UI::EmptyState,
+      title: r("guests.all_invited").t,
+      icon_name: "users",
+      action_text: r("actions.back").t,
+      action_path: Events::Show.with(event.id),
+      button_variant: "btn-ghost",
+      with_card: false
   end
 
   private def render_invite_form
@@ -36,26 +38,13 @@ class Events::InviteGuestsPage < MainLayout
       div class: "form-control" do
         label r("guests.select_guests").t, class: "label font-semibold"
 
-        div class: "space-y-2 max-h-96 overflow-y-auto" do
-          available_users.each do |user|
-            label class: "flex items-center gap-3 p-3 bg-base-200 rounded-lg cursor-pointer hover:bg-base-300" do
-              input type: "checkbox", name: "user_ids[]", value: user.id.to_s, class: "checkbox checkbox-primary"
-
-              div class: "avatar placeholder" do
-                div class: "bg-neutral text-neutral-content rounded-full w-10" do
-                  span class: "text-xs" do
-                    text user.name.split.map(&.[0]).join.upcase[0..1]
-                  end
-                end
-              end
-
-              div class: "flex-1" do
-                div user.name, class: "font-semibold"
-                small user.email, class: "text-sm text-base-content/60"
-              end
-            end
-          end
-        end
+        mount UI::CheckboxList(User),
+          items: available_users,
+          name: "user_ids[]",
+          item_value: ->(u : User) { u.id.to_s },
+          item_label: ->(u : User) { u.name },
+          item_subtitle: ->(u : User) { u.email },
+          show_avatar: true
       end
 
       div class: "card-actions justify-end mt-6" do

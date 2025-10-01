@@ -14,23 +14,18 @@ class TaskCategories::EditPage < MainLayout
 
           form_for TaskCategories::Update.with(category.id), class: "space-y-6" do
             # Category name
-            div class: "form-control" do
-              label r("task_categories.name").t, class: "label font-semibold"
-              input type: "text",
-                name: "task_category:name",
-                value: operation.name.value.to_s,
-                class: "input input-bordered w-full",
-                required: true
-            end
+            mount UI::FormInput,
+              label_text: r("task_categories.name").t,
+              name: "task_category:name",
+              value: operation.name.value.to_s,
+              required: true
 
             # Color picker
-            div class: "form-control" do
-              label r("task_categories.color").t + " (" + r("guests.notes_optional").t.downcase + ")", class: "label font-semibold"
-              input type: "color",
-                name: "task_category:color",
-                value: operation.color.value || "#3B82F6",
-                class: "input input-bordered w-full h-12"
-            end
+            mount UI::FormInput,
+              label_text: r("task_categories.color").t + " (" + r("guests.notes_optional").t.downcase + ")",
+              name: "task_category:color",
+              value: operation.color.value || "#3B82F6",
+              input_type: "color"
 
             # Actions
             div class: "card-actions justify-end mt-8" do

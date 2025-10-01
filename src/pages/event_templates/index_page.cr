@@ -7,10 +7,11 @@ class EventTemplates::IndexPage < MainLayout
 
   def content
     div class: "container mx-auto px-4 py-8" do
-      div class: "flex justify-between items-center mb-8" do
-        h1 r("event_templates.title").t, class: "text-4xl font-bold"
-        link r("event_templates.new").t, to: EventTemplates::New, class: "btn btn-primary"
-      end
+      mount UI::PageHeader,
+        title: r("event_templates.title").t,
+        title_size: "4xl",
+        action_text: r("event_templates.new").t,
+        action_path: EventTemplates::New
 
       if templates.empty?
         render_empty_state
@@ -25,14 +26,12 @@ class EventTemplates::IndexPage < MainLayout
   end
 
   private def render_empty_state
-    div class: "card bg-base-100 shadow-xl" do
-      div class: "card-body text-center py-12" do
-        icon "file-text", "w-16 h-16 mx-auto mb-4 text-base-content/40"
-        h2 r("event_templates.no_templates").t, class: "text-2xl font-bold mb-2"
-        para r("event_templates.no_templates_hint").t, class: "text-base-content/70 mb-6"
-        link r("event_templates.new").t, to: EventTemplates::New, class: "btn btn-primary"
-      end
-    end
+    mount UI::EmptyState,
+      title: r("event_templates.no_templates").t,
+      description: r("event_templates.no_templates_hint").t,
+      icon_name: "file-text",
+      action_text: r("event_templates.new").t,
+      action_path: EventTemplates::New
   end
 
   private def render_template_card(template : EventTemplate)
@@ -45,21 +44,21 @@ class EventTemplates::IndexPage < MainLayout
         end
 
         if location = template.location
-          div class: "flex items-center gap-2 text-sm text-base-content/60 mb-2" do
-            icon "map-pin", "w-4 h-4"
-            span location.name
-          end
+          mount UI::InfoRow,
+            icon_name: "map-pin",
+            text: location.name,
+            size: "sm"
         end
 
         div class: "flex gap-2 text-sm text-base-content/60 mb-4" do
-          div class: "flex items-center gap-1" do
-            icon "clipboard-list", "w-4 h-4"
-            span "#{template.task_list.size} #{r("tasks.tasks").t}"
-          end
-          div class: "flex items-center gap-1" do
-            icon "users", "w-4 h-4"
-            span "#{template.guest_ids.size} #{r("guests.guests").t}"
-          end
+          mount UI::InfoRow,
+            icon_name: "clipboard-list",
+            text: "#{template.task_list.size} #{r("tasks.tasks").t}",
+            size: "sm"
+          mount UI::InfoRow,
+            icon_name: "users",
+            text: "#{template.guest_ids.size} #{r("guests.guests").t}",
+            size: "sm"
         end
 
         div class: "card-actions justify-end" do

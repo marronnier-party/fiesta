@@ -9,16 +9,19 @@ class Tasks::IndexPage < MainLayout
   def content
     div class: "space-y-6" do
       # Header
-      div class: "flex items-center justify-between" do
-        h1 r("tasks.my_tasks").t, class: "text-3xl font-bold"
-      end
+      mount UI::PageHeader, title: r("tasks.my_tasks").t
 
       # Filter tabs
-      render_filter_tabs
+      mount UI::FilterTabs,
+        tabs: filter_tabs,
+        current_value: current_filter
 
       # Tasks list
       if tasks.empty?
-        render_empty_state
+        mount UI::EmptyState,
+          title: r("dashboard.no_tasks").t,
+          icon_name: "clipboard-list",
+          with_card: false
       else
         div class: "space-y-4" do
           tasks.each do |task|
@@ -29,19 +32,29 @@ class Tasks::IndexPage < MainLayout
     end
   end
 
-  private def render_filter_tabs
-    div class: "tabs tabs-boxed w-full" do
-      link_to_filter("all", r("tasks.filters.all").t)
-      link_to_filter("pending", r("tasks.filters.pending").t)
-      link_to_filter("in_progress", r("tasks.filters.in_progress").t)
-      link_to_filter("completed", r("tasks.filters.completed").t)
-    end
-  end
-
-  private def link_to_filter(status : String, label : String)
-    link label,
-      to: Tasks::Index.with(status: status),
-      class: "tab #{current_filter == status ? "tab-active" : ""}"
+  private def filter_tabs
+    [
+      UI::FilterTabs::Tab.new(
+        label: r("tasks.filters.all").t,
+        value: "all",
+        path: Tasks::Index.with(status: "all").path
+      ),
+      UI::FilterTabs::Tab.new(
+        label: r("tasks.filters.pending").t,
+        value: "pending",
+        path: Tasks::Index.with(status: "pending").path
+      ),
+      UI::FilterTabs::Tab.new(
+        label: r("tasks.filters.in_progress").t,
+        value: "in_progress",
+        path: Tasks::Index.with(status: "in_progress").path
+      ),
+      UI::FilterTabs::Tab.new(
+        label: r("tasks.filters.completed").t,
+        value: "completed",
+        path: Tasks::Index.with(status: "completed").path
+      ),
+    ]
   end
 
   private def render_task_card(task : Task)
@@ -68,7 +81,7 @@ class Tasks::IndexPage < MainLayout
             end
           end
 
-          render_task_status_badge(task)
+          mount UI::StatusBadge, status: task.status, size: "lg"
         end
 
         # Task actions
@@ -85,24 +98,6 @@ class Tasks::IndexPage < MainLayout
           end
         end
       end
-    end
-  end
-
-  private def render_task_status_badge(task : Task)
-    case task.status
-    when Task::Status::Pending
-      span r("tasks.statuses.pending").t, class: "badge badge-ghost badge-lg"
-    when Task::Status::InProgress
-      span r("tasks.statuses.in_progress").t, class: "badge badge-warning badge-lg"
-    when Task::Status::Completed
-      span r("tasks.statuses.completed").t, class: "badge badge-success badge-lg"
-    end
-  end
-
-  private def render_empty_state
-    div class: "text-center py-16" do
-      icon "clipboard-list", "w-16 h-16 mx-auto mb-4 opacity-40"
-      para r("dashboard.no_tasks").t, class: "text-xl text-base-content/60"
     end
   end
 end

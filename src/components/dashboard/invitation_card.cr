@@ -31,17 +31,17 @@ class Dashboard::InvitationCard < BaseComponent
   private def render_event_details
     div class: "space-y-2" do
       if start_at = guest.event!.start_at
-        div class: "flex items-center gap-2 text-base-content/80" do
-          icon "calendar", "w-5 h-5"
-          text format_date(start_at)
-        end
+        mount UI::InfoRow,
+          icon_name: "calendar",
+          text: format_datetime_full(start_at),
+          icon_color: "text-base-content/80"
       end
 
       if location = guest.event!.location
-        div class: "flex items-center gap-2 text-base-content/80" do
-          icon "map-pin", "w-5 h-5"
-          text location.name
-        end
+        mount UI::InfoRow,
+          icon_name: "map-pin",
+          text: location.name,
+          icon_color: "text-base-content/80"
       end
 
       if description = guest.event!.description
@@ -50,9 +50,5 @@ class Dashboard::InvitationCard < BaseComponent
         end
       end
     end
-  end
-
-  private def format_date(time : Time)
-    time.to_s("%B %-d, %Y at %-I:%M %p")
   end
 end
