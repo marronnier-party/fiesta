@@ -17,8 +17,8 @@ class UI::PageHeader < BaseComponent
 
       if (action_text_value = action_text) && (path = action_path)
         link to: path, class: "btn btn-primary" do
-          if icon_name = action_icon
-            icon icon_name, "w-5 h-5 mr-2"
+          if icon_value = action_icon
+            icon icon_value, "w-5 h-5 mr-2"
           end
           text action_text_value
         end

@@ -11,7 +11,7 @@ class EventTemplates::IndexPage < MainLayout
         title: r("event_templates.title").t,
         title_size: "4xl",
         action_text: r("event_templates.new").t,
-        action_path: EventTemplates::New
+        action_path: EventTemplates::New.with
 
       if templates.empty?
         render_empty_state
@@ -31,7 +31,7 @@ class EventTemplates::IndexPage < MainLayout
       description: r("event_templates.no_templates_hint").t,
       icon_name: "file-text",
       action_text: r("event_templates.new").t,
-      action_path: EventTemplates::New
+      action_path: EventTemplates::New.with
   end
 
   private def render_template_card(template : EventTemplate)

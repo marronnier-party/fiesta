@@ -20,15 +20,13 @@ class UI::InlineEdit < BaseComponent
       end
 
       # Edit mode
-      form **attrs(
-        class: "flex gap-2",
+      form class: "flex gap-2",
         x_show: "editing",
         x_cloak: true,
         hx_put: @update_url,
         hx_swap: "none",
         "@htmx:before-request": "saving = true",
-        "@htmx:after-request.window": "handleResponse($event)"
-      ) do
+        "@htmx:after-request.window": "handleResponse($event)" do
 
         if @multiline
           tag "textarea",

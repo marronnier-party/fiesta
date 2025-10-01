@@ -1,6 +1,11 @@
 class Tasks::Start < BrowserAction
   include RequireTaskFromId
 
+  # Preload associations needed for authorization
+  private def task_query
+    TaskQuery.new.preload_event.preload_guest
+  end
+
   post "/tasks/:task_id/start" do
     authorize task, policy: TaskPolicy, query: :start?
 

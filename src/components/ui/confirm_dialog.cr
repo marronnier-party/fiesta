@@ -7,7 +7,7 @@ class UI::ConfirmDialog < BaseComponent
   needs confirm_class : String = "btn-error"
 
   def render
-    dialog **attrs(
+    tag "dialog", options: attrs(
       id: "modal-#{id}",
       class: "modal",
       x_data: dialog_data,

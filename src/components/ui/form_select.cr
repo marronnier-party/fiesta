@@ -43,22 +43,26 @@ class UI::FormSelect(T) < BaseComponent
   end
 
   private def get_option_value(option)
-    if proc = @option_value
-      proc.call(option)
-    elsif option.is_a?(Tuple)
+    if option.is_a?(Tuple)
       option[0]
-    else
+    elsif proc = @option_value
+      proc.call(option)
+    elsif option.responds_to?(:id)
       option.id.to_s
+    else
+      option.to_s
     end
   end
 
   private def get_option_label(option)
-    if proc = @option_label
-      proc.call(option)
-    elsif option.is_a?(Tuple)
+    if option.is_a?(Tuple)
       option[1]
-    else
+    elsif proc = @option_label
+      proc.call(option)
+    elsif option.responds_to?(:name)
       option.name.to_s
+    else
+      option.to_s
     end
   end
 end

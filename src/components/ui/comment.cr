@@ -1,5 +1,5 @@
 class UI::Comment < BaseComponent
-  needs comment : Comment
+  needs comment : ::Comment
 
   def render
     div class: "flex gap-3 p-3 bg-base-100 rounded-lg" do

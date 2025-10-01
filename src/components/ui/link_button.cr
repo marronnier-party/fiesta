@@ -9,14 +9,18 @@ class UI::LinkButton < BaseComponent
 
   def render
     link to: to, class: button_classes do
-      if icon_name && icon_position == "left"
-        icon icon_name, icon_size_class + " mr-2"
+      if icon_value = icon_name
+        if icon_position == "left"
+          icon icon_value, icon_size_class + " mr-2"
+        end
       end
 
       self.text text
 
-      if icon_name && icon_position == "right"
-        icon icon_name, icon_size_class + " ml-2"
+      if icon_value = icon_name
+        if icon_position == "right"
+          icon icon_value, icon_size_class + " ml-2"
+        end
       end
     end
   end

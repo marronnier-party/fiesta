@@ -9,6 +9,9 @@ en:
     sign_in: "Sign In"
 
   # Common actions
+  search:
+    guests: "Search guests..."
+
   actions:
     save: "Save"
     cancel: "Cancel"
@@ -20,6 +23,7 @@ en:
     confirm_delete: "Are you sure you want to delete?"
     back: "Back"
     submit: "Submit"
+    add: "Add"
 
   # Dashboard
   dashboard:
@@ -41,6 +45,8 @@ en:
     show: "Event Details"
     name: "Event Name"
     description: "Description"
+    add_description: "Add a description..."
+    no_description: "No description"
     start_at: "Start Date & Time"
     end_at: "End Date & Time"
     location: "Location"
@@ -198,6 +204,7 @@ en:
     complete: "Complete Task"
     mark_complete: "Mark as Complete"
     start_task: "Start Task"
+    complete_task: "Complete Task"
     name: "Task Name"
     description: "Description"
     cost: "Cost"
@@ -205,6 +212,7 @@ en:
     completed_at: "Completed At"
     assigned_to: "Assigned To"
     assign_to: "Assign To"
+    assignee: "Assignee"
     amount_spent: "Amount spent (optional)"
     amount_spent_hint: "Enter how much you spent on this task"
     notes_placeholder: "Any comments or details..."
@@ -216,11 +224,16 @@ en:
     updated_successfully: "Task updated successfully!"
     update_failed: "Could not update task"
     deleted_successfully: "Task deleted successfully!"
+    delete_confirm: "Are you sure you want to delete '%{name}'?"
     not_found: "Task not found"
     not_assigned: "This task is not assigned"
     reassign: "Reassign"
     reassign_task: "Reassign Task"
     reassigned_successfully: "Task reassigned successfully!"
+    filter_by_status: "Filter by status"
+    all_guests: "All guests"
+    confirmed_guests: "Confirmed guests"
+    pending_guests: "Pending guests"
     reassign_failed: "Failed to reassign task"
     guest_not_found: "Guest not found"
     select_assignee: "Select someone..."
@@ -492,6 +505,7 @@ en:
   messaging:
     title: "Messages"
     send_message: "Send Message"
+    message_label: "Message"
     message_placeholder: "Write your message..."
     no_messages: "No messages yet"
     message_sent: "Message sent successfully"

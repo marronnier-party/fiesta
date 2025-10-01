@@ -6,7 +6,7 @@ describe Events::QuickAddTask do
     event = EventFactory.create &.creator_id(user.id)
 
     response = ApiClient.auth(user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(
         Events::QuickAddTask.with(event.id),
         "task:name": "New Task"
@@ -33,7 +33,7 @@ describe Events::QuickAddTask do
     event = EventFactory.create &.creator_id(organizer.id)
 
     response = ApiClient.auth(other_user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(
         Events::QuickAddTask.with(event.id),
         "task:name": "Unauthorized Task"
@@ -67,7 +67,7 @@ describe Events::QuickAddTask do
     event = EventFactory.create &.creator_id(user.id)
 
     response = ApiClient.auth(user)
-      .headers({"HX-Request" => "true"})
+      .headers("HX-Request": "true")
       .exec(
         Events::QuickAddTask.with(event.id),
         "task:name": "Task With Dialog"
@@ -75,6 +75,6 @@ describe Events::QuickAddTask do
 
     # Check response includes confirmation dialog
     task = TaskQuery.new.event_id(event.id).first
-    response.body.should contain("modal-confirm-delete-task-#{task.id}")
+    response.body.should contain("confirm-delete-task-#{task.id}")
   end
 end

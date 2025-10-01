@@ -7,7 +7,7 @@ class UI::InfoRow < BaseComponent
 
   def render
     div class: "flex items-center gap-#{gap_size}" do
-      icon icon_name, "#{icon_size_class} #{icon_color}"
+      icon @icon_name, "#{icon_size_class} #{@icon_color}"
 
       if label_text = label
         div do

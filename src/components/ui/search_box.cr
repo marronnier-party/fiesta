@@ -1,12 +1,12 @@
 class UI::SearchBox < BaseComponent
-  needs action : Lucky::Action.class | String
+  needs action : String
   needs query : String?
   needs placeholder : String
   needs name : String = "search"
   needs max_width : String = "md"
 
   def render
-    form method: "get", action: get_path, class: "max-w-#{@max_width}" do
+    form method: "get", action: @action, class: "max-w-#{@max_width}" do
       div class: "form-control" do
         div class: "input-group" do
           input type: "text", name: @name, value: @query || "",
@@ -17,9 +17,5 @@ class UI::SearchBox < BaseComponent
         end
       end
     end
-  end
-
-  private def get_path
-    @action.is_a?(String) ? @action : @action.path
   end
 end

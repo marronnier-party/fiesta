@@ -10,22 +10,21 @@ class Guests::UpdateStatus < BrowserAction
       else
         redirect_back fallback: Home::Index
       end
-      return
-    end
-
-    # Parse and update status
-    status_value = params.get("status")
-    SaveGuest.update!(guest, status: Guest::Status.parse(status_value))
-
-    if htmx_request?
-      # Return just the updated guest row
-      html Guests::GuestRow,
-        guest: guest.reload,
-        current_user: current_user,
-        is_organizer: true,
-        event: event
     else
-      redirect_back fallback: Events::Show.with(guest.event_id)
+      # Parse and update status
+      status_value = params.get("status")
+      SaveGuest.update!(guest, status: Guest::Status.parse(status_value))
+
+      if htmx_request?
+        # Return just the updated guest row
+        component Guests::GuestRow,
+          guest: guest.reload,
+          current_user: current_user,
+          is_organizer: true,
+          event: event
+      else
+        redirect_back fallback: Events::Show.with(guest.event_id)
+      end
     end
   end
 end

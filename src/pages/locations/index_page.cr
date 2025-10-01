@@ -17,7 +17,7 @@ class Locations::IndexPage < MainLayout
       # Search box
       unless locations.empty? && search_query.blank?
         mount UI::SearchBox,
-          action: Locations::Index,
+          action: Locations::Index.path,
           query: search_query,
           placeholder: r("locations.search_placeholder").t,
           max_width: "2xl"

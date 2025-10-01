@@ -167,12 +167,10 @@ class Events::ShowPage < MainLayout
   end
 
   private def render_guest_stats
-    div **attrs(
-      id: "guest-stats",
+    div id: "guest-stats",
       hx_get: Events::GuestStats.with(event.id).path,
       hx_trigger: "every 30s",
-      hx_swap: "innerHTML"
-    ) do
+      hx_swap: "innerHTML" do
       render_guest_stats_content
     end
   end
@@ -645,15 +643,13 @@ class Events::ShowPage < MainLayout
   end
 
   private def render_quick_add_task_form
-    form **attrs(
-      class: "space-y-3",
+    form class: "space-y-3",
       hx_post: Events::QuickAddTask.with(event.id).path,
       hx_target: "#task-list",
       hx_swap: "afterbegin",
       x_data: "{ taskName: '', submitting: false }",
       "@htmx:before-request": "submitting = true",
-      "@htmx:after-request": "submitting = false; taskName = ''; showQuickAdd = false"
-    ) do
+      "@htmx:after-request": "submitting = false; taskName = ''; showQuickAdd = false" do
       div class: "form-control" do
         label r("tasks.name").t, class: "label label-text font-semibold"
         input type: "text",

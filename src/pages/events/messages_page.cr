@@ -61,7 +61,7 @@ class Events::MessagesPage < MainLayout
           end
           para message.content, class: "text-sm whitespace-pre-wrap"
           small class: "text-xs opacity-70 mt-1 block" do
-            text format_time_ago(message.created_at)
+            text format_relative_time(message.created_at)
           end
         end
       end
@@ -73,6 +73,7 @@ class Events::MessagesPage < MainLayout
       div class: "card-body" do
         form_for EventMessages::Create.with(event.id) do
           mount UI::FormTextarea,
+            label_text: r("messaging.message_label").t,
             name: "content",
             placeholder: r("messaging.message_placeholder").t,
             rows: 3,

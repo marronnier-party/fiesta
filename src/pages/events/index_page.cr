@@ -23,7 +23,7 @@ class Events::IndexPage < MainLayout
 
   private def render_search
     mount UI::SearchBox,
-      action: Events::Index,
+      action: Events::Index.path,
       query: search_query,
       placeholder: r("events.search_placeholder").t
   end
@@ -32,7 +32,7 @@ class Events::IndexPage < MainLayout
     mount UI::PageHeader,
       title: r("events.my_events").t,
       action_text: r("nav.create_event").t,
-      action_path: Events::New,
+      action_path: Events::New.with,
       action_icon: "plus"
   end
 
@@ -54,7 +54,7 @@ class Events::IndexPage < MainLayout
       description: r("events.no_events_hint").t,
       icon_name: "calendar",
       action_text: r("nav.create_event").t,
-      action_path: Events::New
+      action_path: Events::New.with
   end
 
   private def render_event_card(event : Event)

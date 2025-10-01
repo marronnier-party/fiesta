@@ -37,8 +37,9 @@ class Tasks::TaskCard < BaseComponent
             end
 
             # Expand indicator
-            icon "chevron-down",
-                 "w-4 h-4 transition-transform",
+            mount UI::Icon,
+                 name: "chevron-down",
+                 classes: "w-4 h-4 transition-transform",
                  ":class": "{ 'rotate-180': expanded }"
           end
         end
@@ -67,7 +68,7 @@ class Tasks::TaskCard < BaseComponent
           end
 
           # Add comment form with htmx
-          if can_comment
+          if @can_comment
             render_comment_form
           end
         end
@@ -81,21 +82,19 @@ class Tasks::TaskCard < BaseComponent
       if tg.user_id == current_user.id
         case task.status
         when Task::Status::Pending
-          button r("tasks.start_task").t, **attrs(
+          button r("tasks.start_task").t,
             class: "btn btn-sm btn-primary",
             hx_post: Tasks::Start.with(task.id).path,
             hx_target: "#task-#{task.id}",
             hx_swap: "outerHTML",
             "@htmx:before-request": "processing = true"
-          )
         when Task::Status::InProgress
-          button r("tasks.complete_task").t, **attrs(
+          button r("tasks.complete_task").t,
             class: "btn btn-sm btn-success",
             hx_post: Tasks::Complete.with(task.id).path,
             hx_target: "#task-#{task.id}",
             hx_swap: "outerHTML",
             "@htmx:before-request": "processing = true"
-          )
         else
           render_task_status_badge
         end
@@ -107,7 +106,7 @@ class Tasks::TaskCard < BaseComponent
     end
 
     # Organizer actions
-    if is_organizer
+    if @is_organizer
       render_organizer_actions
     end
   end
@@ -132,15 +131,14 @@ class Tasks::TaskCard < BaseComponent
           # Filter dropdown
           div class: "form-control" do
             label r("tasks.filter_by_status").t, class: "label label-text-alt"
-            tag "select", **attrs(
+            tag "select",
               name: "status",
               class: "select select-bordered select-sm w-full",
               hx_get: Tasks::FilterAssignees.with(task.event_id).path,
               hx_trigger: "change",
               hx_target: "#assignee-select-#{task.id}",
               hx_swap: "innerHTML",
-              hx_include: "[name='status']"
-            ) do
+              hx_include: "[name='status']" do
               tag "option", value: "all", text: r("tasks.all_guests").t
               tag "option", value: "confirmed", text: r("tasks.confirmed_guests").t
               tag "option", value: "pending", text: r("tasks.pending_guests").t
@@ -179,13 +177,11 @@ class Tasks::TaskCard < BaseComponent
   end
 
   private def render_comment_form
-    form **attrs(
-      class: "space-y-2",
-      hx_post: Comments::Create.path,
+    form class: "space-y-2",
+      hx_post: ::Comments::Create.path,
       hx_target: "#task-#{task.id}-comments",
       hx_swap: "beforeend",
-      x_data: "{ content: '' }"
-    ) do
+      x_data: "{ content: '' }" do
 
       input type: "hidden", name: "comment:commentable_type", value: "Task"
       input type: "hidden", name: "comment:commentable_id", value: task.id.to_s

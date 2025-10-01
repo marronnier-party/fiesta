@@ -31,7 +31,7 @@ class Comments::Create < BrowserAction
       if operation.saved?
         if htmx_request?
           # Return just the new comment for htmx
-          html UI::Comment, comment: comment.not_nil!
+          component UI::Comment, comment: comment.not_nil!
         else
           flash.success = r("comments.created_successfully").t
           # Redirect back to the appropriate page

@@ -9,6 +9,9 @@ fr:
     sign_in: "Connexion"
 
   # Common actions
+  search:
+    guests: "Rechercher des invités..."
+
   actions:
     save: "Enregistrer"
     cancel: "Annuler"
@@ -20,6 +23,7 @@ fr:
     confirm_delete: "Êtes-vous sûr de vouloir supprimer ?"
     back: "Retour"
     submit: "Soumettre"
+    add: "Ajouter"
 
   # Dashboard
   dashboard:
@@ -41,6 +45,8 @@ fr:
     show: "Détails de l'événement"
     name: "Nom de l'événement"
     description: "Description"
+    add_description: "Ajouter une description..."
+    no_description: "Pas de description"
     start_at: "Date et heure de début"
     end_at: "Date et heure de fin"
     location: "Lieu"
@@ -198,6 +204,7 @@ fr:
     complete: "Terminer la tâche"
     mark_complete: "Marquer comme terminée"
     start_task: "Commencer la tâche"
+    complete_task: "Terminer la tâche"
     name: "Nom de la tâche"
     description: "Description"
     cost: "Coût"
@@ -205,6 +212,7 @@ fr:
     completed_at: "Terminée le"
     assigned_to: "Assignée à"
     assign_to: "Assigner à"
+    assignee: "Assigné"
     amount_spent: "Montant dépensé (optionnel)"
     amount_spent_hint: "Indiquez combien vous avez dépensé pour cette tâche"
     notes_placeholder: "Commentaires ou détails..."
@@ -216,11 +224,16 @@ fr:
     updated_successfully: "Tâche mise à jour avec succès !"
     update_failed: "Impossible de mettre à jour la tâche"
     deleted_successfully: "Tâche supprimée avec succès !"
+    delete_confirm: "Êtes-vous sûr de vouloir supprimer '%{name}' ?"
     not_found: "Tâche non trouvée"
     not_assigned: "Cette tâche n'est pas assignée"
     reassign: "Réassigner"
     reassign_task: "Réassigner la tâche"
     reassigned_successfully: "Tâche réassignée avec succès !"
+    filter_by_status: "Filtrer par statut"
+    all_guests: "Tous les invités"
+    confirmed_guests: "Invités confirmés"
+    pending_guests: "Invités en attente"
     reassign_failed: "Échec de la réassignation de la tâche"
     guest_not_found: "Invité non trouvé"
     select_assignee: "Sélectionner une personne..."
@@ -492,6 +505,7 @@ fr:
   messaging:
     title: "Messages"
     send_message: "Envoyer un message"
+    message_label: "Message"
     message_placeholder: "Écrivez votre message..."
     no_messages: "Aucun message pour le moment"
     message_sent: "Message envoyé avec succès"

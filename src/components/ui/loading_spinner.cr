@@ -13,7 +13,7 @@ class UI::LoadingSpinner < BaseComponent
       "w-8 h-8"
     end
 
-    visibility = show_by_default ? "" : "hidden"
+    visibility = @show_by_default ? "" : "hidden"
 
     span class: "loading loading-spinner #{size_class} #{@classes} htmx-indicator #{visibility}",
          role: "status",

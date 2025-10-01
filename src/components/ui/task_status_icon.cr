@@ -6,7 +6,7 @@ class UI::TaskStatusIcon < BaseComponent
     icon icon_name, "#{icon_size_class} #{icon_color}"
   end
 
-  private def icon_name
+  private def icon_name : String
     case status
     when Task::Status::Pending
       "circle"
@@ -14,6 +14,8 @@ class UI::TaskStatusIcon < BaseComponent
       "clock"
     when Task::Status::Completed
       "check-circle"
+    else
+      "circle"
     end
   end
 

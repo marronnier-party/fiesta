@@ -23,7 +23,7 @@ class Guests::GuestRow < BaseComponent
       div class: "flex items-center gap-2" do
         mount UI::StatusBadge, status: guest.status
 
-        if is_organizer
+        if @is_organizer
           render_status_controls
         end
 
@@ -45,20 +45,19 @@ class Guests::GuestRow < BaseComponent
            style: "display: none;" do
 
         Guest::Status.values.each do |status|
-          button status.to_s, **attrs(
+          button status.to_s,
             class: "btn btn-sm btn-ghost justify-start",
             hx_put: Guests::UpdateStatus.with(guest.id).path,
             hx_vals: {"status" => status.to_s}.to_json,
             hx_target: "#guest-#{guest.id}",
             hx_swap: "outerHTML"
-          )
         end
       end
     end
   end
 
   private def show_attendance_controls?
-    is_organizer && event.start_at && event.start_at.not_nil! < Time.utc
+    @is_organizer && event.start_at && event.start_at.not_nil! < Time.utc
   end
 
   private def render_attendance_controls
