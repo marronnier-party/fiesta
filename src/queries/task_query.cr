@@ -31,4 +31,8 @@ class TaskQuery < Task::BaseQuery
   def ordered_by_position
     order_by(:position, :asc)
   end
+
+  def with_full_context
+    preload_event.preload_guest
+  end
 end

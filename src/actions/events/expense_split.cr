@@ -1,9 +1,7 @@
 class Events::ExpenseSplit < BrowserAction
-  get "/events/:event_id/expense_split" do
-    event = EventQuery.new
-      .preload_creator
-      .find(event_id)
+  include RequireEventWithCreator
 
+  get "/events/:event_id/expense_split" do
     authorize event, policy: EventPolicy, query: :expense_split?
 
     # Get confirmed guests

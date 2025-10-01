@@ -1,9 +1,11 @@
 class Guests::CheckIn < BrowserAction
-  post "/guests/:guest_id/checkin" do
-    guest = GuestQuery.new
-      .preload_event
-      .find(guest_id)
+  include RequireGuestFromId
 
+  private def guest_query
+    GuestQuery.new.preload_event
+  end
+
+  post "/guests/:guest_id/checkin" do
     authorize guest, policy: GuestPolicy, query: :check_in?
 
     event = guest.event!

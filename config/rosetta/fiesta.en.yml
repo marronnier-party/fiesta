@@ -56,6 +56,7 @@ en:
     duplicate_event: "Duplicate Event"
     duplicated_successfully: "Event duplicated successfully"
     duplicate_failed: "Could not duplicate event"
+    not_found: "Event not found"
     organizer_notes: "Organizer Notes"
     organizer_notes_hint: "These notes are only visible to you"
     organizer_notes_placeholder: "Private notes on planning, ideas, reminders..."
@@ -425,6 +426,7 @@ en:
     enable: "Enable Secret Santa"
     disable: "Disable Secret Santa"
     enabled: "Secret Santa enabled"
+    already_enabled: "Secret Santa is already enabled"
     disabled: "Secret Santa disabled"
     gift_budget: "Gift Budget"
     rules: "Rules"
@@ -437,14 +439,18 @@ en:
       pending: "Pending"
       purchased: "Purchased"
       given: "Given"
+    status_updated: "Status updated successfully"
     assignments_created: "Assignments created successfully"
+    assignments_failed: "Failed to create assignments"
+    min_participants: "Need at least 2 confirmed guests for Secret Santa"
     reveal_date: "Reveal Date"
 
   # Calendar Export
   calendar:
     export: "Export to Calendar"
-    export_success: "Event exported successfully"
     ical_format: "iCal Format"
+    export_success: "Event exported successfully"
+    no_start_date: "Cannot export event without a start date"
 
   # Timeline
   timeline:
@@ -463,6 +469,7 @@ en:
     check_in: "Check In"
     undo: "Undo"
     checked_in_successfully: "Guest checked in successfully"
+    undone_successfully: "Check-in undone successfully"
 
   # Expense Split
   expense_split:

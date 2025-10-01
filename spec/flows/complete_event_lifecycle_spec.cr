@@ -43,13 +43,13 @@ describe "Complete event lifecycle flow", tags: "flow" do
     TaskQuery.new.event_id(event.id).select_count.should eq 3
 
     # Step 4: Publish event
-    event.update!(
+    SaveEvent.update!(event,
       status: Event::Status::Confirmed,
       start_at: 2.weeks.from_now,
       end_at: 2.weeks.from_now + 4.hours
     )
 
-    event.reload
+    event = EventQuery.find(event.id)
     event.status.should eq Event::Status::Confirmed
 
     # Step 5: Invite guests
@@ -77,24 +77,24 @@ describe "Complete event lifecycle flow", tags: "flow" do
     texas_option = PollOptionFactory.create &.poll_id(poll.id).option_text("Texas")
 
     # Step 7: Guests RSVP and vote
-    guest_record1.update!(status: Guest::Status::Confirmed, guest_count: 2)
+    SaveGuest.update!(guest_record1, status: Guest::Status::Confirmed, guest_count: 2)
     PollVoteFactory.create &.poll_id(poll.id).poll_option_id(bbq_option.id).user_id(guest1.id)
 
-    guest_record2.update!(status: Guest::Status::Confirmed, guest_count: 1)
+    SaveGuest.update!(guest_record2, status: Guest::Status::Confirmed, guest_count: 1)
     PollVoteFactory.create &.poll_id(poll.id).poll_option_id(bbq_option.id).user_id(guest2.id)
 
-    guest_record3.update!(status: Guest::Status::Declined)
+    SaveGuest.update!(guest_record3, status: Guest::Status::Declined)
 
     GuestQuery.new.event_id(event.id).status(Guest::Status::Confirmed).select_count.should eq 2
     GuestQuery.new.event_id(event.id).status(Guest::Status::Declined).select_count.should eq 1
 
     # Step 8: Lock poll
-    poll.update!(is_locked: true)
+    SavePoll.update!(poll, is_locked: true)
 
     # Step 9: Assign tasks to confirmed guests
-    task1.update!(guest_id: guest_record1.id)
-    task2.update!(guest_id: guest_record2.id)
-    task3.update!(guest_id: guest_record1.id)
+    SaveTask.update!(task1, guest_id: guest_record1.id)
+    SaveTask.update!(task2, guest_id: guest_record2.id)
+    SaveTask.update!(task3, guest_id: guest_record1.id)
 
     # Step 10: Send notifications
     NotificationFactory.create &.user_id(guest1.id)
@@ -110,9 +110,9 @@ describe "Complete event lifecycle flow", tags: "flow" do
       .message("You have 1 task for Summer BBQ")
 
     # Step 11: Guests work on tasks
-    task1.update!(status: Task::Status::InProgress)
-    task2.update!(status: Task::Status::Completed, completed_at: Time.utc)
-    task3.update!(status: Task::Status::Completed, completed_at: Time.utc)
+    SaveTask.update!(task1, status: Task::Status::InProgress)
+    SaveTask.update!(task2, status: Task::Status::Completed, completed_at: Time.utc)
+    SaveTask.update!(task3, status: Task::Status::Completed, completed_at: Time.utc)
 
     TaskQuery.new.event_id(event.id).status(Task::Status::Completed).select_count.should eq 2
 
@@ -145,20 +145,20 @@ describe "Complete event lifecycle flow", tags: "flow" do
       .message("Summer BBQ is tomorrow at 2pm!")
 
     # Step 14: Event day - check in guests
-    guest_record1.update!(status: Guest::Status::Attended)
-    guest_record2.update!(status: Guest::Status::Attended)
+    SaveGuest.update!(guest_record1, status: Guest::Status::Attended)
+    SaveGuest.update!(guest_record2, status: Guest::Status::Attended)
 
     GuestQuery.new.event_id(event.id).status(Guest::Status::Attended).select_count.should eq 2
 
     # Step 15: Complete remaining tasks
-    task1.update!(status: Task::Status::Completed, completed_at: Time.utc)
+    SaveTask.update!(task1, status: Task::Status::Completed, completed_at: Time.utc)
 
     TaskQuery.new.event_id(event.id).status(Task::Status::Completed).select_count.should eq 3
 
     # Step 16: Mark event as done
-    event.update!(status: Event::Status::Done)
+    SaveEvent.update!(event, status: Event::Status::Done)
 
-    event.reload
+    event = EventQuery.find(event.id)
     event.status.should eq Event::Status::Done
 
     # Final verification

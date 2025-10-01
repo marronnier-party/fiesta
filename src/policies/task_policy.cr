@@ -1,4 +1,6 @@
 class TaskPolicy < ApplicationPolicy(Task)
+  include Policies::Concerns::EventRelatedAuthorizationHelpers
+
   def show?
     # Users can view tasks if they are assigned to them or if they are the event organizer
     assigned_to_user? || organizer?
@@ -6,6 +8,11 @@ class TaskPolicy < ApplicationPolicy(Task)
 
   def complete?
     # Only the assigned user can complete a task
+    assigned_to_user?
+  end
+
+  def start?
+    # Only the assigned user can start a task
     assigned_to_user?
   end
 
@@ -23,11 +30,5 @@ class TaskPolicy < ApplicationPolicy(Task)
     return false unless current_user = user
     return false unless guest = record.guest
     guest.user_id == current_user.id
-  end
-
-  private def organizer?
-    return false unless current_user = user
-    event = record.event
-    event.creator_id == current_user.id
   end
 end

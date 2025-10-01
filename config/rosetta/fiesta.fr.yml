@@ -56,6 +56,7 @@ fr:
     duplicate_event: "Dupliquer l'événement"
     duplicated_successfully: "Événement dupliqué avec succès"
     duplicate_failed: "Impossible de dupliquer l'événement"
+    not_found: "Événement non trouvé"
     organizer_notes: "Notes de l'organisateur"
     organizer_notes_hint: "Ces notes ne sont visibles que par vous"
     organizer_notes_placeholder: "Notes privées sur la planification, idées, rappels..."
@@ -425,6 +426,7 @@ fr:
     enable: "Activer le Père Noël secret"
     disable: "Désactiver le Père Noël secret"
     enabled: "Père Noël secret activé"
+    already_enabled: "Le Père Noël secret est déjà activé"
     disabled: "Père Noël secret désactivé"
     gift_budget: "Budget cadeau"
     rules: "Règles"
@@ -437,14 +439,18 @@ fr:
       pending: "En attente"
       purchased: "Acheté"
       given: "Offert"
+    status_updated: "Statut mis à jour avec succès"
     assignments_created: "Attributions créées avec succès"
+    assignments_failed: "Échec de la création des attributions"
+    min_participants: "Il faut au moins 2 invités confirmés pour le Père Noël secret"
     reveal_date: "Date de révélation"
 
   # Calendar Export
   calendar:
     export: "Exporter au calendrier"
-    export_success: "Événement exporté avec succès"
     ical_format: "Format iCal"
+    export_success: "Événement exporté avec succès"
+    no_start_date: "Impossible d'exporter un événement sans date de début"
 
   # Timeline
   timeline:
@@ -463,6 +469,7 @@ fr:
     check_in: "Enregistrer"
     undo: "Annuler"
     checked_in_successfully: "Invité enregistré avec succès"
+    undone_successfully: "Enregistrement annulé avec succès"
 
   # Expense Split
   expense_split:

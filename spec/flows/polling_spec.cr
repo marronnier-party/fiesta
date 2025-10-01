@@ -86,9 +86,9 @@ describe "Polling flow", tags: "flow" do
     event = EventFactory.create &.creator_id(organizer.id)
     poll = PollFactory.create &.event_id(event.id).is_locked(false)
 
-    poll.update!(is_locked: true)
+    SavePoll.update!(poll, is_locked: true)
 
-    poll.reload
+    poll = PollQuery.find(poll.id)
     poll.is_locked.should be_true
   end
 
@@ -132,9 +132,9 @@ describe "Polling flow", tags: "flow" do
     PollVoteQuery.new.poll_option_id(ice_cream.id).select_count.should eq 1
 
     # Lock poll
-    poll.update!(is_locked: true)
+    SavePoll.update!(poll, is_locked: true)
 
-    poll.reload
+    poll = PollQuery.find(poll.id)
     poll.is_locked.should be_true
     poll.total_votes.should eq 5
   end

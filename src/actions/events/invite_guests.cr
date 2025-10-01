@@ -1,9 +1,7 @@
 class Events::InviteGuests < BrowserAction
-  get "/events/:event_id/invite" do
-    event = EventQuery.new
-      .preload_creator
-      .find(event_id)
+  include RequireEventWithCreator
 
+  get "/events/:event_id/invite" do
     authorize event, policy: EventPolicy, query: :invite_guests?
 
     # Get all users except those already invited

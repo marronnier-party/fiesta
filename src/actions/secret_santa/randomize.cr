@@ -21,14 +21,14 @@ class SecretSanta::Randomize < BrowserAction
       .results
 
     if participants.size < 2
-      flash.failure = "Need at least 2 confirmed guests for Secret Santa"
+      flash.failure = r("secret_santa.min_participants").t
       redirect to: SecretSanta::Show.with(event.id)
     end
 
     if SecretSantaService.randomize_assignments(secret_santa, participants)
       flash.success = r("secret_santa.assignments_created").t
     else
-      flash.failure = "Failed to create assignments"
+      flash.failure = r("secret_santa.assignments_failed").t
     end
 
     redirect to: SecretSanta::Show.with(event.id)

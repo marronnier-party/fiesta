@@ -1,4 +1,6 @@
 class GuestPolicy < ApplicationPolicy(Guest)
+  include Policies::Concerns::EventRelatedAuthorizationHelpers
+
   def rsvp?
     return false unless current_user = user
     # Users can RSVP if they are the guest
@@ -13,11 +15,5 @@ class GuestPolicy < ApplicationPolicy(Guest)
   def undo_check_in?
     # Only the event organizer can undo check-in
     organizer?
-  end
-
-  private def organizer?
-    return false unless current_user = user
-    event = record.event
-    event.creator_id == current_user.id
   end
 end

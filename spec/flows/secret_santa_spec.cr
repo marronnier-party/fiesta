@@ -92,9 +92,9 @@ describe "Secret Santa flow", tags: "flow" do
       .receiver_id(receiver.id)
       .is_gift_purchased(false)
 
-    assignment.update!(is_gift_purchased: true)
+    SaveSecretSantaAssignment.update!(assignment, is_gift_purchased: true)
 
-    assignment.reload
+    assignment = SecretSantaAssignmentQuery.find(assignment.id)
     assignment.is_gift_purchased.should be_true
   end
 
@@ -104,9 +104,9 @@ describe "Secret Santa flow", tags: "flow" do
     secret_santa = SecretSantaFactory.create &.event_id(event.id)
       .assignments_locked(false)
 
-    secret_santa.update!(assignments_locked: true)
+    SaveSecretSanta.update!(secret_santa, assignments_locked: true)
 
-    secret_santa.reload
+    secret_santa = SecretSantaQuery.find(secret_santa.id)
     secret_santa.assignments_locked.should be_true
   end
 
@@ -158,18 +158,18 @@ describe "Secret Santa flow", tags: "flow" do
     SecretSantaAssignmentQuery.new.secret_santa_id(secret_santa.id).select_count.should eq 4
 
     # Participants mark gifts as purchased
-    assignment1.update!(is_gift_purchased: true)
-    assignment2.update!(is_gift_purchased: true)
-    assignment3.update!(is_gift_purchased: true)
+    SaveSecretSantaAssignment.update!(assignment1, is_gift_purchased: true)
+    SaveSecretSantaAssignment.update!(assignment2, is_gift_purchased: true)
+    SaveSecretSantaAssignment.update!(assignment3, is_gift_purchased: true)
 
     # Check purchase status
     SecretSantaAssignmentQuery.new.secret_santa_id(secret_santa.id)
       .is_gift_purchased(true).select_count.should eq 3
 
     # Lock assignments before event
-    secret_santa.update!(assignments_locked: true)
+    SaveSecretSanta.update!(secret_santa, assignments_locked: true)
 
-    secret_santa.reload
+    secret_santa = SecretSantaQuery.find(secret_santa.id)
     secret_santa.assignments_locked.should be_true
   end
 

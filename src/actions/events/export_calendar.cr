@@ -11,7 +11,7 @@ class Events::ExportCalendar < BrowserAction
     ical_content = ICalendarService.generate_ical(event)
 
     if ical_content.empty?
-      flash.failure = "Cannot export event without a start date"
+      flash.failure = r("calendar.no_start_date").t
       redirect to: Events::Show.with(event.id)
     end
 

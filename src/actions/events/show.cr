@@ -17,16 +17,16 @@ class Events::Show < BrowserAction
       .preload_guest
       .results
 
-    # Load comments for each task
-    task_comments = {} of Int64 => Array(Comment)
-    tasks.each do |task|
-      comments = CommentQuery.new
-        .for_task(task)
-        .preload_user
-        .recent
-        .results
-      task_comments[task.id] = comments
-    end
+    # Load comments for all tasks at once (avoid N+1 queries)
+    task_ids = tasks.map(&.id)
+    all_comments = CommentQuery.new
+      .commentable_type("Task")
+      .commentable_id.in(task_ids)
+      .preload_user
+      .recent
+      .results
+
+    task_comments = all_comments.group_by(&.commentable_id)
 
     # Find current user's guest record if they're invited
     user_guest = guests.find { |g| g.user_id == current_user.id }

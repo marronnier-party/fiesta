@@ -1,9 +1,7 @@
 class Events::AddTask < BrowserAction
-  get "/events/:event_id/tasks/new" do
-    event = EventQuery.new
-      .preload_creator
-      .find(event_id)
+  include RequireEventWithCreator
 
+  get "/events/:event_id/tasks/new" do
     authorize event, policy: EventPolicy, query: :add_task?
 
     # Get confirmed guests for this event
@@ -20,8 +18,6 @@ class Events::AddTask < BrowserAction
   end
 
   post "/events/:event_id/tasks" do
-    event = EventQuery.find(event_id)
-
     authorize event, policy: EventPolicy, query: :add_task?
 
     SaveTask.create(params, event_id: event.id) do |operation, task|

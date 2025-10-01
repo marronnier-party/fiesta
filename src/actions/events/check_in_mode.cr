@@ -1,9 +1,7 @@
 class Events::CheckInMode < BrowserAction
-  get "/events/:event_id/checkin" do
-    event = EventQuery.new
-      .preload_creator
-      .find(event_id)
+  include RequireEventWithCreator
 
+  get "/events/:event_id/checkin" do
     authorize event, policy: EventPolicy, query: :check_in_mode?
 
     # Load confirmed guests

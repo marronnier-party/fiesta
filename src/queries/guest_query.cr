@@ -26,4 +26,11 @@ class GuestQuery < Guest::BaseQuery
   def confirmed_or_attended
     status.in([Guest::Status::Confirmed, Guest::Status::Attended])
   end
+
+  def confirmed_for_event_with_users(event : Event)
+    for_event(event)
+      .confirmed
+      .preload_user
+      .results
+  end
 end

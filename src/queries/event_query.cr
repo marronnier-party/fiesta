@@ -22,4 +22,12 @@ class EventQuery < Event::BaseQuery
   def recent
     order_by(:created_at, :desc)
   end
+
+  def with_creator_and_location
+    preload_creator.preload_location
+  end
+
+  def for_user_with_preloads(user : User)
+    for_user(user).with_creator_and_location
+  end
 end

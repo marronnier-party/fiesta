@@ -1,19 +1,8 @@
 class Tasks::Start < BrowserAction
-  include Auth::RequireSignIn
   include RequireTaskFromId
-  include Rosetta::Translatable
 
   post "/tasks/:task_id/start" do
-    # Ensure user is the assigned guest
-    if guest = task.guest
-      if guest.user_id != current_user.id
-        flash.failure = r("errors.unauthorized").t
-        redirect to: Me::Show
-      end
-    else
-      flash.failure = r("tasks.not_assigned").t
-      redirect to: Me::Show
-    end
+    authorize task, policy: TaskPolicy, query: :start?
 
     SaveTask.update(task, status: Task::Status::InProgress) do |operation, updated_task|
       if updated_task

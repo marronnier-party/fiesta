@@ -108,13 +108,13 @@ describe "Guest invitation flow", tags: "flow" do
 
     # Guests respond
     guest1_record = GuestQuery.new.user_id(guest1.id).event_id(event.id).first
-    guest1_record.update!(status: Guest::Status::Confirmed)
+    SaveGuest.update!(guest1_record, status: Guest::Status::Confirmed)
 
     guest2_record = GuestQuery.new.user_id(guest2.id).event_id(event.id).first
-    guest2_record.update!(status: Guest::Status::Confirmed)
+    SaveGuest.update!(guest2_record, status: Guest::Status::Confirmed)
 
     guest3_record = GuestQuery.new.user_id(guest3.id).event_id(event.id).first
-    guest3_record.update!(status: Guest::Status::Declined)
+    SaveGuest.update!(guest3_record, status: Guest::Status::Declined)
 
     # Verify results
     GuestQuery.new.event_id(event.id).select_count.should eq 3

@@ -18,7 +18,7 @@ describe "Event management flow", tags: "flow" do
     flow = EventFlow.new(user)
     flow.update_event_with_location(event, location)
 
-    event.reload
+    event = EventQuery.find(event.id)
     event.location_id.should eq location.id
   end
 
@@ -34,7 +34,7 @@ describe "Event management flow", tags: "flow" do
     flow.publish_event(event)
     flow.should_see_confirmed_status
 
-    event.reload
+    event = EventQuery.find(event.id)
     event.status.should eq Event::Status::Confirmed
   end
 
@@ -58,11 +58,11 @@ describe "Event management flow", tags: "flow" do
     guest = GuestFactory.create &.user_id(guest_user.id).event_id(event.id)
 
     # Publish event
-    event.update!(start_at: 1.week.from_now)
+    SaveEvent.update!(event, start_at: 1.week.from_now)
     flow.publish_event(event)
     flow.should_see_confirmed_status
 
-    event.reload
+    event = EventQuery.find(event.id)
     event.status.should eq Event::Status::Confirmed
     event.location_id.should eq location.id
     event.guests.size.should eq 1
@@ -79,7 +79,7 @@ describe "Event management flow", tags: "flow" do
     flow = EventFlow.new(user)
     flow.publish_event(event)
 
-    event.reload
+    event = EventQuery.find(event.id)
     event.status.should eq Event::Status::Draft
   end
 
@@ -104,7 +104,7 @@ describe "Event management flow", tags: "flow" do
     flow.fill "organizer_notes", "Remember to buy extra ice"
     flow.click "@update-event-button"
 
-    event.reload
+    event = EventQuery.find(event.id)
     event.organizer_notes.should eq "Remember to buy extra ice"
   end
 end

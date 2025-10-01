@@ -1,9 +1,7 @@
 class Events::ShowMessages < BrowserAction
-  get "/events/:event_id/messages" do
-    event = EventQuery.new
-      .preload_creator
-      .find(event_id)
+  include RequireEventWithCreator
 
+  get "/events/:event_id/messages" do
     authorize event, policy: EventPolicy, query: :show_messages?
 
     messages = EventMessageQuery.new

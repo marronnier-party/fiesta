@@ -740,24 +740,23 @@ task_comments = all_comments.group_by(&.task_id)
 ## Implementation Priority
 
 ### High Priority (Security & Correctness)
-1. **2.4** - Fix hardcoded French string in `guests/undo_check_in.cr`
-2. **2.6** - Replace manual authorization in `Tasks::Start`
+1. **2.3** - Fix hardcoded French string in `guests/undo_check_in.cr`
+2. **2.5** - Replace manual authorization in `Tasks::Start`
 3. **8.1** - Security audit of all actions
 4. **7.1** - Remove backup files
 
 ### Medium Priority (Code Quality & Maintainability)
 1. **1.1** - Extract common policy helpers
-2. **2.1** - Standardize SecretSanta authorization
-3. **2.2** - Extract common event loading pattern
-4. **2.3** - Extract confirmed guests pattern
-5. **2.5** - Fix RequireEventFromId inconsistency
-6. **5.2** - Fix duplicate loading in Guests::Rsvp
-7. **2.4** - Standardize all flash messages to i18n
+2. **2.1** - Extract common event loading pattern
+3. **2.2** - Extract confirmed guests pattern
+4. **2.4** - Fix RequireEventFromId inconsistency
+5. **5.2** - Fix duplicate loading in Guests::Rsvp
+6. **2.3** - Standardize all flash messages to i18n
 
 ### Low Priority (Nice to Have)
 1. **1.2** - Fix variable naming in SecretSantaAssignmentPolicy
-2. **2.7** - Improve SecretSanta::Enable flow
-3. **2.8** - Enhance RequireGuestFromId flexibility
+2. **2.6** - Improve SecretSanta::Enable flow
+3. **2.7** - Enhance RequireGuestFromId flexibility
 4. **3.1** - Add semantic query methods
 5. **5.1** - Consider service objects for complex actions
 6. **6.1** - Optimize N+1 queries in Events::Show

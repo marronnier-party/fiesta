@@ -74,9 +74,9 @@ describe "Messaging and notifications flow", tags: "flow" do
     notification.status.should eq Notification::Status::Pending
 
     # Mark as sent
-    notification.update!(status: Notification::Status::Sent, sent_at: Time.utc)
+    SaveNotification.update!(notification, status: Notification::Status::Sent, sent_at: Time.utc)
 
-    notification.reload
+    notification = NotificationQuery.find(notification.id)
     notification.status.should eq Notification::Status::Sent
     notification.sent_at.should_not be_nil
   end
@@ -94,7 +94,7 @@ describe "Messaging and notifications flow", tags: "flow" do
     task = TaskFactory.create &.event_id(event.id).guest_id(old_guest.id)
 
     # Reassign task
-    task.update!(guest_id: new_guest.id)
+    SaveTask.update!(task, guest_id: new_guest.id)
 
     # Create notification for new assignee
     notification = NotificationFactory.create &.user_id(new_guest_user.id)
@@ -118,7 +118,7 @@ describe "Messaging and notifications flow", tags: "flow" do
 
     # Change event date
     new_date = 2.weeks.from_now
-    event.update!(start_at: new_date)
+    SaveEvent.update!(event, start_at: new_date)
 
     # Create notifications for all confirmed guests
     NotificationFactory.create &.user_id(guest1.id)

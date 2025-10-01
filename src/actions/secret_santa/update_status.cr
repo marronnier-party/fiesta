@@ -23,7 +23,7 @@ class SecretSanta::UpdateStatus < BrowserAction
 
     SaveSecretSantaAssignment.update(assignment, status: new_status) do |operation, updated|
       if updated
-        flash.success = "Status updated successfully"
+        flash.success = r("secret_santa.status_updated").t
       else
         flash.failure = r("errors.invalid").t
       end

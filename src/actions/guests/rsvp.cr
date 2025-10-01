@@ -1,15 +1,17 @@
 class Guests::Rsvp < BrowserAction
   include RequireGuestFromId
 
-  get "/guests/:guest_id/rsvp" do
-    authorize guest, policy: GuestPolicy, query: :rsvp?
-
-    # Preload event and location for the page
-    loaded_guest = GuestQuery.new
+  private def load_guest_with_event(guest : Guest)
+    GuestQuery.new
       .id(guest.id)
       .preload_event(EventQuery.new.preload_location)
       .first
+  end
 
+  get "/guests/:guest_id/rsvp" do
+    authorize guest, policy: GuestPolicy, query: :rsvp?
+
+    loaded_guest = load_guest_with_event(guest)
     html RsvpPage, guest: loaded_guest
   end
 
@@ -23,11 +25,7 @@ class Guests::Rsvp < BrowserAction
         redirect to: Me::Show
       else
         flash.failure = r("guests.rsvp_failed").t
-        # Preload for error display
-        loaded_guest = GuestQuery.new
-          .id(guest.id)
-          .preload_event(EventQuery.new.preload_location)
-          .first
+        loaded_guest = load_guest_with_event(guest)
         html RsvpPage, guest: loaded_guest, save_operation: operation
       end
     end
